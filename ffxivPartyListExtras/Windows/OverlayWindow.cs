@@ -32,7 +32,7 @@ public class OverlayWindow : Window, IDisposable
         ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
         ImGuiWindowFlags.NoMouseInputs | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings)
     {
-        this.Size = new Vector2(0, 0);
+        this.Size = new Vector2(10000, 10000);
         this.Position = new Vector2(0, 0);
 
         this.plugin = plugin;
@@ -164,19 +164,19 @@ public class OverlayWindow : Window, IDisposable
         //var othr_up = multi_sum(datas.Select(x => x.othr_up));
 
         // Mitigation
-        if (phys_mit == magi_mit && phys_mit > 0) output.Add(new StatusIcon { FileName="mit_all.png", Info = "{0}%".Format(phys_mit), Label = "Mitigation"});
+        if (phys_mit == magi_mit && phys_mit > 0) output.Add(new StatusIcon { FileName="mit_all.png", Info = "{0}%%".Format(phys_mit), Label = "Mitigation"});
         else
         {
-            if (phys_mit > 0) output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%".Format(phys_mit), Label = "Physical Mit" });
-            if (magi_mit > 0) output.Add(new StatusIcon { FileName = "mit_all.png", Info = "{0}%".Format(magi_mit), Label = "Magical Mit" });
+            if (phys_mit > 0) output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%%".Format(phys_mit), Label = "Physical Mit" });
+            if (magi_mit > 0) output.Add(new StatusIcon { FileName = "mit_all.png", Info = "{0}%%".Format(magi_mit), Label = "Magical Mit" });
         }
 
         // Damage Up
         if (phys_up == magi_up && phys_up > 0) output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%".Format(phys_mit), Label = "Damage Up"});
         else
         {
-            if (phys_up > 0) output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%".Format(phys_mit), Label = "Phyiscal Dmg Up" });
-            if (magi_up > 0) output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%".Format(phys_mit), Label = "Magical Dmg Up" });
+            if (phys_up > 0) output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%%".Format(phys_mit), Label = "Phyiscal Dmg Up" });
+            if (magi_up > 0) output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%%".Format(phys_mit), Label = "Magical Dmg Up" });
         }
 
         // Send Message to log for status effects that are missing
@@ -200,34 +200,35 @@ public class OverlayWindow : Window, IDisposable
 
         if (this.Size == null) return;
         var width = ((Vector2)this.Size).X;
+        var posY = ImGui.GetCursorPosY();
         ImGui.SetCursorPosX(width);
-        ImGui.Text(""); // Empty to make .Sameline work nicer
-
+        var startpos = ImGui.GetCursorPos();
+        
         // TODO: the SetCursorPosX calls are scuffed, work out actual widths
         // just don't question the scalars
         foreach (var icon in icons)
         {
             if (icon.Label != null)
             {
-                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Info).X));
-                ImGui.SameLine();
+                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Label).X));
+                startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Label);
-                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Info).X));
+                ImGui.SetCursorPos(startpos);
             }
-            PluginLog.Debug("textures: {0}", string.Join(", ", plugin.textures));
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (3 * ImGui.GetFontSize()));
-            ImGui.SameLine();
+
+            //ImGui.SetCursorPosY(posY);
+            ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() - (1.5f * ImGui.GetFontSize()), posY));
+            startpos = ImGui.GetCursorPos();
             ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(ImGui.GetFontSize(), ImGui.GetFontSize()));
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (3 * ImGui.GetFontSize()));
+            ImGui.SetCursorPos(startpos);
 
             if (icon.Info != null) {
                 ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Info).X));
-                ImGui.SameLine();
+                startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Info);
-                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Info).X));
+                ImGui.SetCursorPos(startpos);
             }
         }
-        //ImGui.PopItemWidth();
     }
 
     // VS might moan about some of these being possibly Null.
