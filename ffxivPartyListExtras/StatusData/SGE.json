@@ -1,0 +1,22 @@
+[
+    {
+        "row_id": 2604,
+        "status_name": "Kardia",
+        "special": "kardia"
+    },
+    {
+        "row_id": 2605,
+        "status_name": "Kardion",
+        "special": "kardion"
+    },
+    {
+        "row_id": 2607,
+        "status_name": "Eukrasian Diagnosis",
+        "special": "barrier"
+    },
+    {
+        "row_id": 2609,
+        "status_name": "Eukrasian Prognosis",
+        "special": "barrier"
+    }
+]

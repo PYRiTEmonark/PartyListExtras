@@ -1,0 +1,23 @@
+[
+    {
+        "row_id": 743,
+        "status_name": "Grit",
+        "special": "stance"
+    },
+    {
+        "row_id": 746,
+        "status_name": "Dark Mind",
+        "magi_mit": 0.2
+    },
+    {
+        "row_id": 747,
+        "status_name": "Shadow Wall",
+        "phys_mit": 0.3,
+        "magi_mit": 0.3
+    },
+    {
+        "row_id": 810,
+        "status_name": "Living Dead",
+        "special": "living_dead"
+    }
+]

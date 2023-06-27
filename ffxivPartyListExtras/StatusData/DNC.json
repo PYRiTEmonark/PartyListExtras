@@ -1,0 +1,23 @@
+[
+    {
+        "row_id": 1823,
+        "status_name": "Closed Position",
+        "special": "dp_g"
+    },
+    {
+        "row_id": 1824,
+        "status_name": "Dance Partner",
+        "special": "dp_r"
+    },
+    {
+        "row_id": 1826,
+        "status_name": "Shield Samba",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
+        "row_id": 2697,
+        "status_name": "Improvised Finish",
+        "special": "barrier"
+    }
+]
