@@ -1,0 +1,13 @@
+{
+  "Author": "pyrite_radio",
+  "Name": "Party List Extras",
+  "Punchline": "Parses some Buffs and Debuffs to help understand what your party is doing.",
+  "Description": "Adds Text and Icons next to the party list describing active buffs. Still missing some jobs - See github for progress.",
+  "InternalName": "ffxiv_plx",
+  "ApplicableVersion": "any",
+  "Tags": [
+    "sample",
+    "plugin",
+    "goats"
+  ]
+}
