@@ -203,12 +203,14 @@ public class OverlayWindow : Window, IDisposable
         var posY = ImGui.GetCursorPosY();
         ImGui.SetCursorPosX(width);
         var startpos = ImGui.GetCursorPos();
-        
+
+        var dm = plugin.Configuration.DisplayMode;
+
         // TODO: the SetCursorPosX calls are scuffed, work out actual widths
         // just don't question the scalars
         foreach (var icon in icons)
         {
-            if (icon.Label != null)
+            if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Info == null)))
             {
                 ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Label).X));
                 startpos = ImGui.GetCursorPos();
@@ -217,13 +219,13 @@ public class OverlayWindow : Window, IDisposable
             }
 
             //ImGui.SetCursorPosY(posY);
-            ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() - (1.5f * ImGui.GetFontSize()), posY));
+            ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() - (1f * ImGui.GetFontSize()), posY));
             startpos = ImGui.GetCursorPos();
             ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(ImGui.GetFontSize(), ImGui.GetFontSize()));
             ImGui.SetCursorPos(startpos);
 
             if (icon.Info != null) {
-                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Info).X));
+                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X));
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Info);
                 ImGui.SetCursorPos(startpos);

@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
@@ -10,12 +11,10 @@ public class ConfigWindow : Window, IDisposable
     private Configuration Configuration;
 
     public ConfigWindow(Plugin plugin) : base(
-        "Party List Extras Config",
-        ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
-        ImGuiWindowFlags.NoScrollWithMouse)
+        "Party List Extras Config")
     {
-        this.Size = new Vector2(232, 75);
-        this.SizeCondition = ImGuiCond.Always;
+        this.Size = new Vector2(500, 500);
+        this.SizeCondition = ImGuiCond.Once;
 
         this.Configuration = plugin.Configuration;
     }
@@ -24,13 +23,31 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
-        // can't ref a property, so use a local copy
-        var configValue = this.Configuration.DetailedMode;
-        if (ImGui.Checkbox("Show Icon Labels", ref configValue))
+        ImGui.Text("Text to show next to icons");
+        var options = new string[]
         {
-            this.Configuration.DetailedMode = configValue;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
-            this.Configuration.Save();
+            "All",
+            "Information if present, label otherwise",
+            "Information only",
+            "None",
+        };
+        ImGui.SetNextItemWidth(ImGui.GetWindowContentRegionMax().X);
+        if (ImGui.BeginCombo("", options[Configuration.DisplayMode]))
+        {
+            for (int i = 0; i < options.Length; i++)
+            {
+                var x = Configuration.DisplayMode == i;
+                if (ImGui.Selectable(options[i], x))
+                {
+                    Configuration.DisplayMode = i;
+                    Configuration.Save();
+                }
+                if (x)
+                {
+                    ImGui.SetItemDefaultFocus();
+                }
+            }
+            ImGui.EndCombo();
         }
     }
 }

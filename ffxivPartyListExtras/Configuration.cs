@@ -9,7 +9,7 @@ namespace ffxivPartyListExtras
     {
         public int Version { get; set; } = 0;
 
-        public bool DetailedMode { get; set; } = true;
+        public int DisplayMode { get; set; } = 0;
 
         // the below exist just to make saving less cumbersome
         [NonSerialized]
