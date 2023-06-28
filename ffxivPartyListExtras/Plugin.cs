@@ -74,6 +74,48 @@ namespace ffxivPartyListExtras
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
 
+            LoadAssets();
+
+            // DO THIS LAST
+            // otherwise if there's an error the command gets registered
+            this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
+            {
+                HelpMessage = "toggles the overlay"
+            });
+        }
+
+        public void Dispose()
+        {
+            this.WindowSystem.RemoveAllWindows();
+            
+            ConfigWindow.Dispose();
+            OverlayWindow.Dispose();
+
+            this.CommandManager.RemoveHandler(CommandName);
+        }
+
+        private void OnCommand(string command, string args)
+        {
+            // Currently just toggle the window on slash command
+            if (args == "debug") {
+                PluginLog.Information(
+                    "Missing Status Ids: {0}",
+                    string.Join("", OverlayWindow.missing_ids
+                        .Select(x => string.Format("{0} = {1}; ", x.Item1, x.Item2))));
+            } else if (args == "reload") {
+                LoadAssets();
+            }
+            else OverlayEnabled = !OverlayEnabled;
+        }
+
+        private void LoadAssets()
+        {
+            textures = new Dictionary<string, TextureWrap>();
+            statusEffectData = new Dictionary<int, StatusEffectData>();
+
+            // Loads/Reloads icons and data files
+            PluginLog.Information("Loading/Reloading PartyListExtras assets");
+
             // Find our image files
             var baseImagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "Icons");
             var imageNames = Directory.GetFiles(baseImagePath, "*.png").Select(Path.GetFileName).ToArray();
@@ -119,41 +161,11 @@ namespace ffxivPartyListExtras
                             continue;
                         }
                         this.statusEffectData.Add(sxd.row_id, sxd);
-                    }                    
+                    }
                 }
             }
 
             PluginLog.Debug("Data files Loaded: {0}", string.Join(',', dataNames));
-
-            // DO THIS LAST
-            // otherwise if there's an error the command gets registered
-            this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
-            {
-                HelpMessage = "toggles the overlay"
-            });
-        }
-
-        public void Dispose()
-        {
-            this.WindowSystem.RemoveAllWindows();
-            
-            ConfigWindow.Dispose();
-            OverlayWindow.Dispose();
-
-            this.CommandManager.RemoveHandler(CommandName);
-        }
-
-        private void OnCommand(string command, string args)
-        {
-            // Currently just toggle the window on slash command
-            if (args == "debug")
-            {
-                PluginLog.Information(
-                    "Missing Status Ids: {0}",
-                    string.Join("", OverlayWindow.missing_ids
-                        .Select(x => string.Format("{0} = {1}; ", x.Item1, x.Item2))));
-            }
-            else OverlayEnabled = !OverlayEnabled;
         }
 
         private unsafe void DrawUI()

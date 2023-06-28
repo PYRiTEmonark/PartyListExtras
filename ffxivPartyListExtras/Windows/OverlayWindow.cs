@@ -28,7 +28,7 @@ public class OverlayWindow : Window, IDisposable
     public List<Tuple<string, string>> missing_ids = new List<Tuple<string, string>>();
 
     public unsafe OverlayWindow(Plugin plugin) : base(
-        "OverlayWindow",
+        "PLX_OverlayWindow",
         ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
         ImGuiWindowFlags.NoMouseInputs | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings)
     {
@@ -112,8 +112,6 @@ public class OverlayWindow : Window, IDisposable
 
     private List<StatusIcon> ParseStatusList(StatusList sl)
     {
-        // TODO: replace this with image/label pairs
-        // this is so we can get rid of the sillyness that is RenderWithImages
         var output = new List<StatusIcon>();
 
         var debug = new List<Tuple<string, string>>();
@@ -172,11 +170,11 @@ public class OverlayWindow : Window, IDisposable
         }
 
         // Damage Up
-        if (phys_up == magi_up && phys_up > 0) output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%".Format(phys_mit), Label = "Damage Up"});
+        if (phys_up == magi_up && phys_up > 0) output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%%".Format(phys_up), Label = "Damage Up"});
         else
         {
-            if (phys_up > 0) output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%%".Format(phys_mit), Label = "Phyiscal Dmg Up" });
-            if (magi_up > 0) output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%%".Format(phys_mit), Label = "Magical Dmg Up" });
+            if (phys_up > 0) output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%%".Format(phys_up), Label = "Phyiscal Dmg Up" });
+            if (magi_up > 0) output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%%".Format(magi_up), Label = "Magical Dmg Up" });
         }
 
         // Send Message to log for status effects that are missing
@@ -199,7 +197,7 @@ public class OverlayWindow : Window, IDisposable
     {
 
         if (this.Size == null) return;
-        var width = ((Vector2)this.Size).X;
+        var width = ((Vector2)this.Size).X-20;
         var posY = ImGui.GetCursorPosY();
         ImGui.SetCursorPosX(width);
         var startpos = ImGui.GetCursorPos();
@@ -219,12 +217,12 @@ public class OverlayWindow : Window, IDisposable
             }
 
             //ImGui.SetCursorPosY(posY);
-            ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() - (1f * ImGui.GetFontSize()), posY));
+            ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() - (1.5f * ImGui.GetFontSize()), posY));
             startpos = ImGui.GetCursorPos();
             ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(ImGui.GetFontSize(), ImGui.GetFontSize()));
             ImGui.SetCursorPos(startpos);
 
-            if (icon.Info != null) {
+            if (icon.Info != null && dm != 3) {
                 ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X));
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Info);
