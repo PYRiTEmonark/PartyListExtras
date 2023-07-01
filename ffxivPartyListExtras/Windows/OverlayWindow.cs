@@ -166,7 +166,7 @@ public class OverlayWindow : Window, IDisposable
         else
         {
             if (phys_mit > 0) output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%%".Format(phys_mit), Label = "Physical Mit" });
-            if (magi_mit > 0) output.Add(new StatusIcon { FileName = "mit_all.png", Info = "{0}%%".Format(magi_mit), Label = "Magical Mit" });
+            if (magi_mit > 0) output.Add(new StatusIcon { FileName = "mit_magi.png", Info = "{0}%%".Format(magi_mit), Label = "Magical Mit" });
         }
 
         // Damage Up
