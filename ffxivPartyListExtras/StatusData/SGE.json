@@ -18,5 +18,10 @@
         "row_id": 2609,
         "status_name": "Eukrasian Prognosis",
         "special": "barrier"
+    },
+    {
+        "row_id": 2620,
+        "status_name": "Physis II",
+        "special": "regen"
     }
 ]

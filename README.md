@@ -6,15 +6,23 @@ Note that the information is restricted to buffs provided by players only, fight
 ## Progress
 
 For want of a better method, what the statuses actually do is explained in JSON files under `ffxivPartyListExtras/StatusData`.
+This is because the client holds no information on what the status effects actually do, just who has what.
 Files are split into Job and Role, this is for readability only and isn't strictly nessacary.
 
 ### Jobs
 
+- AST: Partial - Role related buffs not implimented
+- DNC: Partial up to level 60
+- DRG: *Dragon's Eye only
+- DRK: Partial, up to level 60
 - GNB: Complete
-- DRK: Partial, up to level 50
+- MNK: *Brotherhood only
+- PLD: *Stance Only
 - SGE: Kardion only
-- DNC: Dance Partner only
+- WAR: *Stance Only
 - All other jobs: Nothing (yet)
 
-PRs for other jobs welcome.
-Status effect IDs are logged, or use /plx debug to dump all seen ids to the log.
+PRs/Issues very welcome.
+Status effect IDs are logged as Debug, or use /plx missing to dump all seen ids to the log.
+Row IDs should be identical to the ones in the excel data, however as there may be duplicates in the data in game verification is appreciated (but not required).
+`*` indicates that the job has been filled in but not tested in game.

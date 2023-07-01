@@ -1,0 +1,32 @@
+[
+    {
+        "row_id": 1183,
+        "status_name": "Right Eye",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    },
+    {
+        "row_id": 1184,
+        "status_name": "Left Eye",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    },
+    {
+        "row_id": 1453,
+        "status_name": "Right Eye",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    },
+    {
+        "row_id": 1454,
+        "status_name": "Left Eye",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    },
+    {
+        "row_id": 1910,
+        "status_name": "Right Eye",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    }
+]

@@ -1,0 +1,44 @@
+[
+    {
+        "row_id": 1882,
+        "status_name": "The Balance",
+        "phys_up": 0.03,
+        "magi_up": 0.03
+    },
+    {
+        "row_id": 1883,
+        "status_name": "The Bole",
+        "phys_up": 0.03,
+        "magi_up": 0.03
+    },
+    {
+        "row_id": 1884,
+        "status_name": "The Arrow",
+        "phys_up": 0.03,
+        "magi_up": 0.03
+    },
+    {
+        "row_id": 1885,
+        "status_name": "The Spear",
+        "phys_up": 0.03,
+        "magi_up": 0.03
+    },
+    {
+        "row_id": 1886,
+        "status_name": "The Ewer",
+        "phys_up": 0.03,
+        "magi_up": 0.03
+    },
+    {
+        "row_id": 1887,
+        "status_name": "The Spire",
+        "phys_up": 0.03,
+        "magi_up": 0.03
+    },
+    {
+        "row_id": 2716,
+        "status_name": "Harmony of Mind",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    }
+]

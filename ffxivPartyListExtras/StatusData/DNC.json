@@ -10,6 +10,12 @@
         "special": "dp_r"
     },
     {
+        "row_id": 1821,
+        "status_name": "Standard Finish",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    },
+    {
         "row_id": 1826,
         "status_name": "Shield Samba",
         "phys_mit": 0.1,

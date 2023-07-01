@@ -97,11 +97,13 @@ namespace ffxivPartyListExtras
         private void OnCommand(string command, string args)
         {
             // Currently just toggle the window on slash command
-            if (args == "debug") {
+            if (args == "missing") {
                 PluginLog.Information(
                     "Missing Status Ids: {0}",
                     string.Join("", OverlayWindow.missing_ids
                         .Select(x => string.Format("{0} = {1}; ", x.Item1, x.Item2))));
+            } else if (args == "missing clear") {
+                OverlayWindow.missing_ids.Clear();
             } else if (args == "reload") {
                 LoadAssets();
             }
