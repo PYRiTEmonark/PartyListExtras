@@ -20,7 +20,7 @@ using static Lumina.Data.Parsing.Uld.NodeData;
 
 namespace ffxivPartyListExtras
 {
-    // number to update so the DLL actually changes: 5
+    // number to update so the DLL actually changes: 6
     public sealed class Plugin : IDalamudPlugin
     {
         public string Name => "ffxivPartyListExtras";
@@ -106,6 +106,9 @@ namespace ffxivPartyListExtras
                 OverlayWindow.missing_ids.Clear();
             } else if (args == "reload") {
                 LoadAssets();
+            } else if (args == "config")
+            {
+                ConfigWindow.IsOpen = true;
             }
             else OverlayEnabled = !OverlayEnabled;
         }

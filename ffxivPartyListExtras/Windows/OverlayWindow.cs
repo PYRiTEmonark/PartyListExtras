@@ -9,6 +9,7 @@ using System.Text.Json;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
@@ -62,14 +63,14 @@ public class OverlayWindow : Window, IDisposable
 
         // resize window
         // Set width and height so window is to the left of the party list
-        var width = 300;
-        this.Size = new Vector2(width, apl_node.Height);
-        this.Position = new Vector2(apl_node.ScreenX - width - 10, apl_node.ScreenY);
+        //var width = 300;
+        //this.Size = new Vector2(width, apl_node.Height);
+        //this.Position = new Vector2(apl_node.ScreenX - width - 10, apl_node.ScreenY);
 
-        // nullable types my beloathed
-        drawlist.AddRectFilledMultiColor((Vector2)this.Position, (Vector2)(this.Position + this.Size), clear, black, black, clear);
+        this.Size = ImGui.GetMainViewport().Size;
 
-        // drawlist.AddText(new Vector2(15, 15), ImGui.GetColorU32(ImGuiCol.Text), count.ToString()) ;
+        // Draw background - old, entire list version
+        //drawlist.AddRectFilledMultiColor((Vector2)this.Position, (Vector2)(this.Position + this.Size), clear, black, black, clear);
 
         for (var i = 0; i < count; i++)
         {
@@ -77,10 +78,14 @@ public class OverlayWindow : Window, IDisposable
             var node = apl->PartyMember[i].ClassJobIcon->AtkResNode;
             // TEMP: Offset is temporary
             var curpos = new Vector2(node.ScreenX - 300, node.ScreenY);
-            var childpos = curpos - (Vector2)this.Position;
+            var cursize = new Vector2(300, node.Height);
 
-            ImGui.SetCursorPos(childpos);
-            ImGui.BeginChild("Player {0}".Format(i));
+            // Draw Background
+            drawlist.AddRectFilledMultiColor(curpos, (curpos+cursize), clear, black, black, clear);
+
+            // Start child window to make the cursor work "nicer"
+            ImGui.SetCursorPos(curpos);
+            ImGui.BeginChild("Player {0}".Format(i), cursize, false, this.Flags);
 
             // PlayerCharacter and BattleNPC is both BattleChara
             // TODO: fix this so there isn't the duplication
@@ -104,7 +109,7 @@ public class OverlayWindow : Window, IDisposable
             };
 
             //Spin out to helper functions because long
-            DrawStatusIcons(ParseStatusList(sl));
+            DrawStatusIcons(ParseStatusList(sl), cursize.Y);
 
             ImGui.EndChild();
         }
@@ -192,38 +197,54 @@ public class OverlayWindow : Window, IDisposable
         return output;
     }
 
-    // Replace $mit_all.png$ with an image when rendering
-    private void DrawStatusIcons(List<StatusIcon> icons)
+    // Render StatusIcons
+    // Note: Still uses the cursor
+    // This isn't bad, but it's a strange way to do it
+    private void DrawStatusIcons(List<StatusIcon> icons, float height)
     {
-
         if (this.Size == null) return;
-        var width = ((Vector2)this.Size).X-20;
-        var posY = ImGui.GetCursorPosY();
+        var width = 300;
         ImGui.SetCursorPosX(width);
         var startpos = ImGui.GetCursorPos();
 
+        // shorten it out
         var dm = plugin.Configuration.DisplayMode;
+
+        // Set some preferences
+        var padding = 5f;
+        var imgsize = height - (padding*2f);
+        var posY = ImGui.GetCursorPosY() + padding;
 
         // TODO: the SetCursorPosX calls are scuffed, work out actual widths
         // just don't question the scalars
         foreach (var icon in icons)
         {
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() - padding);
+
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Info == null)))
             {
-                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1.5f * ImGui.CalcTextSize(icon.Label).X));
+                ImGui.SetCursorPos(new Vector2(
+                    ImGui.GetCursorPosX() - ((1f * ImGui.CalcTextSize(icon.Label).X) + padding),
+                    posY
+                ));
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Label);
                 ImGui.SetCursorPos(startpos);
             }
 
-            //ImGui.SetCursorPosY(posY);
-            ImGui.SetCursorPos(new Vector2(ImGui.GetCursorPosX() - (1.5f * ImGui.GetFontSize()), posY));
+            ImGui.SetCursorPos(new Vector2(
+                ImGui.GetCursorPosX() - ((1f * imgsize) + padding),
+                posY
+            ));
             startpos = ImGui.GetCursorPos();
-            ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(ImGui.GetFontSize(), ImGui.GetFontSize()));
+            ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(imgsize, imgsize));
             ImGui.SetCursorPos(startpos);
 
             if (icon.Info != null && dm != 3) {
-                ImGui.SetCursorPosX(ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X));
+                ImGui.SetCursorPos(new Vector2(
+                    ImGui.GetCursorPosX() - ((1f * ImGui.CalcTextSize(icon.Info).X) - padding),
+                    posY
+                ));
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Info);
                 ImGui.SetCursorPos(startpos);
