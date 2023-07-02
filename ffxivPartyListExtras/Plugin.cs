@@ -20,13 +20,13 @@ using static Lumina.Data.Parsing.Uld.NodeData;
 
 namespace ffxivPartyListExtras
 {
-    // number to update so the DLL actually changes: 6
+    // number to update so the DLL actually changes: 7
     public sealed class Plugin : IDalamudPlugin
     {
         public string Name => "ffxivPartyListExtras";
         private const string CommandName = "/plx";
 
-        private bool OverlayEnabled = true;
+        private bool overlayEnabled = true;
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private CommandManager CommandManager { get; init; }
@@ -110,7 +110,7 @@ namespace ffxivPartyListExtras
             {
                 ConfigWindow.IsOpen = true;
             }
-            else OverlayEnabled = !OverlayEnabled;
+            else overlayEnabled = !overlayEnabled;
         }
 
         private void LoadAssets()
@@ -181,7 +181,7 @@ namespace ffxivPartyListExtras
             AddonPartyList* apl = (AddonPartyList*)GameGui.GetAddonByName("_PartyList");
             if (apl == null) { return; }
             var isvis = apl->AtkUnitBase.IsVisible;
-            OverlayWindow.IsOpen = isvis && OverlayEnabled;
+            OverlayWindow.IsOpen = isvis && overlayEnabled;
         }
 
         public void DrawConfigUI()

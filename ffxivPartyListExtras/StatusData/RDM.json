@@ -1,0 +1,13 @@
+[
+    {
+        "row_id": 1239,
+        "status_name": "Embolden",
+        "magi_up": 0.05
+    },
+    {
+        "row_id": 1297,
+        "status_name": "Embolden",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    }
+]

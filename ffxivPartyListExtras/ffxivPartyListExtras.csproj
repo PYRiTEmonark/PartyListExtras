@@ -54,6 +54,7 @@
     <None Remove="StatusData\GNB.json" />
     <None Remove="StatusData\MNK.json" />
     <None Remove="StatusData\PLD.json" />
+    <None Remove="StatusData\RDM.json" />
     <None Remove="StatusData\SGE.json" />
     <None Remove="StatusData\Tank.json" />
     <None Remove="StatusData\WAR.json" />
@@ -108,6 +109,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\PLD.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\RDM.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\SGE.json">
