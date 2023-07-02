@@ -136,7 +136,7 @@ public class OverlayWindow : Window, IDisposable
         // Read properties out of data
         // TODO: move all definitions of IconElement out to a json file
         string[] special_labels = {
-            "stance", "invuln", "living_dead",
+            "stance", "invuln", "living_dead", "block_all",
             "kardion", "kardia", "regen", //"barrier",
             "dp_g", "dp_r"
         };
@@ -144,6 +144,7 @@ public class OverlayWindow : Window, IDisposable
             new StatusIcon {FileName = "stance.png", Label = "Stance"},
             new StatusIcon {FileName = "invuln.png", Label = "Invuln"},
             new StatusIcon {FileName = "living_dead.png", Label = "Living Dead"},
+            new StatusIcon {FileName = "block_all.png", Label = "Block All"},
             new StatusIcon {FileName = "kardia.png", Label = "Sent"},
             new StatusIcon {FileName = "kardion.png", Label = "Recv"},
             new StatusIcon {FileName = "regen.png", Label = "Regen"},

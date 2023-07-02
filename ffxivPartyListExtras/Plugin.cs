@@ -80,7 +80,7 @@ namespace ffxivPartyListExtras
             // otherwise if there's an error the command gets registered
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
-                HelpMessage = "toggles the overlay"
+                HelpMessage = "Toggles Overlay. Use /plx help for other commands."
             });
         }
 
@@ -96,7 +96,7 @@ namespace ffxivPartyListExtras
 
         private void OnCommand(string command, string args)
         {
-            // Currently just toggle the window on slash command
+            // this isn't the greatest way of doing it but it's fine
             if (args == "missing") {
                 PluginLog.Information(
                     "Missing Status Ids: {0}",
@@ -106,11 +106,17 @@ namespace ffxivPartyListExtras
                 OverlayWindow.missing_ids.Clear();
             } else if (args == "reload") {
                 LoadAssets();
-            } else if (args == "config")
-            {
+            } else if (args == "config") {
                 ConfigWindow.IsOpen = true;
+            } else if (args == "help") {
+                ChatGui.Print("Party List Extras commands:\n" +
+                    "/plx help - sends this message\n" +
+                    "/plx reload - load data files and images\n" +
+                    "/plx config - opens config window");
+                ChatGui.UpdateQueue();
+            } else {
+                overlayEnabled = !overlayEnabled;
             }
-            else overlayEnabled = !overlayEnabled;
         }
 
         private void LoadAssets()

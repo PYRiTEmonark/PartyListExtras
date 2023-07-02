@@ -1,8 +1,24 @@
 [
     {
+        "row_id": 74,
+        "status_name": "Sentinel",
+        "phys_mit": 0.3,
+        "magi_mit": 0.3
+    },
+    {
+        "row_id": 77,
+        "status_name": "Bulwark",
+        "special": "block_all"
+    },
+    {
         "row_id": 79,
         "status_name": "Iron Will",
         "special": "stance"
+    },
+    {
+        "row_id": 82,
+        "status_name": "Hallowed Ground",
+        "special": "invuln"
     },
     {
         "row_id": 393,
@@ -10,8 +26,75 @@
         "special": "stance"
     },
     {
+        "row_id": 1856,
+        "status_name": "Sheltron",
+        "phys_mit": 0.15,
+        "magi_mit": 0.15
+    },
+    {
+        "row_id": 2674,
+        "status_name": "Holy Sheltron",
+        "phys_mit": 0.15,
+        "magi_mit": 0.15
+    },
+    {
+        "row_id": 1302,
+        "status_name": "Hallowed Ground",
+        "special": "invuln"
+    },
+    {
+        "row_id": 1174,
+        "status_name": "Intervention",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
+        "row_id": 2020,
+        "status_name": "Intervention",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
+        "row_id": 2676,
+        "status_name": "Knight's Benediction",
+        "special": "regen"
+    },
+    {
+        "row_id": 2675,
+        "status_name": "Knight's Resolve",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
+        "row_id": 2843,
+        "status_name": "Passage of Arms",
+        "phys_mit": 0.15,
+        "magi_mit": 0.15
+    },
+    {
+        "row_id": 3188,
+        "status_name": "Knight's Resolve",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
         "row_id": 2843,
         "status_name": "Iron Will",
         "special": "stance"
+    },
+    {
+        "row_id": 727,
+        "status_name": "Divine Veil",
+        "special": "barrier"
+    },
+    {
+        "row_id": 1362,
+        "status_name": "Divine Veil",
+        "special": "barrier"
+    },
+    {
+        "row_id": 2169,
+        "status_name": "Divine Veil",
+        "special": "barrier"
     }
 ]

@@ -9,6 +9,10 @@ For want of a better method, what the statuses actually do is explained in JSON 
 This is because the client holds no information on what the status effects actually do, just who has what.
 Files are split into Job and Role, this is for readability only and isn't strictly nessacary.
 
+Currently, some conditional buffs aren't applied properly. These are:
+- PLD: Intervention buffed when sentinel/rampart active
+- AST: Role Related buffs from arcana
+
 ### Jobs
 
 - AST: Partial - Role related buffs not implimented
@@ -17,9 +21,10 @@ Files are split into Job and Role, this is for readability only and isn't strict
 - DRK: Partial, up to level 60
 - GNB: Complete
 - MNK: *Brotherhood only
-- PLD: *Stance Only
+- PLD: *Partial - Intervention missing additional effect
+- RDM: Embolden only
 - SGE: Kardion only
-- WAR: *Stance Only
+- WAR: *Stance only
 - All other jobs: Nothing (yet)
 
 PRs/Issues very welcome.
