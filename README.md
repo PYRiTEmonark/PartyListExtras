@@ -16,6 +16,7 @@ Currently, some conditional buffs aren't applied properly. These are:
 ### Jobs
 
 - AST: Partial - Role related buffs not implimented
+- BRD: Raging Strikes only
 - DNC: Partial up to level 60
 - DRG: *Dragon's Eye only
 - DRK: Partial, up to level 60
@@ -23,6 +24,7 @@ Currently, some conditional buffs aren't applied properly. These are:
 - MNK: *Brotherhood only
 - PLD: *Partial - Intervention missing additional effect
 - RDM: Embolden only
+- RPR: Crest only
 - SGE: Kardion only
 - WAR: *Stance only
 - All other jobs: Nothing (yet)

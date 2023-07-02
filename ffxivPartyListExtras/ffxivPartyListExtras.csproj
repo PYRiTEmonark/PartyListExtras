@@ -49,6 +49,7 @@
     <None Remove="Icons\vuln_othr.png" />
     <None Remove="Icons\vuln_phys.png" />
     <None Remove="README.md" />
+    <None Remove="StatusData\BRD.json" />
     <None Remove="StatusData\DNC.json" />
     <None Remove="StatusData\DRG.json" />
     <None Remove="StatusData\DRK.json" />
@@ -96,6 +97,9 @@
     <Content Include="..\Data\goat.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
+    </Content>
+    <Content Include="StatusData\BRD.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\DNC.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
