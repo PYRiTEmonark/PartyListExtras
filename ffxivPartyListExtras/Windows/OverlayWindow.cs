@@ -1,16 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
-using System.Text.Json;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using Dalamud.Interface;
-using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
 using Dalamud.Utility;
@@ -24,6 +19,9 @@ namespace ffxivPartyListExtras.Windows;
 public class OverlayWindow : Window, IDisposable
 {
     private Plugin plugin;
+
+    // Scales all drawn things
+    public float scaling;
 
     // Used to ensure we don't duplicate the debug status info message
     public List<Tuple<string, string>> missing_ids = new List<Tuple<string, string>>();
@@ -44,9 +42,9 @@ public class OverlayWindow : Window, IDisposable
     public unsafe override void Draw()
     {
         // Grab some things for later
-        // TODO: move some of these idk, imgui will shit itself if you move the drawlist
         var drawlist = ImGui.GetBackgroundDrawList();
         AgentHUD* pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
+        if (pl == null) { return; }
         var partyMemberList = (HudPartyMember*)pl->PartyMemberList;
         var count = pl->PartyMemberCount;
 
@@ -55,6 +53,8 @@ public class OverlayWindow : Window, IDisposable
 
         AddonPartyList* apl = (AddonPartyList*)plugin.GameGui.GetAddonByName("_PartyList");
         if (apl == null) { return; }
+
+        this.scaling = apl->AtkUnitBase.Scale;
 
         var bkg_node = apl->BackgroundNineGridNode;
         if (bkg_node == null) { return; }
@@ -77,8 +77,10 @@ public class OverlayWindow : Window, IDisposable
             // Get ResNode of the JobIcon
             var node = apl->PartyMember[i].ClassJobIcon->AtkResNode;
             // TEMP: Offset is temporary
-            var curpos = new Vector2(node.ScreenX - 300, node.ScreenY);
-            var cursize = new Vector2(300, node.Height);
+            var curpos = new Vector2(node.ScreenX - ((300 * scaling) + 10), node.ScreenY);
+            var cursize = new Vector2(300 * scaling, node.Height * scaling);
+
+            // this.scaling = node.Height / 32;
 
             // Draw Background
             drawlist.AddRectFilledMultiColor(curpos, (curpos+cursize), clear, black, black, clear);
@@ -145,8 +147,8 @@ public class OverlayWindow : Window, IDisposable
             new StatusIcon {FileName = "invuln.png", Label = "Invuln"},
             new StatusIcon {FileName = "living_dead.png", Label = "Living Dead"},
             new StatusIcon {FileName = "block_all.png", Label = "Block All"},
-            new StatusIcon {FileName = "kardia.png", Label = "Sent"},
             new StatusIcon {FileName = "kardion.png", Label = "Recv"},
+            new StatusIcon {FileName = "kardia.png", Label = "Sent"},
             new StatusIcon {FileName = "regen.png", Label = "Regen"},
             //new IconElement {FileName = "barrier.png", Label = "Barrier"},
             new StatusIcon {FileName = "dp_g.png", Label = "Sent"},
@@ -204,7 +206,7 @@ public class OverlayWindow : Window, IDisposable
     private void DrawStatusIcons(List<StatusIcon> icons, float height)
     {
         if (this.Size == null) return;
-        var width = 300;
+        var width = 300 * scaling;
         ImGui.SetCursorPosX(width);
         var startpos = ImGui.GetCursorPos();
 
@@ -213,7 +215,7 @@ public class OverlayWindow : Window, IDisposable
 
         // Set some preferences
         var padding = 5f;
-        var imgsize = height - (padding*2f);
+        var imgsize = (height) - (padding * 2f);
         var posY = ImGui.GetCursorPosY() + padding;
 
         // TODO: the SetCursorPosX calls are scuffed, work out actual widths
@@ -224,33 +226,43 @@ public class OverlayWindow : Window, IDisposable
 
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Info == null)))
             {
-                ImGui.SetCursorPos(new Vector2(
-                    ImGui.GetCursorPosX() - ((1f * ImGui.CalcTextSize(icon.Label).X) + padding),
-                    posY
-                ));
+                move_cur_scaled(
+                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Label).X), -padding * scaling,
+                    posY * scaling, 0
+                );
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Label);
                 ImGui.SetCursorPos(startpos);
             }
 
-            ImGui.SetCursorPos(new Vector2(
-                ImGui.GetCursorPosX() - ((1f * imgsize) + padding),
-                posY
-            ));
+            move_cur_scaled(
+                ImGui.GetCursorPosX() - (1f * imgsize), -padding,
+                posY * scaling, 0
+            );
             startpos = ImGui.GetCursorPos();
             ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(imgsize, imgsize));
             ImGui.SetCursorPos(startpos);
 
             if (icon.Info != null && dm != 3) {
-                ImGui.SetCursorPos(new Vector2(
-                    ImGui.GetCursorPosX() - ((1f * ImGui.CalcTextSize(icon.Info).X) - padding),
-                    posY
-                ));
+                move_cur_scaled(
+                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X) * scaling, padding,
+                    posY * scaling, 0
+                );
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Info);
                 ImGui.SetCursorPos(startpos);
             }
         }
+    }
+
+    internal void move_cur_scaled(float x, float ox, float y, float oy)
+    {
+        // this was useful, then it wasn't
+        // it may become useful later
+        ImGui.SetCursorPos(new Vector2(
+            x + ox,
+            y + oy
+        ));
     }
 
     // VS might moan about some of these being possibly Null.

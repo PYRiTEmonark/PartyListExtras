@@ -20,6 +20,18 @@
         "special": "barrier"
     },
     {
+        "row_id": 2618,
+        "status_name": "Kerachole",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
+        "row_id": 2619,
+        "status_name": "Taurochole",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
         "row_id": 2620,
         "status_name": "Physis II",
         "special": "regen"

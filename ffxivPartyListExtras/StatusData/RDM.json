@@ -9,5 +9,15 @@
         "status_name": "Embolden",
         "phys_up": 0.05,
         "magi_up": 0.05
+    },
+    {
+        "row_id": 1971,
+        "status_name": "Manafication",
+        "magi_up": 0.05
+    },
+    {
+        "row_id": 2707,
+        "status_name": "Magick Barrier",
+        "magi_mit": 0.1
     }
 ]

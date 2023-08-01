@@ -5,7 +5,7 @@ Note that the information is restricted to buffs provided by players only, fight
 
 ## Progress
 
-For want of a better method, what the statuses actually do is explained in JSON files under `ffxivPartyListExtras/StatusData`.
+For want of a better method, what the statuses actually do is explained in JSON files under `./ffxivPartyListExtras/StatusData`.
 This is because the client holds no information on what the status effects actually do, just who has what.
 Files are split into Job and Role, this is for readability only and isn't strictly nessacary.
 
@@ -16,16 +16,17 @@ Currently, some conditional buffs aren't applied properly. These are:
 ### Jobs
 
 - AST: Partial - Role related buffs not implimented
-- BRD: Raging Strikes only
+- BRD: Raging Strikes and *Troubador only
 - DNC: Partial up to level 60
 - DRG: *Dragon's Eye only
 - DRK: Partial, up to level 60
 - GNB: Complete
+- MCH: *Tacticain only
 - MNK: *Brotherhood only
 - PLD: *Partial - Intervention missing additional effect
 - RDM: Embolden only
 - RPR: Crest only
-- SGE: Kardion only
+- SGE: Partial
 - WAR: *Stance only
 - All other jobs: Nothing (yet)
 

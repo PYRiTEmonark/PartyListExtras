@@ -14,13 +14,10 @@ using System.Linq;
 using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using System.Text.Json;
-using System;
-using Dalamud.Utility;
-using static Lumina.Data.Parsing.Uld.NodeData;
 
 namespace ffxivPartyListExtras
 {
-    // number to update so the DLL actually changes: 7
+    // number to update so the DLL actually changes: 8
     public sealed class Plugin : IDalamudPlugin
     {
         public string Name => "ffxivPartyListExtras";
@@ -114,8 +111,11 @@ namespace ffxivPartyListExtras
                     "/plx reload - load data files and images\n" +
                     "/plx config - opens config window");
                 ChatGui.UpdateQueue();
-            } else {
+            } else if (args == "") {
                 overlayEnabled = !overlayEnabled;
+            } else
+            {
+                ChatGui.Print("Unknown command - use /plx help for information");
             }
         }
 
@@ -197,7 +197,7 @@ namespace ffxivPartyListExtras
     }
     internal struct StatusEffectData
     {
-        // to be popped out and used as Mapping Key
+        // to be used as Mapping Key
         public required int row_id { get; set; }
         // should be as in game
         public required string status_name { get; set; }

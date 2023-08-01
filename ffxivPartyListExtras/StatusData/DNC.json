@@ -16,6 +16,12 @@
         "magi_up": 0.05
     },
     {
+        "row_id": 1822,
+        "status_name": "Technical Finish",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    },
+    {
         "row_id": 1826,
         "status_name": "Shield Samba",
         "phys_mit": 0.1,

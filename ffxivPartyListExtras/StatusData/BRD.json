@@ -4,5 +4,11 @@
         "status_name": "Raging Strikes",
         "phys_up": 0.15,
         "magi_up": 0.15
+    },
+    {
+        "row_id": 1934,
+        "status_name": "Troubadour",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
     }
 ]
