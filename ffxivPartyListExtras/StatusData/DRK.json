@@ -19,5 +19,10 @@
         "row_id": 810,
         "status_name": "Living Dead",
         "special": "living_dead"
+    },
+    {
+        "row_id": 1894,
+        "status_name": "Dark Missionary",
+        "magi_mit": 0.1
     }
 ]

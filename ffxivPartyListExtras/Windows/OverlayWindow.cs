@@ -12,6 +12,7 @@ using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 
 namespace ffxivPartyListExtras.Windows;
@@ -43,8 +44,13 @@ public class OverlayWindow : Window, IDisposable
     {
         // Grab some things for later
         var drawlist = ImGui.GetBackgroundDrawList();
-        AgentHUD* pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
-        if (pl == null) { return; }
+
+        AgentHUD* pl = (AgentHUD*)GetAgentHud();
+        if (pl == null) {
+            PluginLog.Debug("Null AgentHUD pointer");
+            return;
+        }
+        
         var partyMemberList = (HudPartyMember*)pl->PartyMemberList;
         var count = pl->PartyMemberCount;
 
@@ -52,13 +58,12 @@ public class OverlayWindow : Window, IDisposable
         var clear = ImGui.ColorConvertFloat4ToU32(new Vector4(0f, 0f, 0f, 0f));
 
         AddonPartyList* apl = (AddonPartyList*)plugin.GameGui.GetAddonByName("_PartyList");
+        
         if (apl == null) { return; }
-
         this.scaling = apl->AtkUnitBase.Scale;
-
         var bkg_node = apl->BackgroundNineGridNode;
-        if (bkg_node == null) { return; }
 
+        if (bkg_node == null) { return; }
         var apl_node = bkg_node->AtkResNode;
 
         // resize window
@@ -75,7 +80,9 @@ public class OverlayWindow : Window, IDisposable
         for (var i = 0; i < count; i++)
         {
             // Get ResNode of the JobIcon
-            var node = apl->PartyMember[i].ClassJobIcon->AtkResNode;
+            var icon = apl->PartyMember[i].ClassJobIcon;
+            if (icon == null) { continue; }
+            var node = icon->AtkResNode;
             // TEMP: Offset is temporary
             var curpos = new Vector2(node.ScreenX - ((300 * scaling) + 10), node.ScreenY);
             var cursize = new Vector2(300 * scaling, node.Height * scaling);
@@ -117,6 +124,19 @@ public class OverlayWindow : Window, IDisposable
         }
     }
 
+    private unsafe nint GetAgentHud()
+    {
+        var f = Framework.Instance();
+        if (f == null) return IntPtr.Zero;
+
+        var u = f->GetUiModule();
+        if (u == null) return IntPtr.Zero;
+
+        var a = u->GetAgentModule();
+        if (a == null) return IntPtr.Zero;
+
+        return (nint)a->GetAgentHUD();
+    }
     private List<StatusIcon> ParseStatusList(StatusList sl)
     {
         var output = new List<StatusIcon>();
