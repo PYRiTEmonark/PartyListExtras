@@ -52,6 +52,12 @@ public class OverlayWindow : Window, IDisposable
         }
         
         var partyMemberList = (HudPartyMember*)pl->PartyMemberList;
+        if (partyMemberList == null)
+        {
+            PluginLog.Debug("Null HudPartyMember pointer");
+            return;
+        }
+
         var count = pl->PartyMemberCount;
 
         var black = ImGui.ColorConvertFloat4ToU32(new Vector4(0f, 0f, 0f, 1f));
