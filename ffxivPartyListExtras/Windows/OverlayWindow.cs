@@ -85,6 +85,28 @@ public class OverlayWindow : Window, IDisposable
 
         for (var i = 0; i < count; i++)
         {
+            // PlayerCharacter and BattleNPC is both BattleChara
+            // TODO: fix this so there isn't the duplication
+            PlayerCharacter pc; BattleNpc bc;
+            StatusList sl;
+            var result = plugin.ObjectTable.SearchById(partyMemberList[i].ObjectId);
+            if (result?.GetType() == typeof(PlayerCharacter))
+            {
+                pc = (PlayerCharacter)result;
+                sl = pc.StatusList;
+            }
+            else if (result?.GetType() == typeof(BattleNpc))
+            {
+                bc = (BattleNpc)result;
+                sl = bc.StatusList;
+            }
+            else
+            {
+                //if (result == null) PluginLog.Warning("Party List member null");
+                //else PluginLog.Warning("Unexpected member of party list: {0}", result.GetType().ToString());
+                continue;
+            };
+
             // Get ResNode of the JobIcon
             var icon = apl->PartyMember[i].ClassJobIcon;
             if (icon == null) { continue; }
@@ -102,27 +124,6 @@ public class OverlayWindow : Window, IDisposable
             ImGui.SetCursorPos(curpos);
             ImGui.BeginChild("Player {0}".Format(i), cursize, false, this.Flags);
 
-            // PlayerCharacter and BattleNPC is both BattleChara
-            // TODO: fix this so there isn't the duplication
-            PlayerCharacter pc; BattleNpc bc;
-            StatusList sl;
-            var result = plugin.ObjectTable.SearchById(partyMemberList[i].ObjectId);
-            if (result?.GetType() == typeof(PlayerCharacter))
-            {
-                pc = (PlayerCharacter)result;
-                sl = pc.StatusList;
-            }
-            else if (result?.GetType() == typeof(BattleNpc))
-            {
-                bc = (BattleNpc)result;
-                sl = bc.StatusList;
-            }
-            else {
-                //if (result == null) PluginLog.Warning("Party List member null");
-                //else PluginLog.Warning("Unexpected member of party list: {0}", result.GetType().ToString());
-                continue;
-            };
-
             //Spin out to helper functions because long
             DrawStatusIcons(ParseStatusList(sl), cursize.Y);
 
@@ -130,16 +131,16 @@ public class OverlayWindow : Window, IDisposable
         }
     }
 
-    private unsafe nint GetAgentHud()
+    private unsafe nint? GetAgentHud()
     {
         var f = Framework.Instance();
-        if (f == null) return IntPtr.Zero;
+        if (f == null) return null;
 
         var u = f->GetUiModule();
-        if (u == null) return IntPtr.Zero;
+        if (u == null) return null;
 
         var a = u->GetAgentModule();
-        if (a == null) return IntPtr.Zero;
+        if (a == null) return null;
 
         return (nint)a->GetAgentHUD();
     }
