@@ -45,32 +45,29 @@ public class OverlayWindow : Window, IDisposable
         // Grab some things for later
         var drawlist = ImGui.GetBackgroundDrawList();
 
-        AgentHUD* pl = (AgentHUD*)GetAgentHud();
-        if (pl == null) {
-            PluginLog.Debug("Null AgentHUD pointer");
-            return;
-        }
-        
-        var partyMemberList = (HudPartyMember*)pl->PartyMemberList;
-        if (partyMemberList == null)
+        // If any of this goes wrong we just skip drawing the window
+        AgentHUD* pl;
+        HudPartyMember* partyMemberList;
+        short count;
+        AddonPartyList* apl;
+        AtkResNode apl_node;
+        try
         {
-            PluginLog.Debug("Null HudPartyMember pointer");
+            pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
+            partyMemberList = (HudPartyMember*)pl->PartyMemberList;
+            count = pl->PartyMemberCount;
+            apl = (AddonPartyList*)plugin.GameGui.GetAddonByName("_PartyList");
+            this.scaling = apl->AtkUnitBase.Scale;
+            apl_node = apl->BackgroundNineGridNode->AtkResNode;
+        }
+        catch (NullReferenceException e) {
+            PluginLog.Debug("Failure during start of OverlayWindow.Draw - skipping");
+            PluginLog.Debug(e.Message);
             return;
         }
-
-        var count = pl->PartyMemberCount;
 
         var black = ImGui.ColorConvertFloat4ToU32(new Vector4(0f, 0f, 0f, 1f));
         var clear = ImGui.ColorConvertFloat4ToU32(new Vector4(0f, 0f, 0f, 0f));
-
-        AddonPartyList* apl = (AddonPartyList*)plugin.GameGui.GetAddonByName("_PartyList");
-        
-        if (apl == null) { return; }
-        this.scaling = apl->AtkUnitBase.Scale;
-        var bkg_node = apl->BackgroundNineGridNode;
-
-        if (bkg_node == null) { return; }
-        var apl_node = bkg_node->AtkResNode;
 
         // resize window
         // Set width and height so window is to the left of the party list
@@ -131,19 +128,6 @@ public class OverlayWindow : Window, IDisposable
         }
     }
 
-    private unsafe nint? GetAgentHud()
-    {
-        var f = Framework.Instance();
-        if (f == null) return null;
-
-        var u = f->GetUiModule();
-        if (u == null) return null;
-
-        var a = u->GetAgentModule();
-        if (a == null) return null;
-
-        return (nint)a->GetAgentHUD();
-    }
     private List<StatusIcon> ParseStatusList(StatusList sl)
     {
         var output = new List<StatusIcon>();
