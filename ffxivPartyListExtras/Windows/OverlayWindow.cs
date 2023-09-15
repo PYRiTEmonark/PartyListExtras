@@ -46,14 +46,13 @@ public class OverlayWindow : Window, IDisposable
         var drawlist = ImGui.GetBackgroundDrawList();
 
         // If any of this goes wrong we just skip drawing the window
-        AgentHUD* pl;
         HudPartyMember* partyMemberList;
         short count;
         AddonPartyList* apl;
         AtkResNode apl_node;
         try
         {
-            pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
+            AgentHUD* pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
             partyMemberList = (HudPartyMember*)pl->PartyMemberList;
             count = pl->PartyMemberCount;
             apl = (AddonPartyList*)plugin.GameGui.GetAddonByName("_PartyList");
@@ -61,8 +60,7 @@ public class OverlayWindow : Window, IDisposable
             apl_node = apl->BackgroundNineGridNode->AtkResNode;
         }
         catch (NullReferenceException e) {
-            PluginLog.Debug("Failure during start of OverlayWindow.Draw - skipping");
-            PluginLog.Debug(e.Message);
+            PluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
             return;
         }
 
@@ -151,7 +149,7 @@ public class OverlayWindow : Window, IDisposable
         string[] special_labels = {
             "stance", "invuln", "living_dead", "block_all",
             "kardion", "kardia", "regen", //"barrier",
-            "dp_g", "dp_r"
+            "dp_g", "dp_r", "crit_rate_up"
         };
         StatusIcon[] special_fstrings = new StatusIcon[] {
             new StatusIcon {FileName = "stance.png", Label = "Stance"},
@@ -164,6 +162,7 @@ public class OverlayWindow : Window, IDisposable
             //new IconElement {FileName = "barrier.png", Label = "Barrier"},
             new StatusIcon {FileName = "dp_g.png", Label = "Sent"},
             new StatusIcon {FileName = "dp_r.png", Label = "Recv"},
+            new StatusIcon {FileName = "crit_rate_up.png", Label = "Crit Up"}
         };
 
         for (int i = 0; i < special_labels.Length; i++)
@@ -226,7 +225,7 @@ public class OverlayWindow : Window, IDisposable
 
         // Set some preferences
         var padding = 5f;
-        var imgsize = (height) - (padding * 2f);
+        var imgsize = height - (padding * 2f);
         var posY = ImGui.GetCursorPosY() + padding;
 
         // TODO: the SetCursorPosX calls are scuffed, work out actual widths
@@ -256,7 +255,7 @@ public class OverlayWindow : Window, IDisposable
 
             if (icon.Info != null && dm != 3) {
                 move_cur_scaled(
-                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X) * scaling, padding,
+                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling), padding,
                     posY * scaling, 0
                 );
                 startpos = ImGui.GetCursorPos();

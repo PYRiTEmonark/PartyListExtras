@@ -40,5 +40,17 @@
         "status_name": "Harmony of Mind",
         "phys_up": 0.05,
         "magi_up": 0.05
+    },
+    {
+        "row_id": 1878,
+        "status_name": "Divination",
+        "phys_up": 0.06,
+        "magi_up": 0.06
+    },
+    {
+        "row_id": 2034,
+        "status_name": "Divination",
+        "phys_up": 0.06,
+        "magi_up": 0.06
     }
 ]

@@ -24,5 +24,11 @@
         "row_id": 1894,
         "status_name": "Dark Missionary",
         "magi_mit": 0.1
+    },
+    {
+        "row_id": 2682,
+        "status_name": "Oblation",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
     }
 ]

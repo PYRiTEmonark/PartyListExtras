@@ -3,5 +3,11 @@
         "row_id": 2596,
         "status_name": "Crest of Time Borrowed",
         "special": "barrier"
+    },
+    {
+        "row_id": 2599,
+        "status_name": "Arcane Circle",
+        "phys_up": 0.03,
+        "magi_up": 0.03
     }
 ]

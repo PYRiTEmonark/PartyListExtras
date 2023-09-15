@@ -33,6 +33,12 @@
         "magi_mit": 0.1
     },
     {
+        "row_id": 1840,
+        "status_name": "Heart of Stone",
+        "phys_mit": 0.15,
+        "magi_mit": 0.15
+    },
+    {
         "row_id": 1836,
         "status_name": "Superbolide",
         "special": "invuln"

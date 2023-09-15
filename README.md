@@ -7,30 +7,32 @@ Note that the information is restricted to buffs provided by players only, fight
 
 For want of a better method, what the statuses actually do is explained in JSON files under `./ffxivPartyListExtras/StatusData`.
 This is because the client holds no information on what the status effects actually do, just who has what.
-Files are split into Job and Role, this is for readability only and isn't strictly nessacary.
+Files are split into Job/Role, this is for readability only and isn't strictly nessacary.
 
-Currently, some conditional buffs aren't applied properly. These are:
+Currently some conditional buffs aren't applied properly. These are:
 - PLD: Intervention buffed when sentinel/rampart active
 - AST: Role Related buffs from arcana
 
 ### Jobs
 
-- AST: Partial - Role related buffs not implimented
-- BRD: Raging Strikes and *Troubador only
-- DNC: Partial up to level 60
-- DRG: *Dragon's Eye only
-- DRK: Partial, up to level 60
+- AST: Level 30 + *Divination - Role related buffs not implimented
+- BRD: Raging Strikes, *Battle Voice and *Troubador
+- DNC: Up to Level 60
+- DRG: *Dragon's Eye and *Battle Litany
+- DRK: Complete
 - GNB: Complete
 - MCH: *Tacticain only
 - MNK: *Brotherhood only
 - PLD: *Partial - Intervention missing additional effect
 - RDM: Embolden only
-- RPR: Crest only
-- SGE: Partial
+- RPR: Crest and *Arcane Circle
+- SAM: Third Eye only
+- SGE: Up to Level 70
 - WAR: *Stance only
 - All other jobs: Nothing (yet)
 
-PRs/Issues very welcome.
+PRs/Issues (containing status ids) very welcome.
+
 Status effect IDs are logged as Debug, or use /plx missing to dump all seen ids to the log.
 Row IDs should be identical to the ones in the excel data, however as there may be duplicates in the data in game verification is appreciated (but not required).
-`*` indicates that the job has been filled in but not tested in game.
+Entries needing verification are marked with an asterix.

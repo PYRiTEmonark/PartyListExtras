@@ -10,5 +10,10 @@
         "status_name": "Troubadour",
         "phys_mit": 0.1,
         "magi_mit": 0.1
+    },
+    {
+        "row_id": 141,
+        "status_name": "Raging Strikes",
+        "special": "crit_rate_up"
     }
 ]
