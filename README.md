@@ -12,6 +12,7 @@ Files are split into Job/Role, this is for readability only and isn't strictly n
 Currently some conditional buffs aren't applied properly. These are:
 - PLD: Intervention buffed when sentinel/rampart active
 - AST: Role Related buffs from arcana
+- Tank: Reprisal and Arm's Length. Potential for "effective" mitigation to be calculated
 
 ### Jobs
 
