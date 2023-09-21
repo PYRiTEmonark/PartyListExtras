@@ -36,4 +36,4 @@ PRs/Issues (containing status ids) very welcome.
 
 Status effect IDs are logged as Debug, or use /plx missing to dump all seen ids to the log.
 Row IDs should be identical to the ones in the excel data, however as there may be duplicates in the data in game verification is appreciated (but not required).
-Entries needing verification are marked with an asterix.
+Entries needing verification are marked with an asterisk.
