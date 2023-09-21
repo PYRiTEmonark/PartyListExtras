@@ -3,10 +3,9 @@
   <PropertyGroup>
     <Authors></Authors>
     <Company></Company>
-    <Version>0.0.0.1</Version>
-    <Description>A sample plugin.</Description>
+    <Version>0.0.1</Version>
     <Copyright></Copyright>
-    <PackageProjectUrl>https://github.com/goatcorp/SamplePlugin</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/PYRiTEmonark/ffxivPartyListExtras</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -25,6 +24,7 @@
     <None Remove="Icons\all_up.png" />
     <None Remove="Icons\barrier.png" />
     <None Remove="Icons\block_all.png" />
+    <None Remove="Icons\crit_rate_up.png" />
     <None Remove="Icons\dp_g.png" />
     <None Remove="Icons\dp_r.png" />
     <None Remove="Icons\icon.png" />
@@ -69,6 +69,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\block_all.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\crit_rate_up.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\dp_r.png">
