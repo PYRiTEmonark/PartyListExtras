@@ -25,7 +25,7 @@ Currently some conditional buffs aren't applied properly. These are:
 - MCH: *Tacticain only
 - MNK: *Brotherhood only
 - PLD: *Partial - Intervention missing additional effect
-- RDM: Embolden only
+- RDM: Complete
 - RPR: Crest and *Arcane Circle
 - SAM: Third Eye only
 - SGE: Up to Level 70

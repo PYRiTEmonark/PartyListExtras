@@ -1,14 +1,13 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Numerics;
 using Dalamud.Interface.Windowing;
 using ImGuiNET;
 
-namespace ffxivPartyListExtras.Windows;
+namespace PartyListExtras.Windows;
 
 public class ConfigWindow : Window, IDisposable
 {
-    private Configuration Configuration;
+    private Configuration configuration;
 
     public ConfigWindow(Plugin plugin) : base(
         "Party List Extras Config")
@@ -16,7 +15,7 @@ public class ConfigWindow : Window, IDisposable
         this.Size = new Vector2(500, 500);
         this.SizeCondition = ImGuiCond.Once;
 
-        this.Configuration = plugin.Configuration;
+        this.configuration = plugin.Configuration;
     }
 
     public void Dispose() { }
@@ -32,15 +31,15 @@ public class ConfigWindow : Window, IDisposable
             "None",
         };
         ImGui.SetNextItemWidth(ImGui.GetWindowContentRegionMax().X);
-        if (ImGui.BeginCombo("", options[Configuration.DisplayMode]))
+        if (ImGui.BeginCombo("", options[configuration.DisplayMode]))
         {
             for (int i = 0; i < options.Length; i++)
             {
-                var x = Configuration.DisplayMode == i;
+                var x = configuration.DisplayMode == i;
                 if (ImGui.Selectable(options[i], x))
                 {
-                    Configuration.DisplayMode = i;
-                    Configuration.Save();
+                    configuration.DisplayMode = i;
+                    configuration.Save();
                 }
                 if (x)
                 {

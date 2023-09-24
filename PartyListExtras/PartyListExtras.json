@@ -3,11 +3,8 @@
   "Name": "Party List Extras",
   "Punchline": "Parses Buffs to help understand what your party is doing.",
   "Description": "Adds Text and Icons next to the party list describing active buffs. Still missing some jobs - See github for progress.",
-  "InternalName": "ffxiv_plx",
+  "InternalName": "plx",
   "ApplicableVersion": "any",
   "Tags": [
-    "sample",
-    "plugin",
-    "goats"
   ]
 }

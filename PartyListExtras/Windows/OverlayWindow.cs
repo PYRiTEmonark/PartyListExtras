@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Interface.Windowing;
-using Dalamud.Logging;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
@@ -15,7 +13,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 
-namespace ffxivPartyListExtras.Windows;
+namespace PartyListExtras.Windows;
 
 public class OverlayWindow : Window, IDisposable
 {
@@ -60,7 +58,7 @@ public class OverlayWindow : Window, IDisposable
             apl_node = apl->BackgroundNineGridNode->AtkResNode;
         }
         catch (NullReferenceException e) {
-            PluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
+            plugin.pluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
             return;
         }
 
@@ -117,7 +115,7 @@ public class OverlayWindow : Window, IDisposable
 
             // Start child window to make the cursor work "nicer"
             ImGui.SetCursorPos(curpos);
-            ImGui.BeginChild("Player {0}".Format(i), cursize, false, this.Flags);
+            ImGui.BeginChild("Player {0}".Format(i), cursize, false, Flags);
 
             //Spin out to helper functions because long
             DrawStatusIcons(ParseStatusList(sl), cursize.Y);
@@ -205,7 +203,7 @@ public class OverlayWindow : Window, IDisposable
                 missing_ids.Add(item);
             }
         }
-        if (debugMessage.Length > 0) PluginLog.Debug("Missing Status Ids: " + debugMessage);
+        if (debugMessage.Length > 0) plugin.pluginLog.Debug("Missing Status Ids: " + debugMessage);
 
         return output;
     }
@@ -275,8 +273,6 @@ public class OverlayWindow : Window, IDisposable
         ));
     }
 
-    // VS might moan about some of these being possibly Null.
-    // VS is wrong, we just filtered out the Null values.
     internal bool one_true(IEnumerable<bool?> values)
     {
         // filter out null values then aggregate using or
