@@ -1,6 +1,6 @@
-# ffxiv Party List Extras
+# Party List Extras
 
-Adds some extra information about personal/party status effects to the party list.
+A Dalamud plugin to add some extra information about personal/party status effects to the party list.
 Note that the information is restricted to buffs provided by players only, fight-related effects will not be added to the plugin.
 
 ## Progress
