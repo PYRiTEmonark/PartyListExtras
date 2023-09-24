@@ -10,13 +10,14 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using System.Text.Json;
 using Dalamud.Plugin.Services;
 using PartyListExtras.Windows;
+using Dalamud.Interface.Internal;
 
 namespace PartyListExtras
 {
-    // number to update so the DLL actually changes: 8
+    // number to update so the DLL actually changes: 9
     public sealed class Plugin : IDalamudPlugin
     {
-        public string Name => "ffxivPartyListExtras";
+        public string Name => "PartyListExtras";
         private const string CommandName = "/plx";
 
         private bool overlayEnabled = true;
@@ -24,7 +25,7 @@ namespace PartyListExtras
         private DalamudPluginInterface PluginInterface { get; init; }
         private ICommandManager CommandManager { get; init; }
         public Configuration Configuration { get; init; }
-        public WindowSystem WindowSystem = new("ffxivPartyListExtras");
+        public WindowSystem WindowSystem = new("PartyListExtras");
         public IGameGui GameGui { get; init; }
         public IChatGui ChatGui { get; init; }
         public IClientState ClientState { get; init; }
@@ -35,7 +36,7 @@ namespace PartyListExtras
 
         private ConfigWindow ConfigWindow { get; init; }
         private OverlayWindow OverlayWindow { get; init; }
-        internal Dictionary<string, TextureWrap> textures = new Dictionary<string, TextureWrap>();
+        internal Dictionary<string, IDalamudTextureWrap> textures = new Dictionary<string, IDalamudTextureWrap>();
         internal Dictionary<int, StatusEffectData> statusEffectData = new Dictionary<int, StatusEffectData>();
 
         public Plugin(
@@ -120,7 +121,7 @@ namespace PartyListExtras
 
         private void LoadAssets()
         {
-            textures = new Dictionary<string, TextureWrap>();
+            textures = new Dictionary<string, IDalamudTextureWrap>();
             statusEffectData = new Dictionary<int, StatusEffectData>();
 
             // Loads/Reloads icons and data files
@@ -138,7 +139,7 @@ namespace PartyListExtras
             {
                 if (imageName == null) continue;
                 var imagePath = Path.Combine(baseImagePath, imageName);
-                this.textures.Add(imageName, (TextureWrap)this.PluginInterface.UiBuilder.LoadImage(imagePath));
+                this.textures.Add(imageName, this.PluginInterface.UiBuilder.LoadImage(imagePath));
             }
 
             pluginLog.Debug("Images Loaded: {0}", string.Join(',', imageNames));

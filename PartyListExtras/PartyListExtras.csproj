@@ -5,7 +5,7 @@
     <Company></Company>
     <Version>0.0.1</Version>
     <Copyright></Copyright>
-    <PackageProjectUrl>https://github.com/PYRiTEmonark/ffxivPartyListExtras</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/PYRiTEmonark/PartyListExtras</PackageProjectUrl>
   </PropertyGroup>
 
   <PropertyGroup>
