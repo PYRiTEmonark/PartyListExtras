@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Interface.Windowing;
+using Dalamud.Logging;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
@@ -58,7 +59,7 @@ public class OverlayWindow : Window, IDisposable
             apl_node = apl->BackgroundNineGridNode->AtkResNode;
         }
         catch (NullReferenceException e) {
-            plugin.pluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
+            PluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
             return;
         }
 
@@ -203,7 +204,7 @@ public class OverlayWindow : Window, IDisposable
                 missing_ids.Add(item);
             }
         }
-        if (debugMessage.Length > 0) plugin.pluginLog.Debug("Missing Status Ids: " + debugMessage);
+        if (debugMessage.Length > 0) PluginLog.Debug("Missing Status Ids: " + debugMessage);
 
         return output;
     }

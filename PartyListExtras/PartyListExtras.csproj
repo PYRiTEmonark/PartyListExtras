@@ -20,12 +20,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Images\**" />
-    <EmbeddedResource Remove="Images\**" />
-    <None Remove="Images\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Icons\all_down.png" />
     <None Remove="Icons\all_up.png" />
     <None Remove="Icons\barrier.png" />
@@ -149,7 +143,7 @@
   </PropertyGroup>
   
    <ItemGroup>
-     <PackageReference Include="DalamudPackager" Version="2.1.11" />
+     <PackageReference Include="DalamudPackager" Version="2.1.12" />
    </ItemGroup>
 
   <ItemGroup>

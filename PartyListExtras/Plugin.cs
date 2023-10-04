@@ -11,6 +11,8 @@ using System.Text.Json;
 using Dalamud.Plugin.Services;
 using PartyListExtras.Windows;
 using Dalamud.Interface.Internal;
+using Dalamud.Game.Gui;
+using Dalamud.Logging;
 
 namespace PartyListExtras
 {
@@ -27,27 +29,24 @@ namespace PartyListExtras
         public Configuration Configuration { get; init; }
         public WindowSystem WindowSystem = new("PartyListExtras");
         public IGameGui GameGui { get; init; }
-        public IChatGui ChatGui { get; init; }
+        public ChatGui ChatGui { get; init; }
         public IClientState ClientState { get; init; }
         public IObjectTable ObjectTable { get; init; }
         public IPartyList PartyList { get; init; }
-        public IPluginLog pluginLog { get; init; }
-
 
         private ConfigWindow ConfigWindow { get; init; }
         private OverlayWindow OverlayWindow { get; init; }
-        internal Dictionary<string, IDalamudTextureWrap> textures = new Dictionary<string, IDalamudTextureWrap>();
+        internal Dictionary<string, TextureWrap> textures = new Dictionary<string, TextureWrap>();
         internal Dictionary<int, StatusEffectData> statusEffectData = new Dictionary<int, StatusEffectData>();
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             [RequiredVersion("1.0")] ICommandManager commandManager,
             [RequiredVersion("1.0")] IGameGui gameGui,
-            [RequiredVersion("1.0")] IChatGui chatGui,
+            [RequiredVersion("1.0")] ChatGui chatGui,
             [RequiredVersion("1.0")] IClientState clientState,
             [RequiredVersion("1.0")] IObjectTable objectTable,
-            [RequiredVersion("1.0")] IPartyList partyList,
-            [RequiredVersion("1.0")] IPluginLog pluginLog)
+            [RequiredVersion("1.0")] IPartyList partyList)
         {
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
@@ -56,7 +55,6 @@ namespace PartyListExtras
             this.ClientState = clientState;
             this.PartyList = partyList;
             this.ObjectTable = objectTable;
-            this.pluginLog = pluginLog;
 
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);
@@ -95,7 +93,7 @@ namespace PartyListExtras
         {
             // this isn't the greatest way of doing it but it's fine
             if (args == "missing") {
-                pluginLog.Information(
+                PluginLog.Information(
                     "Missing Status Ids: {0}",
                     string.Join("", OverlayWindow.missing_ids
                         .Select(x => string.Format("{0} = {1}; ", x.Item1, x.Item2))));
@@ -121,18 +119,18 @@ namespace PartyListExtras
 
         private void LoadAssets()
         {
-            textures = new Dictionary<string, IDalamudTextureWrap>();
+            textures = new Dictionary<string, TextureWrap>();
             statusEffectData = new Dictionary<int, StatusEffectData>();
 
             // Loads/Reloads icons and data files
-            pluginLog.Information("Loading/Reloading PartyListExtras assets");
+            PluginLog.Information("Loading/Reloading PartyListExtras assets");
 
             // Find our image files
             var baseImagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "Icons");
             var imageNames = Directory.GetFiles(baseImagePath, "*.png").Select(Path.GetFileName).ToArray();
 
             // Logging cus VS refuses to copy images sometimes
-            pluginLog.Debug("Loading images from {0}", baseImagePath);
+            PluginLog.Debug("Loading images from {0}", baseImagePath);
 
             // Load images into the dict
             foreach (var imageName in imageNames)
@@ -142,13 +140,13 @@ namespace PartyListExtras
                 this.textures.Add(imageName, this.PluginInterface.UiBuilder.LoadImage(imagePath));
             }
 
-            pluginLog.Debug("Images Loaded: {0}", string.Join(',', imageNames));
+            PluginLog.Debug("Images Loaded: {0}", string.Join(',', imageNames));
 
             // as above but for status .json files in /StatusData
             var baseDataPath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "StatusData");
             var dataNames = Directory.GetFiles(baseDataPath, "*.json").Select(Path.GetFileName).ToArray();
 
-            pluginLog.Debug("Loading data files from {0}", baseDataPath);
+            PluginLog.Debug("Loading data files from {0}", baseDataPath);
 
             foreach (var dataName in dataNames)
             {
@@ -159,7 +157,7 @@ namespace PartyListExtras
                     var rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(fs);
                     if (rawData == null)
                     {
-                        pluginLog.Warning("Data file {0} didn't load - Badly formatted?");
+                        PluginLog.Warning("Data file {0} didn't load - Badly formatted?");
                         continue;
                     }
 
@@ -167,7 +165,7 @@ namespace PartyListExtras
                     {
                         if (statusEffectData.ContainsKey(sxd.row_id))
                         {
-                            pluginLog.Warning("Key {0} exists twice; accepted {1}, rejected {2}",
+                            PluginLog.Warning("Key {0} exists twice; accepted {1}, rejected {2}",
                                 sxd.row_id, statusEffectData[sxd.row_id].status_name, sxd.status_name);
                             continue;
                         }
@@ -176,7 +174,7 @@ namespace PartyListExtras
                 }
             }
 
-            pluginLog.Debug("Data files Loaded: {0}", string.Join(',', dataNames));
+            PluginLog.Debug("Data files Loaded: {0}", string.Join(',', dataNames));
         }
 
         private unsafe void DrawUI()
