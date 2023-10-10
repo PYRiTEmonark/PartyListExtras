@@ -31,7 +31,6 @@
     <None Remove="Icons\dp_g.png" />
     <None Remove="Icons\dp_r.png" />
     <None Remove="Icons\healing_up.png" />
-    <None Remove="Icons\icon.png" />
     <None Remove="Icons\invuln.png" />
     <None Remove="Icons\kardia.png" />
     <None Remove="Icons\kardion.png" />
