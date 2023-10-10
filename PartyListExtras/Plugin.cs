@@ -117,6 +117,7 @@ namespace PartyListExtras
             else if (args == "help")
             {
                 ChatGui.Print("Party List Extras commands:\n" +
+                    "/plx - toggle overlay\n" +
                     "/plx help - sends this message\n" +
                     "/plx reload - load data files and images\n" +
                     "/plx config - opens config window");
@@ -169,7 +170,14 @@ namespace PartyListExtras
                 var dataPath = Path.Combine(baseDataPath, dataName);
                 using (FileStream fs = File.OpenRead(dataPath))
                 {
-                    var rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(fs);
+                    List<StatusEffectData>? rawData;
+                    try
+                    {
+                         rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(fs);
+                    } catch (JsonException ex) {
+                        pluginLog.Warning("Error loading file {0} - {1}", dataName, ex.Message);
+                        continue;
+                    }
                     if (rawData == null)
                     {
                         pluginLog.Warning("Data file {0} didn't load - Badly formatted?");
