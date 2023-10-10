@@ -10,5 +10,33 @@
         "status_name": "Brotherhood",
         "phys_up": 0.05,
         "magi_up": 0.05
+    },
+    {
+        "row_id": 2008,
+        "status_name": "Riddle of Earth",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
+        "row_id": 1181,
+        "status_name": "Riddle of Fire",
+        "phys_up": 0.05,
+        "magi_up": 0.05
+    },
+    {
+        "row_id": 1413,
+        "status_name": "Riddle of Fire",
+        "phys_up": 0.15,
+        "magi_up": 0.15
+    },
+    {
+        "row_id": 2687,
+        "status_name": "Riddle of Wind",
+        "auto_delay_down": 0.5
+    },
+    {
+        "row_id": 102,
+        "status_name": "Mantra",
+        "healing_up": 0.1
     }
 ]

@@ -12,6 +12,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using FFXIVClientStructs.Havok;
 using ImGuiNET;
 
 namespace PartyListExtras.Windows;
@@ -59,7 +60,7 @@ public class OverlayWindow : Window, IDisposable
             apl_node = apl->BackgroundNineGridNode->AtkResNode;
         }
         catch (NullReferenceException e) {
-            PluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
+            plugin.pluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
             return;
         }
 
@@ -144,12 +145,8 @@ public class OverlayWindow : Window, IDisposable
         }
 
         // Read properties out of data
-        // TODO: move all definitions of IconElement out to a json file
-        string[] special_labels = {
-            "stance", "invuln", "living_dead", "block_all",
-            "kardion", "kardia", "regen", //"barrier",
-            "dp_g", "dp_r", "crit_rate_up"
-        };
+
+        // This Needs to be paralell to the `SpecialEffects` enum
         StatusIcon[] special_fstrings = new StatusIcon[] {
             new StatusIcon {FileName = "stance.png", Label = "Stance"},
             new StatusIcon {FileName = "invuln.png", Label = "Invuln"},
@@ -157,42 +154,63 @@ public class OverlayWindow : Window, IDisposable
             new StatusIcon {FileName = "block_all.png", Label = "Block All"},
             new StatusIcon {FileName = "kardion.png", Label = "Recv"},
             new StatusIcon {FileName = "kardia.png", Label = "Sent"},
-            new StatusIcon {FileName = "regen.png", Label = "Regen"},
-            //new IconElement {FileName = "barrier.png", Label = "Barrier"},
             new StatusIcon {FileName = "dp_g.png", Label = "Sent"},
             new StatusIcon {FileName = "dp_r.png", Label = "Recv"},
-            new StatusIcon {FileName = "crit_rate_up.png", Label = "Crit Up"}
+            new StatusIcon {FileName = "regen.png", Label = "Regen"},
+            new StatusIcon {FileName = "crit_rate_up.png", Label = "Crit Up"},
+            //new IconElement {FileName = "barrier.png", Label = "Barrier"},
         };
 
-        for (int i = 0; i < special_labels.Length; i++)
+        for (int i = 0; i < Enum.GetNames(typeof(SpecialEffects)).Length; i++)
         {
-            if (datas.Select(x => x.special).Contains(special_labels[i]))
+            if (datas.Select(x => x.special).Contains((SpecialEffects)i))
                 output.Add(special_fstrings[i]);
         }
 
+        // Mitigation
         var phys_mit = multi_sum(datas.Select(x => x.phys_mit));
         var magi_mit = multi_sum(datas.Select(x => x.magi_mit));
-        //var othr_mit = multi_sum(datas.Select(x => x.othr_mit));
 
-        var phys_up = multi_sum(datas.Select(x => x.phys_up));
-        var magi_up = multi_sum(datas.Select(x => x.magi_up));
-        //var othr_up = multi_sum(datas.Select(x => x.othr_up));
-
-        // Mitigation
-        if (phys_mit == magi_mit && phys_mit > 0) output.Add(new StatusIcon { FileName="mit_all.png", Info = "{0}%%".Format(phys_mit), Label = "Mitigation"});
+        if (phys_mit == magi_mit && phys_mit > 0)
+            output.Add(new StatusIcon { FileName="mit_all.png", Info = "{0}%%".Format(phys_mit), Label = "Mitigation"});
         else
         {
-            if (phys_mit > 0) output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%%".Format(phys_mit), Label = "Physical Mit" });
-            if (magi_mit > 0) output.Add(new StatusIcon { FileName = "mit_magi.png", Info = "{0}%%".Format(magi_mit), Label = "Magical Mit" });
+            if (phys_mit > 0)
+                output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%%".Format(phys_mit), Label = "Physical Mit" });
+            if (magi_mit > 0)
+                output.Add(new StatusIcon { FileName = "mit_magi.png", Info = "{0}%%".Format(magi_mit), Label = "Magical Mit" });
         }
 
         // Damage Up
-        if (phys_up == magi_up && phys_up > 0) output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%%".Format(phys_up), Label = "Damage Up"});
+        var phys_up = multi_sum(datas.Select(x => x.phys_up));
+        var magi_up = multi_sum(datas.Select(x => x.magi_up));
+
+        if (phys_up == magi_up && phys_up > 0)
+            output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%%".Format(phys_up), Label = "Damage Up"});
         else
         {
-            if (phys_up > 0) output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%%".Format(phys_up), Label = "Phyiscal Dmg Up" });
-            if (magi_up > 0) output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%%".Format(magi_up), Label = "Magical Dmg Up" });
+            if (phys_up > 0)
+                output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%%".Format(phys_up), Label = "Phyiscal Dmg Up" });
+            if (magi_up > 0)
+                output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%%".Format(magi_up), Label = "Magical Dmg Up" });
         }
+
+        // Attack Speed
+        var attack_speed_up = multi_sum(datas.Select(x => x.attack_speed_up));
+        var cast_speed_up = multi_sum(datas.Select(x => x.cast_speed_up));
+        var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
+
+        if (attack_speed_up > 0)
+            output.Add(new StatusIcon { FileName = "attack_speed_up.png", Info = "{0}%%".Format(attack_speed_up), Label = "Attack Speed Up" });
+        if (cast_speed_up > 0)
+            output.Add(new StatusIcon { FileName = "cast_speed_up.png", Info = "{0}%%".Format(cast_speed_up), Label = "Cast Speed Up" });
+        if (auto_speed_up > 0)
+            output.Add(new StatusIcon { FileName = "auto_speed_up.png", Info = "{0}%%".Format(auto_speed_up), Label = "Auto Speed Up" });
+
+        // Heal Rate
+        var healing_up = multi_sum(datas.Select(x => x.healing_up));
+        if (healing_up > 0)
+            output.Add(new StatusIcon { FileName = "healing_up.png", Info = "{0}%%".Format(healing_up), Label = "Healing Up" });
 
         // Send Message to log for status effects that are missing
         var debugMessage = "";
@@ -204,7 +222,7 @@ public class OverlayWindow : Window, IDisposable
                 missing_ids.Add(item);
             }
         }
-        if (debugMessage.Length > 0) PluginLog.Debug("Missing Status Ids: " + debugMessage);
+        if (debugMessage.Length > 0) plugin.pluginLog.Debug("Missing Status Ids: " + debugMessage);
 
         return output;
     }
@@ -227,8 +245,7 @@ public class OverlayWindow : Window, IDisposable
         var imgsize = height - (padding * 2f);
         var posY = ImGui.GetCursorPosY() + padding;
 
-        // TODO: the SetCursorPosX calls are scuffed, work out actual widths
-        // just don't question the scalars
+        // TODO: the widths are mostly guesses here, possible to break with scaling
         foreach (var icon in icons)
         {
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() - padding);
@@ -290,12 +307,5 @@ public class OverlayWindow : Window, IDisposable
     internal int to_percent(float value)
     {
         return (int)Math.Round(value * 100, 0);
-    }
-
-    internal struct StatusIcon
-    {
-        public string FileName { get; set; } // The icon itself, e.g. "mit_all.png"
-        public string? Label { get; set; } // Static label on the icon, e.g. "Mitigation"
-        public string? Info { get; set; } // Info on the icon, e.g. the actual mit percentage
     }
 }

@@ -9,30 +9,46 @@ For want of a better method, what the statuses actually do is explained in JSON 
 This is because the client holds no information on what the status effects actually do, just who has what.
 Files are split into Job/Role, this is for readability only and isn't strictly nessacary.
 
-Currently some conditional buffs aren't applied properly. These are:
+Currently some buffs aren't applied properly. These are:
 - PLD: Intervention buffed when sentinel/rampart active
 - AST: Role Related buffs from arcana
+- BRD: Radiant Finale depending on job gauge
 - Tank: Reprisal and Arm's Length. Potential for "effective" mitigation to be calculated
+- Ditto for "effective" damage for things that are currently fuzzed under "special"
+- Physical Ranged - Tactician, Shield Samba and Troubadour do not stack
 
 ### Jobs
 
-- AST: Level 30 + *Divination - Role related buffs not implimented
-- BRD: Raging Strikes, *Battle Voice and *Troubador
-- DNC: Up to Level 60
-- DRG: *Dragon's Eye and *Battle Litany
+#### Tank
 - DRK: Complete
 - GNB: Complete
-- MCH: *Tacticain only
-- MNK: *Brotherhood only
 - PLD: *Partial - Intervention missing additional effect
-- RDM: Complete
+- WAR: *Stance only
+
+#### Healer
+- AST: Level 30 + *Divination - Role related buffs not implimented
+- SCH: 
+- SGE: Up to Level 70
+- WHM: 
+
+#### Melee
+- DRG: *Dragon's Eye, *Lance Charge and *Battle Litany
+- MNK: *Brotherhood, *Riddle of Earth and *Riddle of Fire
+- NIN:
 - RPR: Crest and *Arcane Circle
 - SAM: Third Eye only
-- SGE: Up to Level 70
-- WAR: *Stance only
-- All other jobs: Nothing (yet)
 
-PRs/Issues (containing status ids) very welcome.
+#### Magical Ranged
+- BLM: Complete
+- SMN: 
+- RDM: Complete
+
+#### Phyiscal Ranged
+- BRD: Raging Strikes, *Battle Voice and *Troubador
+- DNC: Up to Level 60
+- MCH: *Tacticain only
+
+PRs/Issues very welcome.
 
 Status effect IDs are logged as Debug, or use /plx missing to dump all seen ids to the log.
 Row IDs should be identical to the ones in the excel data, however as there may be duplicates in the data in game verification is appreciated (but not required).

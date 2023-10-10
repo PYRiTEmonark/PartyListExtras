@@ -11,6 +11,7 @@ using System.Text.Json;
 using Dalamud.Plugin.Services;
 using PartyListExtras.Windows;
 using Dalamud.Interface.Internal;
+using System.Text.Json.Serialization;
 
 namespace PartyListExtras
 {
@@ -43,7 +44,7 @@ namespace PartyListExtras
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
             [RequiredVersion("1.0")] ICommandManager commandManager,
             [RequiredVersion("1.0")] IGameGui gameGui,
-        [RequiredVersion("1.0")] IChatGui chatGui,
+            [RequiredVersion("1.0")] IChatGui chatGui,
             [RequiredVersion("1.0")] IClientState clientState,
             [RequiredVersion("1.0")] IObjectTable objectTable,
             [RequiredVersion("1.0")] IPartyList partyList,
@@ -188,7 +189,7 @@ namespace PartyListExtras
                 }
             }
 
-            pluginLog.Debug("Data files Loaded: {0}", string.Join(',', dataNames));
+            pluginLog.Debug("Data files Loaded: {0}", string.Join(", ", dataNames));
         }
 
         private unsafe void DrawUI()
@@ -207,31 +208,5 @@ namespace PartyListExtras
             ConfigWindow.IsOpen = true;
         }
     }
-    internal struct StatusEffectData
-    {
-        // to be used as Mapping Key
-        public required int row_id { get; set; }
-        // should be as in game
-        public required string status_name { get; set; }
-
-        // special acts as a custom field, e.g. stance, invuln
-        public string? special { get; set; }
-
-        // Mitigation
-        public float? phys_mit { get; set; }
-        public float? magi_mit { get; set; }
-        public float? othr_mit { get; set; }
-
-        // Damage Up
-        public float? phys_up { get; set; }
-        public float? magi_up { get; set; }
-        public float? othr_up { get; set; }
-
-        // HP Regen in potency per tick
-        // TODO: anything better than that?
-        public float? regen { get; set; }
-
-    }
 
 }
-

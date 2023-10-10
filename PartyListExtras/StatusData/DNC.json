@@ -2,34 +2,40 @@
     {
         "row_id": 1823,
         "status_name": "Closed Position",
+        "status_type": "PartyShared",
         "special": "dp_g"
     },
     {
         "row_id": 1824,
         "status_name": "Dance Partner",
+        "status_type": "PartyShared",
         "special": "dp_r"
     },
     {
         "row_id": 1821,
         "status_name": "Standard Finish",
+        "status_type": "PartyMember",
         "phys_up": 0.05,
         "magi_up": 0.05
     },
     {
         "row_id": 1822,
         "status_name": "Technical Finish",
+        "status_type": "PartyWide",
         "phys_up": 0.05,
         "magi_up": 0.05
     },
     {
         "row_id": 1826,
         "status_name": "Shield Samba",
+        "status_type": "PartyWide",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 2697,
         "status_name": "Improvised Finish",
+        "status_type": "PartyWide",
         "special": "barrier"
     }
 ]

@@ -2,56 +2,66 @@
     {
         "row_id": 1831,
         "status_name": "No Mercy",
+        "status_type": "Self",
         "phys_up": 0.2,
         "magi_up": 0.2
     },
     {
         "row_id": 1833,
         "status_name": "Royal Guard",
+        "status_type": "Self",
         "special": "stance"
     },
     {
         "row_id": 1835,
         "status_name": "Aurora",
+        "status_type": "PartyMember",
         "special": "regen"
     },
     {
         "row_id": 1832,
         "status_name": "Camouflage",
+        "status_type": "Self",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 1834,
         "status_name": "Nebula",
+        "status_type": "Self",
         "phys_mit": 0.3,
         "magi_mit": 0.3
     },
     {
         "row_id": 1839,
         "status_name": "Heart of Light",
+        "status_type": "PartyWide",
         "magi_mit": 0.1
     },
     {
         "row_id": 1840,
         "status_name": "Heart of Stone",
+        "status_type": "PartyMember",
         "phys_mit": 0.15,
         "magi_mit": 0.15
     },
     {
         "row_id": 1836,
         "status_name": "Superbolide",
+        "status_type": "Self",
         "special": "invuln"
     },
     {
         "row_id": 2683,
         "status_name": "Heart of Corundum",
+        "status_type": "PartyMember",
         "phys_mit": 0.15,
         "magi_mit": 0.15
     },
     {
         "row_id": 2684,
         "status_name": "Clarity of Corundum",
+        "status_type": "PartyMember",
         "phys_mit": 0.15,
         "magi_mit": 0.15
     }
