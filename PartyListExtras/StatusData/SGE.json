@@ -2,13 +2,13 @@
     {
         "row_id": 2604,
         "status_name": "Kardia",
-        "status_type": "Shared",
+        "status_type": "PartyShared",
         "special": "kardia"
     },
     {
         "row_id": 2605,
         "status_name": "Kardion",
-        "status_type": "Shared",
+        "status_type": "PartyShared",
         "special": "kardion"
     },
     {

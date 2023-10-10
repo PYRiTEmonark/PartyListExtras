@@ -50,12 +50,12 @@
         "healing_up": 0.05
     },
     {
-        "row_id": -1,
+        "row_id": 2715,
         "status_name": "Harmony of Body",
         "status_type": "Self",
         "cast_speed_up": 0.1,
         "auto_speed_up": 0.1
-    }
+    },
     {
         "row_id": 1878,
         "status_name": "Divination",
