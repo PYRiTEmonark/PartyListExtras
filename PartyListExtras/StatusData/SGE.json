@@ -2,38 +2,52 @@
     {
         "row_id": 2604,
         "status_name": "Kardia",
+        "status_type": "Shared",
         "special": "kardia"
     },
     {
         "row_id": 2605,
         "status_name": "Kardion",
+        "status_type": "Shared",
         "special": "kardion"
     },
     {
         "row_id": 2607,
         "status_name": "Eukrasian Diagnosis",
+        "status_type": "PartyMember",
         "special": "barrier"
     },
     {
         "row_id": 2609,
         "status_name": "Eukrasian Prognosis",
+        "status_type": "PartyMember",
         "special": "barrier"
     },
     {
         "row_id": 2618,
         "status_name": "Kerachole",
+        "status_type": "PartyWide",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 2619,
         "status_name": "Taurochole",
+        "status_type": "PartyWide",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 2620,
+        "status_name": "Physis",
+        "status_type": "PartyWide",
+        "special": "regen"
+    },
+    {
+        "row_id": 2620,
         "status_name": "Physis II",
+        "status_type": "PartyWide",
+        "healing_up": 0.1,
         "special": "regen"
     }
 ]

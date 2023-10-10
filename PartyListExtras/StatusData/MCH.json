@@ -2,12 +2,14 @@
     {
         "row_id": 1951,
         "status_name": "Tacticain",
+        "status_type": "PartyWide",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 2177,
         "status_name": "Tacticain",
+        "status_type": "PartyWide",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     }

@@ -2,11 +2,13 @@
     {
         "row_id": 2596,
         "status_name": "Crest of Time Borrowed",
+        "status_type": "PartyMember",
         "special": "barrier"
     },
     {
         "row_id": 2599,
         "status_name": "Arcane Circle",
+        "status_type": "PartyWide",
         "phys_up": 0.03,
         "magi_up": 0.03
     }

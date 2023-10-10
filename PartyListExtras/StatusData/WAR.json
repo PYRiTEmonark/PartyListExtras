@@ -2,16 +2,19 @@
     {
         "row_id": 91,
         "status_name": "Defiance",
+        "status_type": "Self",
         "special": "stance"
     },
     {
         "row_id": 1396,
         "status_name": "Defiance",
+        "status_type": "Self",
         "special": "stance"
     },
     {
         "row_id": 3124,
         "status_name": "Defiance",
+        "status_type": "Self",
         "special": "stance"
     }
 ]

@@ -2,6 +2,7 @@
     {
         "row_id": 488,
         "status_name": "Shade Shift",
+        "status_type": "Self",
         "special": "barrier"
     }
 ]

@@ -10,9 +10,10 @@ This is because the client holds no information on what the status effects actua
 Files are split into Job/Role, this is for readability only and isn't strictly nessacary.
 
 Currently some buffs aren't applied properly. These are:
-- PLD: Intervention buffed when sentinel/rampart active
+- PLD: Intervention buffed when sentinel/rampart active, Block rate on Passage of Arms
 - AST: Role Related buffs from arcana
 - BRD: Radiant Finale depending on job gauge
+- SGE: Kerachole and Taurochole cannot be stacked
 - Tank: Reprisal and Arm's Length. Potential for "effective" mitigation to be calculated
 - Ditto for "effective" damage for things that are currently fuzzed under "special"
 - Physical Ranged - Tactician, Shield Samba and Troubadour do not stack
@@ -22,13 +23,13 @@ Currently some buffs aren't applied properly. These are:
 #### Tank
 - DRK: Complete
 - GNB: Complete
-- PLD: *Partial - Intervention missing additional effect
+- PLD: *Partial, see above
 - WAR: *Stance only
 
 #### Healer
 - AST: Level 30 + *Divination - Role related buffs not implimented
 - SCH: 
-- SGE: Up to Level 70
+- SGE: Level 70 only
 - WHM: 
 
 #### Melee
