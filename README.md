@@ -3,11 +3,14 @@
 A Dalamud plugin to add some extra information about personal/party status effects to the party list.
 Note that the information is restricted to buffs provided by players only, fight-related effects will not be added to the plugin.
 
-## Progress
-
 For want of a better method, what the statuses actually do is explained in JSON files under `./ffxivPartyListExtras/StatusData`.
+All json files are read in and converted to a `StatusEffectData` struct.
 This is because the client holds no information on what the status effects actually do, just who has what.
 Files are split into Job/Role, this is for readability only and isn't strictly nessacary.
+
+Note that the end goal isn't to perfectly illustrate damage, just to simplify the myriad of buffs that can be hard to parse.
+
+## Progress
 
 Currently some buffs aren't applied properly. These are:
 - PLD: Intervention buffed when sentinel/rampart active, Block rate on Passage of Arms

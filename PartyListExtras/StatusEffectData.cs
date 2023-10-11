@@ -64,12 +64,13 @@ namespace PartyListExtras
         stance, // Tank Stances
         invuln, // Tank Invulnrabilities
         living_dead, // DRK's Living Dead (before invuln pops)
-        blockAll, // PLD's Bulwark
+        block_all, // PLD's Bulwark
         kardion,
         kardia,
         dp_g,
         dp_r,
         regen,
-        crit_rate_up
+        crit_rate_up,
+        barrier // Currently unused
     }
 }

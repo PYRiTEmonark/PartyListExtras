@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Configuration;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
@@ -64,8 +65,9 @@ public class OverlayWindow : Window, IDisposable
             return;
         }
 
-        var black = ImGui.ColorConvertFloat4ToU32(new Vector4(0f, 0f, 0f, 1f));
-        var clear = ImGui.ColorConvertFloat4ToU32(new Vector4(0f, 0f, 0f, 0f));
+        var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
+        var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
+        var singlecol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorSingle);
 
         // resize window
         // Set width and height so window is to the left of the party list
@@ -75,13 +77,10 @@ public class OverlayWindow : Window, IDisposable
 
         this.Size = ImGui.GetMainViewport().Size;
 
-        // Draw background - old, entire list version
-        //drawlist.AddRectFilledMultiColor((Vector2)this.Position, (Vector2)(this.Position + this.Size), clear, black, black, clear);
-
+        // For each player in the party...
         for (var i = 0; i < count; i++)
         {
-            // PlayerCharacter and BattleNPC is both BattleChara
-            // TODO: fix this so there isn't the duplication
+            // Pull the status list of the party member
             PlayerCharacter pc; BattleNpc bc;
             StatusList sl;
             var result = plugin.ObjectTable.SearchById(partyMemberList[i].ObjectId);
@@ -102,18 +101,18 @@ public class OverlayWindow : Window, IDisposable
                 continue;
             };
 
-            // Get ResNode of the JobIcon
+            // Get ResNode of the JobIcon - everything is drawn relative to the job icon
             var icon = apl->PartyMember[i].ClassJobIcon;
             if (icon == null) { continue; }
             var node = icon->AtkResNode;
-            // TEMP: Offset is temporary
-            var curpos = new Vector2(node.ScreenX - ((300 * scaling) + 10), node.ScreenY);
+            // TODO: allow repositioning and resizing of the UI element
+            var curpos = new Vector2(node.ScreenX - ((300 * scaling) + plugin.Configuration.OverlayOffset), node.ScreenY);
             var cursize = new Vector2(300 * scaling, node.Height * scaling);
-
-            // this.scaling = node.Height / 32;
-
             // Draw Background
-            drawlist.AddRectFilledMultiColor(curpos, (curpos+cursize), clear, black, black, clear);
+            if (plugin.Configuration.doGradientBackground)
+                drawlist.AddRectFilledMultiColor(curpos, (curpos + cursize), leftcol, rightcol, rightcol, leftcol);
+            else
+                drawlist.AddRectFilled(curpos, (curpos + cursize), rightcol);
 
             // Start child window to make the cursor work "nicer"
             ImGui.SetCursorPos(curpos);
@@ -158,7 +157,7 @@ public class OverlayWindow : Window, IDisposable
             new StatusIcon {FileName = "dp_r.png", Label = "Recv"},
             new StatusIcon {FileName = "regen.png", Label = "Regen"},
             new StatusIcon {FileName = "crit_rate_up.png", Label = "Crit Up"},
-            //new IconElement {FileName = "barrier.png", Label = "Barrier"},
+            new StatusIcon {FileName = "barrier.png", Label = "Barrier"}
         };
 
         for (int i = 0; i < Enum.GetNames(typeof(SpecialEffects)).Length; i++)
@@ -227,9 +226,7 @@ public class OverlayWindow : Window, IDisposable
         return output;
     }
 
-    // Render StatusIcons
-    // Note: Still uses the cursor
-    // This isn't bad, but it's a strange way to do it
+    // Render a list of StatusIcons, depends on the cursor being in the top right of the intended area
     private void DrawStatusIcons(List<StatusIcon> icons, float height)
     {
         if (this.Size == null) return;
@@ -248,8 +245,12 @@ public class OverlayWindow : Window, IDisposable
         // TODO: the widths are mostly guesses here, possible to break with scaling
         foreach (var icon in icons)
         {
+            // To render RTL, we do use the cursor, but set its position back to where it was
+            // before we draw each element. 
+
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() - padding);
 
+            // the label e.g. damage up
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Info == null)))
             {
                 move_cur_scaled(
@@ -261,6 +262,7 @@ public class OverlayWindow : Window, IDisposable
                 ImGui.SetCursorPos(startpos);
             }
 
+            // The icon itself
             move_cur_scaled(
                 ImGui.GetCursorPosX() - (1f * imgsize), -padding,
                 posY * scaling, 0
@@ -269,6 +271,7 @@ public class OverlayWindow : Window, IDisposable
             ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(imgsize, imgsize));
             ImGui.SetCursorPos(startpos);
 
+            // Info, e.g. mit percent
             if (icon.Info != null && dm != 3) {
                 move_cur_scaled(
                     ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling), padding,
@@ -283,8 +286,7 @@ public class OverlayWindow : Window, IDisposable
 
     internal void move_cur_scaled(float x, float ox, float y, float oy)
     {
-        // this was useful, then it wasn't
-        // it may become useful later
+        // this was useful, then it wasn't. it may become useful later
         ImGui.SetCursorPos(new Vector2(
             x + ox,
             y + oy

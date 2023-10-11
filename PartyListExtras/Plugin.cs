@@ -78,7 +78,7 @@ namespace PartyListExtras
             // otherwise if there's an error the command gets registered
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
-                HelpMessage = "Toggles Overlay. Use /plx help for other commands."
+                HelpMessage = "Opens config window. Use /plx help for other commands."
             });
         }
 
@@ -95,42 +95,29 @@ namespace PartyListExtras
         private void OnCommand(string command, string args)
         {
             // this isn't the greatest way of doing it but it's fine
-            if (args == "missing")
+            if (args == "help")
+            {
+                ChatGui.Print("Party List Extras commands:\n" +
+                    "/plx - opens config window\n" +
+                    "/plx help - sends this message\n" +
+                    "/plx reload - load data files and images\n" +
+                    "/plx on/off/toggle - enables, disables and toggles the overlay respectively");
+                //ChatGui.UpdateQueue();
+            }
+            else if (args == "missing")
             {
                 pluginLog.Information(
                     "Missing Status Ids: {0}",
                     string.Join("", OverlayWindow.missing_ids
                         .Select(x => string.Format("{0} = {1}; ", x.Item1, x.Item2))));
             }
-            else if (args == "missing clear")
-            {
-                OverlayWindow.missing_ids.Clear();
-            }
-            else if (args == "reload")
-            {
-                LoadAssets();
-            }
-            else if (args == "config")
-            {
-                ConfigWindow.IsOpen = true;
-            }
-            else if (args == "help")
-            {
-                ChatGui.Print("Party List Extras commands:\n" +
-                    "/plx - toggle overlay\n" +
-                    "/plx help - sends this message\n" +
-                    "/plx reload - load data files and images\n" +
-                    "/plx config - opens config window");
-                //ChatGui.UpdateQueue();
-            }
-            else if (args == "")
-            {
-                overlayEnabled = !overlayEnabled;
-            }
-            else
-            {
-                ChatGui.Print("Unknown command - use /plx help for information");
-            }
+            else if (args == "missing clear") OverlayWindow.missing_ids.Clear();
+            else if (args == "reload") LoadAssets();
+            else if (args == "on") overlayEnabled = true;
+            else if (args == "off") overlayEnabled = false;
+            else if (args == "toggle") overlayEnabled = !overlayEnabled;
+            else if (args == "") ConfigWindow.IsOpen = true;
+            else ChatGui.Print("Unknown command - use /plx help for information");
         }
 
         private void LoadAssets()
@@ -171,13 +158,13 @@ namespace PartyListExtras
                 using (FileStream fs = File.OpenRead(dataPath))
                 {
                     List<StatusEffectData>? rawData;
-                    try
-                    {
+                    try {
                          rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(fs);
                     } catch (JsonException ex) {
                         pluginLog.Warning("Error loading file {0} - {1}", dataName, ex.Message);
                         continue;
                     }
+
                     if (rawData == null)
                     {
                         pluginLog.Warning("Data file {0} didn't load - Badly formatted?");
