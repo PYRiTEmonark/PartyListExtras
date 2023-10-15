@@ -146,24 +146,24 @@ public class OverlayWindow : Window, IDisposable
         // Read properties out of data
 
         // This Needs to be paralell to the `SpecialEffects` enum
-        StatusIcon[] special_fstrings = new StatusIcon[] {
-            new StatusIcon {FileName = "stance.png", Label = "Stance"},
-            new StatusIcon {FileName = "invuln.png", Label = "Invuln"},
-            new StatusIcon {FileName = "living_dead.png", Label = "Living Dead"},
-            new StatusIcon {FileName = "block_all.png", Label = "Block All"},
-            new StatusIcon {FileName = "kardion.png", Label = "Recv"},
-            new StatusIcon {FileName = "kardia.png", Label = "Sent"},
-            new StatusIcon {FileName = "dp_g.png", Label = "Sent"},
-            new StatusIcon {FileName = "dp_r.png", Label = "Recv"},
-            new StatusIcon {FileName = "regen.png", Label = "Regen"},
-            new StatusIcon {FileName = "crit_rate_up.png", Label = "Crit Up"},
-            new StatusIcon {FileName = "barrier.png", Label = "Barrier"}
+        Dictionary<SpecialEffects, StatusIcon> special_fstrings = new Dictionary<SpecialEffects, StatusIcon> {
+            { SpecialEffects.stance, new StatusIcon {FileName = "stance.png", Label = "Stance"} },
+            { SpecialEffects.invuln, new StatusIcon {FileName = "invuln.png", Label = "Invuln"} },
+            { SpecialEffects.living_dead, new StatusIcon { FileName = "living_dead.png", Label = "Living Dead" } },
+            { SpecialEffects.block_all, new StatusIcon {FileName = "block_all.png", Label = "Block All"} },
+            { SpecialEffects.kardion, new StatusIcon {FileName = "kardion.png", Label = "Recv"} },
+            { SpecialEffects.kardia, new StatusIcon {FileName = "kardia.png", Label = "Sent"} },
+            { SpecialEffects.dp_g, new StatusIcon {FileName = "dp_g.png", Label = "Sent"} },
+            { SpecialEffects.dp_r, new StatusIcon {FileName = "dp_r.png", Label = "Recv"} },
+            { SpecialEffects.regen, new StatusIcon {FileName = "regen.png", Label = "Regen"} },
+            { SpecialEffects.crit_rate_up, new StatusIcon {FileName = "crit_rate_up.png", Label = "Crit Up"} }
+            //{ SpecialEffects.barrier, new StatusIcon {FileName = "barrier.png", Label = "Barrier"} }
         };
 
-        for (int i = 0; i < Enum.GetNames(typeof(SpecialEffects)).Length; i++)
+        foreach (var sx in special_fstrings.Keys)
         {
-            if (datas.Select(x => x.special).Contains((SpecialEffects)i))
-                output.Add(special_fstrings[i]);
+            if (datas.Select(x => x.special).Contains((SpecialEffects)sx))
+                output.Add(special_fstrings[sx]);
         }
 
         // Mitigation
