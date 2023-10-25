@@ -12,6 +12,8 @@ using Dalamud.Plugin.Services;
 using PartyListExtras.Windows;
 using Dalamud.Interface.Internal;
 using System.Text.Json.Serialization;
+using System.Diagnostics;
+using System;
 
 namespace PartyListExtras
 {
@@ -37,7 +39,7 @@ namespace PartyListExtras
 
         private ConfigWindow ConfigWindow { get; init; }
         private OverlayWindow OverlayWindow { get; init; }
-        internal Dictionary<string, IDalamudTextureWrap> textures = new Dictionary<string, IDalamudTextureWrap>();
+        internal Dictionary<string, IDalamudTextureWrap > textures = new Dictionary<string, IDalamudTextureWrap>();
         internal Dictionary<int, StatusEffectData> statusEffectData = new Dictionary<int, StatusEffectData>();
 
         public Plugin(

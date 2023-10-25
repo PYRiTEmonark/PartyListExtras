@@ -84,8 +84,8 @@ public class ConfigWindow : Window, IDisposable
         ImGui.Text("Offset");
         ImGui.SameLine();
         ImGui.SetNextItemWidth(100);
-        //if(ImGui.InputInt("", ref OverlayOffset, 1, 10))
-        //    configuration.OverlayOffset = OverlayOffset;
+        if(ImGui.InputInt("", ref OverlayOffset, 1, 10))
+            configuration.OverlayOffset = OverlayOffset;
 
         ImGui.Separator();
 

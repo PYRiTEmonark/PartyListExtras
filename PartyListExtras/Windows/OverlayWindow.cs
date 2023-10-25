@@ -43,8 +43,6 @@ public class OverlayWindow : Window, IDisposable
 
     public unsafe override void Draw()
     {
-        // Grab some things for later
-        var drawlist = ImGui.GetBackgroundDrawList();
 
         // If any of this goes wrong we just skip drawing the window
         HudPartyMember* partyMemberList;
@@ -64,11 +62,6 @@ public class OverlayWindow : Window, IDisposable
             plugin.pluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
             return;
         }
-
-        var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
-        var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
-        var singlecol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorSingle);
-
         // resize window
         // Set width and height so window is to the left of the party list
         //var width = 300;
@@ -108,20 +101,9 @@ public class OverlayWindow : Window, IDisposable
             // TODO: allow repositioning and resizing of the UI element
             var curpos = new Vector2(node.ScreenX - ((300 * scaling) + plugin.Configuration.OverlayOffset), node.ScreenY);
             var cursize = new Vector2(300 * scaling, node.Height * scaling);
-            // Draw Background
-            if (plugin.Configuration.doGradientBackground)
-                drawlist.AddRectFilledMultiColor(curpos, (curpos + cursize), leftcol, rightcol, rightcol, leftcol);
-            else
-                drawlist.AddRectFilled(curpos, (curpos + cursize), rightcol);
-
-            // Start child window to make the cursor work "nicer"
-            ImGui.SetCursorPos(curpos);
-            ImGui.BeginChild("Player {0}".Format(i), cursize, false, Flags);
 
             //Spin out to helper functions because long
-            DrawStatusIcons(ParseStatusList(sl), cursize.Y);
-
-            ImGui.EndChild();
+            DrawStatusIcons(ParseStatusList(sl), curpos, cursize);
         }
     }
 
@@ -226,11 +208,18 @@ public class OverlayWindow : Window, IDisposable
         return output;
     }
 
-    // Render a list of StatusIcons, depends on the cursor being in the top right of the intended area
-    private void DrawStatusIcons(List<StatusIcon> icons, float height)
+    // Render a list of StatusIcons
+    private void DrawStatusIcons(List<StatusIcon> icons, Vector2 curpos, Vector2 cursize)
     {
+        // Start child window to make the cursor work "nicer"
+        ImGui.SetCursorPos(curpos);
+        ImGui.BeginChild("StatusIconList", cursize, false, Flags);
+
+        //ImGui.SetCursorPos(pos);
+        PluginLog.Warning("{0}", ImGui.GetCursorPos());
+
         if (this.Size == null) return;
-        var width = 300 * scaling;
+        var width = cursize.X;
         ImGui.SetCursorPosX(width);
         var startpos = ImGui.GetCursorPos();
 
@@ -239,9 +228,23 @@ public class OverlayWindow : Window, IDisposable
 
         // Set some preferences
         var padding = 5f;
-        var imgsize = height - (padding * 2f);
+        var imgsize = cursize.Y - (padding * 2f);
         var posY = ImGui.GetCursorPosY() + padding;
 
+        // Draw Background
+        var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
+        var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
+        var singlecol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorSingle);
+
+        // Draw Background
+        var drawlist = ImGui.GetBackgroundDrawList();
+        if (plugin.Configuration.doGradientBackground)
+            drawlist.AddRectFilledMultiColor(curpos, (curpos + cursize), leftcol, rightcol, rightcol, leftcol);
+        else
+            drawlist.AddRectFilled(curpos, (curpos + cursize), singlecol);
+
+
+        // Draw icons
         // TODO: the widths are mostly guesses here, possible to break with scaling
         foreach (var icon in icons)
         {
@@ -282,6 +285,8 @@ public class OverlayWindow : Window, IDisposable
                 ImGui.SetCursorPos(startpos);
             }
         }
+
+        ImGui.EndChild();
     }
 
     internal void move_cur_scaled(float x, float ox, float y, float oy)
