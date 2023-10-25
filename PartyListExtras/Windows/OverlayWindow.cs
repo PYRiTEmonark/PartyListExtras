@@ -215,9 +215,6 @@ public class OverlayWindow : Window, IDisposable
         ImGui.SetCursorPos(curpos);
         ImGui.BeginChild("StatusIconList", cursize, false, Flags);
 
-        //ImGui.SetCursorPos(pos);
-        PluginLog.Warning("{0}", ImGui.GetCursorPos());
-
         if (this.Size == null) return;
         var width = cursize.X;
         ImGui.SetCursorPosX(width);
@@ -256,30 +253,30 @@ public class OverlayWindow : Window, IDisposable
             // the label e.g. damage up
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Info == null)))
             {
-                move_cur_scaled(
-                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Label).X), -padding * scaling,
-                    posY * scaling, 0
-                );
+                ImGui.SetCursorPos(new Vector2(
+                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Label).X) + (-padding * scaling),
+                    posY * scaling
+                ));
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Label);
                 ImGui.SetCursorPos(startpos);
             }
 
             // The icon itself
-            move_cur_scaled(
-                ImGui.GetCursorPosX() - (1f * imgsize), -padding,
-                posY * scaling, 0
-            );
+            ImGui.SetCursorPos(new Vector2(
+                ImGui.GetCursorPosX() - (1f * imgsize) - padding,
+                posY * scaling
+            ));
             startpos = ImGui.GetCursorPos();
             ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(imgsize, imgsize));
             ImGui.SetCursorPos(startpos);
 
             // Info, e.g. mit percent
             if (icon.Info != null && dm != 3) {
-                move_cur_scaled(
-                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling), padding,
-                    posY * scaling, 0
-                );
+                ImGui.SetCursorPos(new Vector2(
+                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling) + padding,
+                    posY * scaling
+                ));
                 startpos = ImGui.GetCursorPos();
                 ImGui.Text(icon.Info);
                 ImGui.SetCursorPos(startpos);
@@ -287,15 +284,6 @@ public class OverlayWindow : Window, IDisposable
         }
 
         ImGui.EndChild();
-    }
-
-    internal void move_cur_scaled(float x, float ox, float y, float oy)
-    {
-        // this was useful, then it wasn't. it may become useful later
-        ImGui.SetCursorPos(new Vector2(
-            x + ox,
-            y + oy
-        ));
     }
 
     internal bool one_true(IEnumerable<bool?> values)
