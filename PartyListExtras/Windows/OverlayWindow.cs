@@ -103,10 +103,15 @@ public class OverlayWindow : Window, IDisposable
             var cursize = new Vector2(300 * scaling, node.Height * scaling);
 
             //Spin out to helper functions because long
-            DrawStatusIcons(ParseStatusList(sl), curpos, cursize);
+            DrawStatusIcons(ParseStatusList(sl), "party_{0}".Format(i), curpos, cursize);
         }
     }
 
+    /// <summary>
+    /// Turns a dalamud StatusList object into StatusIcons for easy rendering
+    /// </summary>
+    /// <param name="sl">The status list as found in a BattleChara object</param>
+    /// <returns>A list of parsed status icons</returns>
     private List<StatusIcon> ParseStatusList(StatusList sl)
     {
         var output = new List<StatusIcon>();
@@ -208,12 +213,19 @@ public class OverlayWindow : Window, IDisposable
         return output;
     }
 
-    // Render a list of StatusIcons
-    private void DrawStatusIcons(List<StatusIcon> icons, Vector2 curpos, Vector2 cursize)
+    /// <summary>
+    /// Draw a formatted list of status icons
+    /// Depends on config settings
+    /// </summary>
+    /// <param name="icons">list of icons to render</param>
+    /// <param name="windowId">unique number to prevent overlapping windows</param>
+    /// <param name="curpos">position of the subwindow</param>
+    /// <param name="cursize">size of the subwindow</param>
+    private void DrawStatusIcons(List<StatusIcon> icons, string windowId, Vector2 curpos, Vector2 cursize)
     {
         // Start child window to make the cursor work "nicer"
         ImGui.SetCursorPos(curpos);
-        ImGui.BeginChild("StatusIconList", cursize, false, Flags);
+        ImGui.BeginChild("PLX_StatusIconList_{0}".Format(windowId), cursize, false);
 
         if (this.Size == null) return;
         var width = cursize.X;
