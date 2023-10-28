@@ -22,21 +22,22 @@ namespace PartyListExtras
         public SpecialEffects? special { get; set; }
 
         // Mitigation
+        // "othr_mit" unused, may become effective mit
         public float? phys_mit { get; set; }
         public float? magi_mit { get; set; }
         public float? othr_mit { get; set; }
 
-        // Damage Up
+        // Damage Up by dmg type, "othr_up" as above
         public float? phys_up { get; set; }
         public float? magi_up { get; set; }
         public float? othr_up { get; set; }
 
-        // Speed Up
+        // Various Speed Up
         public float? attack_speed_up { get; set; }
         public float? cast_speed_up { get; set; }
         public float? auto_speed_up { get; set; }
 
-        // Healing Up
+        // Healing Recived Up
         public float? healing_up { get; set; }
     }
 
@@ -71,6 +72,7 @@ namespace PartyListExtras
         dp_r,
         regen,
         crit_rate_up,
+        max_hp_up, // WAR's Thrill of Battle
         barrier // Currently unused
     }
 }

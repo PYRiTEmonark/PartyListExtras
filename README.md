@@ -8,15 +8,16 @@ All json files are read in and converted to a `StatusEffectData` struct.
 This is because the client holds no information on what the status effects actually do, just who has what.
 Files are split into Job/Role, this is for readability only and isn't strictly nessacary.
 
-Note that the end goal isn't to perfectly illustrate damage, just to simplify the myriad of buffs that can be hard to parse.
+Note that the end goal isn't to perfectly illustrate damage, just to simplify the myriad of buffs that can be hard to parse mid-fight.
 
 ## Progress
 
 Currently some buffs aren't applied properly. These are:
-- PLD: Intervention buffed when sentinel/rampart active, Block rate on Passage of Arms
 - AST: Role Related buffs from arcana
 - BRD: Radiant Finale depending on job gauge
+- PLD: Intervention buffed when sentinel/rampart active, Block rate on Passage of Arms
 - SGE: Kerachole and Taurochole cannot be stacked
+- WAR: Thrill of Battle assumes the enhanced version (WAR gets no healing up below lvl78)
 - Tank: Reprisal and Arm's Length. Potential for "effective" mitigation to be calculated
 - Ditto for "effective" damage for things that are currently fuzzed under "special"
 - Physical Ranged - Tactician, Shield Samba and Troubadour do not stack
@@ -27,7 +28,7 @@ Currently some buffs aren't applied properly. These are:
 - DRK: Complete
 - GNB: Complete
 - PLD: *Partial, see above
-- WAR: *Stance only
+- WAR: *Partial, see above
 
 #### Healer
 - AST: Level 30 + *Divination - Role related buffs not implimented
@@ -38,13 +39,13 @@ Currently some buffs aren't applied properly. These are:
 #### Melee
 - DRG: *Dragon's Eye, *Lance Charge and *Battle Litany
 - MNK: *Brotherhood, *Riddle of Earth and *Riddle of Fire
-- NIN:
-- RPR: Crest and *Arcane Circle
+- NIN: N/A
+- RPR: Complete
 - SAM: Third Eye only
 
 #### Magical Ranged
 - BLM: Complete
-- SMN: 
+- SMN: N/A (for now)
 - RDM: Complete
 
 #### Phyiscal Ranged
