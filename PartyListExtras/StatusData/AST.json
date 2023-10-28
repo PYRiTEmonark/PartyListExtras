@@ -2,49 +2,49 @@
     {
         "row_id": 1882,
         "status_name": "The Balance",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": 1883,
         "status_name": "The Bole",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": 1884,
         "status_name": "The Arrow",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": 1885,
         "status_name": "The Spear",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": 1886,
         "status_name": "The Ewer",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": 1887,
         "status_name": "The Spire",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": 2716,
         "status_name": "Harmony of Mind",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_up": 0.05,
         "magi_up": 0.05,
         "healing_up": 0.05
@@ -52,28 +52,28 @@
     {
         "row_id": 2715,
         "status_name": "Harmony of Body",
-        "status_type": "Self",
+        "target_type": "Self",
         "cast_speed_up": 0.1,
         "auto_speed_up": 0.1
     },
     {
         "row_id": 1878,
         "status_name": "Divination",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": 2034,
         "status_name": "Divination",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "phys_up": 0.06,
         "magi_up": 0.06
     },
     {
         "row_id": -1,
         "status_name": "Divination",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     }

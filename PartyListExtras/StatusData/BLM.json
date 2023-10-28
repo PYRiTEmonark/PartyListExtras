@@ -2,13 +2,13 @@
     {
         "row_id": 168,
         "status_name": "Manaward",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "barrier"
     },
     {
         "row_id": 738,
         "status_name": "Circle of Power",
-        "status_type": "PartyAoE",
+        "target_type": "PartyAoE",
         "cast_speed_up": 0.15,
         "auto_speed_up": 0.15
     }

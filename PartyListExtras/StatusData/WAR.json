@@ -2,80 +2,80 @@
     {
         "row_id": 91,
         "status_name": "Defiance",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "stance"
     },
     {
         "row_id": 1396,
         "status_name": "Defiance",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "stance"
     },
     {
         "row_id": 3124,
         "status_name": "Defiance",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "stance"
     },
     {
         "row_id": 2678,
         "status_name": "Bloodwhetting",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 2679,
         "status_name": "Stem the Flow",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 87,
         "status_name": "Thrill of Battle",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "max_hp_up",
         "healing_up": 0.2
     },
     {
         "row_id": 31,
         "status_name": "Thrill of Battle",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "max_hp_up"
     },
     {
         "row_id": 89,
         "status_name": "Vengance",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.3,
         "magi_mit": 0.3
     },
     {
         "row_id": 735,
         "status_name": "Raw Intuition",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 1457,
         "status_name": "Shake it Off",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.15,
         "magi_mit": 0.15
     },
     {
         "row_id": 1993,
         "status_name": "Shake it Off",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.15,
         "magi_mit": 0.15
     },
     {
         "row_id": 2108,
         "status_name": "Shake it Off (Over Time)",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "regen"
     }
 ]

@@ -2,55 +2,55 @@
     {
         "row_id": 1183,
         "status_name": "Right Eye",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_up": 0.1,
         "magi_up": 0.1
     },
     {
         "row_id": 1184,
         "status_name": "Left Eye",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.05,
         "magi_up": 0.05
     },
     {
         "row_id": 1453,
         "status_name": "Right Eye",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_up": 0.1,
         "magi_up": 0.1
     },
     {
         "row_id": 1454,
         "status_name": "Left Eye",
-        "status_type": "PartyMember",
+        "target_type": "PartyMember",
         "phys_up": 0.05,
         "magi_up": 0.05
     },
     {
         "row_id": 1910,
         "status_name": "Right Eye",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_up": 0.1,
         "magi_up": 0.1
     },
     {
         "row_id": 786,
         "status_name": "Battle Litany",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "crit_rate_up": 0.1
     },
     {
         "row_id": 1864,
         "status_name": "Lance Charge",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_up": 0.1,
         "magi_up": 0.1
     },
     {
         "row_id": 2358,
         "status_name": "Lance Charge",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_up": 0.1,
         "magi_up": 0.1
     }

@@ -2,7 +2,7 @@
     {
         "row_id": 1232,
         "status_name": "Third Eye",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     }

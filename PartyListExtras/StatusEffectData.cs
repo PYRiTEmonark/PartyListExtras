@@ -15,7 +15,7 @@ namespace PartyListExtras
         public required string status_name { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public required StatusType status_type { get; set; }
+        public required TargetType target_type { get; set; }
 
         // special acts as a custom field, e.g. stance, invuln
         [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -48,7 +48,7 @@ namespace PartyListExtras
         public string? Info { get; set; } // Info on the icon, e.g. the actual mit percentage
     }
 
-    internal enum StatusType
+    internal enum TargetType
     {
         Self, // Given to self only, e.g. Tank's Rampart
         ConstSelf, // Can/should always be up, e.g. SAM's Fuka and Fugetsu

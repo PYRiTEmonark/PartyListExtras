@@ -2,38 +2,38 @@
     {
         "row_id": 743,
         "status_name": "Grit",
-        "status_type": "ConstSelf",
+        "target_type": "ConstSelf",
         "special": "stance"
     },
     {
         "row_id": 746,
         "status_name": "Dark Mind",
-        "status_type": "Self",
+        "target_type": "Self",
         "magi_mit": 0.2
     },
     {
         "row_id": 747,
         "status_name": "Shadow Wall",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.3,
         "magi_mit": 0.3
     },
     {
         "row_id": 810,
         "status_name": "Living Dead",
-        "status_type": "Self",
+        "target_type": "Self",
         "special": "living_dead"
     },
     {
         "row_id": 1894,
         "status_name": "Dark Missionary",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "magi_mit": 0.1
     },
     {
         "row_id": 2682,
         "status_name": "Oblation",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     }

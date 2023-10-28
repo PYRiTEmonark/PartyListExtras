@@ -2,26 +2,26 @@
     {
         "row_id": 1239,
         "status_name": "Embolden",
-        "status_type": "Self",
+        "target_type": "Self",
         "magi_up": 0.05
     },
     {
         "row_id": 1297,
         "status_name": "Embolden",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "phys_up": 0.05,
         "magi_up": 0.05
     },
     {
         "row_id": 1971,
         "status_name": "Manafication",
-        "status_type": "Self",
+        "target_type": "Self",
         "magi_up": 0.05
     },
     {
         "row_id": 2707,
         "status_name": "Magick Barrier",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "magi_mit": 0.1
     }
 ]

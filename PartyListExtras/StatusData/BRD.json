@@ -2,28 +2,28 @@
     {
         "row_id": 125,
         "status_name": "Raging Strikes",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_up": 0.15,
         "magi_up": 0.15
     },
     {
         "row_id": 1934,
         "status_name": "Troubadour",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     },
     {
         "row_id": 2722,
         "status_name": "Radiant Finale",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "phys_up": 0.6,
         "magi_up": 0.6
     },
     {
         "row_id": 2964,
         "status_name": "Radiant Finale",
-        "status_type": "PartyWide",
+        "target_type": "PartyWide",
         "phys_up": 0.6,
         "magi_up": 0.6
     }

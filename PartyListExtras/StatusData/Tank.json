@@ -2,7 +2,7 @@
     {
         "row_id": 1191,
         "status_name": "Rampart",
-        "status_type": "Self",
+        "target_type": "Self",
         "phys_mit": 0.2,
         "magi_mit": 0.2
     }
