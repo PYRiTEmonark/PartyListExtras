@@ -69,7 +69,6 @@ namespace PartyListExtras
             OverlayWindow.IsOpen = true;
 
             WindowSystem.AddWindow(ConfigWindow);
-            WindowSystem.AddWindow(OverlayWindow);
 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
             this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
@@ -198,6 +197,8 @@ namespace PartyListExtras
             if (apl == null) { return; }
             var isvis = apl->AtkUnitBase.IsVisible;
             OverlayWindow.IsOpen = isvis && overlayEnabled;
+
+            this.OverlayWindow.Draw();
         }
 
         public void DrawConfigUI()

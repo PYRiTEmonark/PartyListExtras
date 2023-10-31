@@ -18,8 +18,11 @@ using ImGuiNET;
 
 namespace PartyListExtras.Windows;
 
-public class OverlayWindow : Window, IDisposable
+public class OverlayWindow : IDisposable
 {
+    // This used to use the window manager hence the setup
+    // As I kinda like it this way
+
     private Plugin plugin;
 
     // Scales all drawn things
@@ -28,10 +31,12 @@ public class OverlayWindow : Window, IDisposable
     // Used to ensure we don't duplicate the debug status info message
     public List<Tuple<string, string>> missing_ids = new List<Tuple<string, string>>();
 
-    public unsafe OverlayWindow(Plugin plugin) : base(
-        "PLX_OverlayWindow",
-        ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
-        ImGuiWindowFlags.NoMouseInputs | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings)
+    public Vector2 Size;
+    public Vector2 Position;
+
+    public bool IsOpen;
+
+    public unsafe OverlayWindow(Plugin plugin)
     {
         this.Size = new Vector2(10000, 10000);
         this.Position = new Vector2(0, 0);
@@ -41,8 +46,15 @@ public class OverlayWindow : Window, IDisposable
 
     public void Dispose() { }
 
-    public unsafe override void Draw()
+    public unsafe void Draw()
     {
+
+        if (!IsOpen) { return; }
+
+        ImGui.Begin("PLX_OverlayWindow",
+            ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
+            ImGuiWindowFlags.NoMouseInputs | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings
+            );
 
         // If any of this goes wrong we just skip drawing the window
         HudPartyMember* partyMemberList;
@@ -104,7 +116,10 @@ public class OverlayWindow : Window, IDisposable
 
             //Spin out to helper functions because long
             DrawStatusIcons(ParseStatusList(sl), "party_{0}".Format(i), curpos, cursize);
+
         }
+
+        ImGui.End();
     }
 
     /// <summary>
