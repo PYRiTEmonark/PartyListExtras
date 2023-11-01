@@ -11,7 +11,7 @@ namespace PartyListExtras
     {
         public int Version { get; set; } = 0;
 
-        public int DisplayMode { get; set; } = 0;
+        public int DisplayMode { get; set; } = 2;
 
         public int OverlayOffset { get; set; } = 10;
 
