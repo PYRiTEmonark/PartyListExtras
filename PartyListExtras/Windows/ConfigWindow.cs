@@ -34,7 +34,7 @@ public class ConfigWindow : Window, IDisposable
             "Information only",
             "None",
         };
-        if (ImGui.BeginCombo("a", options[dm]))
+        if (ImGui.BeginCombo(" ", options[dm]))
         {
             for (int i = 0; i < options.Length; i++)
             {
@@ -70,12 +70,14 @@ public class ConfigWindow : Window, IDisposable
 
         ImGui.SameLine();
 
+        ImGui.Image(plugin.textures["stance.png"].ImGuiHandle, new Vector2(imgsize, imgsize));
         if (dm != 2 && dm != 3)
         {
-            ImGui.Text("Stance");
             ImGui.SameLine();
+            ImGui.Text("Stance");
         }
-        ImGui.Image(plugin.textures["stance.png"].ImGuiHandle, new Vector2(imgsize, imgsize));
+
+        // Overlay Position
 
         ImGui.Separator();
         ImGui.Text("Overlay Position");
@@ -87,9 +89,11 @@ public class ConfigWindow : Window, IDisposable
         if(ImGui.InputInt("", ref OverlayOffset, 1, 10))
             configuration.OverlayOffset = OverlayOffset;
 
+
+        // Background colours
         ImGui.Separator();
 
-        if (ImGui.TreeNode("Background"))
+        if (ImGui.TreeNode("Background Colours"))
         {
             bool gradbkg = configuration.doGradientBackground;
             if (ImGui.Checkbox("Gradient Background", ref gradbkg))
