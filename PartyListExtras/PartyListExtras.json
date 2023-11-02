@@ -2,7 +2,7 @@
     "Author": "pyrite_radio",
     "Name": "Party List Extras",
     "Punchline": "Parses Buffs to help understand what your party is doing.",
-    "Description": "Adds Text and Icons next to the party list describing active buffs. Still missing some jobs - See github for progress. Please note the overlay goes to the right of your party list.",
+    "Description": "Adds Text and Icons next to the party list describing active buffs. Still missing some jobs - See github for progress. Please note the overlay goes to the left of your party list.",
     "InternalName": "PartyListExtras",
     "RepoUrl": "https://github.com/PYRiTEmonark/PartyListExtras",
     "ApplicableVersion": "any",

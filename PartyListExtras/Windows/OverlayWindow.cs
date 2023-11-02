@@ -310,7 +310,7 @@ public class OverlayWindow : IDisposable
             // Info, e.g. mit percent
             if (icon.Info != null && dm != 3) {
                 ImGui.SetCursorPos(new Vector2(
-                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling),
+                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling) - padding,
                     posY * scaling
                 ));
                 startpos = ImGui.GetCursorPos();
