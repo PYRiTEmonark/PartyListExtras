@@ -191,6 +191,7 @@ namespace PartyListExtras
         private unsafe void DrawUI()
         {
             this.WindowSystem.Draw();
+            this.OverlayWindow.Draw();
 
             // show overlay if open
             AddonPartyList* apl = (AddonPartyList*)GameGui.GetAddonByName("_PartyList");
@@ -198,7 +199,6 @@ namespace PartyListExtras
             var isvis = apl->AtkUnitBase.IsVisible;
             OverlayWindow.IsOpen = isvis && overlayEnabled;
 
-            this.OverlayWindow.Draw();
         }
 
         public void DrawConfigUI()

@@ -1,20 +1,25 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Configuration;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using Dalamud.Interface;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
 using Dalamud.Utility;
+using FFXIVClientStructs.FFXIV.Client.Game.Gauge;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using FFXIVClientStructs.Havok;
 using ImGuiNET;
+using Lumina.Data.Parsing.Layer;
+using Lumina.Excel.GeneratedSheets;
 
 namespace PartyListExtras.Windows;
 
@@ -49,12 +54,13 @@ public class OverlayWindow : IDisposable
     public unsafe void Draw()
     {
 
-        if (!IsOpen) { return; }
+        //if (!IsOpen) { return; }
 
         ImGui.Begin("PLX_OverlayWindow",
             ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
             ImGuiWindowFlags.NoMouseInputs | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings
             );
+        ImGui.SetWindowPos(this.Position);
 
         // If any of this goes wrong we just skip drawing the window
         HudPartyMember* partyMemberList;
@@ -173,13 +179,13 @@ public class OverlayWindow : IDisposable
         var magi_mit = multi_sum(datas.Select(x => x.magi_mit));
 
         if (phys_mit == magi_mit && phys_mit > 0)
-            output.Add(new StatusIcon { FileName="mit_all.png", Info = "{0}%%".Format(phys_mit), Label = "Mitigation"});
+            output.Add(new StatusIcon { FileName="mit_all.png", Info = "{0}%".Format(phys_mit), Label = "Mitigation"});
         else
         {
             if (phys_mit > 0)
-                output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%%".Format(phys_mit), Label = "Physical Mit" });
+                output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%".Format(phys_mit), Label = "Physical Mit" });
             if (magi_mit > 0)
-                output.Add(new StatusIcon { FileName = "mit_magi.png", Info = "{0}%%".Format(magi_mit), Label = "Magical Mit" });
+                output.Add(new StatusIcon { FileName = "mit_magi.png", Info = "{0}%".Format(magi_mit), Label = "Magical Mit" });
         }
 
         // Damage Up
@@ -187,13 +193,13 @@ public class OverlayWindow : IDisposable
         var magi_up = multi_sum(datas.Select(x => x.magi_up));
 
         if (phys_up == magi_up && phys_up > 0)
-            output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%%".Format(phys_up), Label = "Damage Up"});
+            output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%".Format(phys_up), Label = "Damage Up"});
         else
         {
             if (phys_up > 0)
-                output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%%".Format(phys_up), Label = "Phyiscal Dmg Up" });
+                output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%".Format(phys_up), Label = "Phyiscal Dmg Up" });
             if (magi_up > 0)
-                output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%%".Format(magi_up), Label = "Magical Dmg Up" });
+                output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%".Format(magi_up), Label = "Magical Dmg Up" });
         }
 
         // Attack Speed
@@ -202,16 +208,16 @@ public class OverlayWindow : IDisposable
         var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
 
         if (attack_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "attack_speed_up.png", Info = "{0}%%".Format(attack_speed_up), Label = "Attack Speed Up" });
+            output.Add(new StatusIcon { FileName = "attack_speed_up.png", Info = "{0}%".Format(attack_speed_up), Label = "Attack Speed Up" });
         if (cast_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "cast_speed_up.png", Info = "{0}%%".Format(cast_speed_up), Label = "Cast Speed Up" });
+            output.Add(new StatusIcon { FileName = "cast_speed_up.png", Info = "{0}%".Format(cast_speed_up), Label = "Cast Speed Up" });
         if (auto_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "auto_speed_up.png", Info = "{0}%%".Format(auto_speed_up), Label = "Auto Speed Up" });
+            output.Add(new StatusIcon { FileName = "auto_speed_up.png", Info = "{0}%".Format(auto_speed_up), Label = "Auto Speed Up" });
 
         // Heal Rate
         var healing_up = multi_sum(datas.Select(x => x.healing_up));
         if (healing_up > 0)
-            output.Add(new StatusIcon { FileName = "healing_up.png", Info = "{0}%%".Format(healing_up), Label = "Healing Up" });
+            output.Add(new StatusIcon { FileName = "healing_up.png", Info = "{0}%".Format(healing_up), Label = "Healing Up" });
 
         // Send Message to log for status effects that are missing
         var debugMessage = "";
@@ -239,18 +245,17 @@ public class OverlayWindow : IDisposable
     private void DrawStatusIcons(List<StatusIcon> icons, string windowId, Vector2 curpos, Vector2 cursize)
     {
         // Start child window to make the cursor work "nicer"
-        ImGui.SetCursorPos(curpos);
-        ImGui.BeginChild("PLX_StatusIconList_{0}".Format(windowId), cursize, false);
+        ImGui.BeginChild("PLX_StatusIconList_{0}".Format(windowId), cursize);
+        ImGui.SetWindowPos(curpos);
 
-        if (this.Size == null) return;
         var width = cursize.X;
         ImGui.SetCursorPosX(width);
         var startpos = ImGui.GetCursorPos();
 
-        // shorten it out
+        // shorten the display mode
         var dm = plugin.Configuration.DisplayMode;
 
-        // Set some preferences
+        // Set some constants
         var padding = 5f;
         var imgsize = cursize.Y - (padding * 2f);
         var posY = ImGui.GetCursorPosY() + padding;
@@ -260,13 +265,14 @@ public class OverlayWindow : IDisposable
         var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
         var singlecol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorSingle);
 
+        var white = ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1));
+
         // Draw Background
         var drawlist = ImGui.GetBackgroundDrawList();
         if (plugin.Configuration.doGradientBackground)
             drawlist.AddRectFilledMultiColor(curpos, (curpos + cursize), leftcol, rightcol, rightcol, leftcol);
         else
             drawlist.AddRectFilled(curpos, (curpos + cursize), singlecol);
-
 
         // Draw icons
         // TODO: the widths are mostly guesses here, possible to break with scaling
@@ -285,7 +291,8 @@ public class OverlayWindow : IDisposable
                     posY * scaling
                 ));
                 startpos = ImGui.GetCursorPos();
-                ImGui.Text(icon.Label);
+                //ImGui.Text(icon.Label);
+                drawlist.AddText(curpos + startpos, white, icon.Label);
                 ImGui.SetCursorPos(startpos);
             }
 
@@ -295,17 +302,20 @@ public class OverlayWindow : IDisposable
                 posY * scaling
             ));
             startpos = ImGui.GetCursorPos();
-            ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(imgsize, imgsize));
+            plugin.pluginLog.Error("{0}", startpos);
+            //ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(imgsize, imgsize));
+            drawlist.AddImage(plugin.textures[icon.FileName].ImGuiHandle, curpos + startpos, curpos + startpos + new Vector2(imgsize, imgsize));
             ImGui.SetCursorPos(startpos);
 
             // Info, e.g. mit percent
             if (icon.Info != null && dm != 3) {
                 ImGui.SetCursorPos(new Vector2(
-                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling) + padding,
+                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling),
                     posY * scaling
                 ));
                 startpos = ImGui.GetCursorPos();
-                ImGui.Text(icon.Info);
+                //ImGui.Text(icon.Text);
+                drawlist.AddText(curpos + startpos, white, icon.Info);
                 ImGui.SetCursorPos(startpos);
             }
         }

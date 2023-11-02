@@ -34,7 +34,7 @@ public class ConfigWindow : Window, IDisposable
             "Information only",
             "None",
         };
-        if (ImGui.BeginCombo("", options[dm]))
+        if (ImGui.BeginCombo("a", options[dm]))
         {
             for (int i = 0; i < options.Length; i++)
             {
