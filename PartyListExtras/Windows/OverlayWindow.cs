@@ -53,8 +53,7 @@ public class OverlayWindow : IDisposable
 
     public unsafe void Draw()
     {
-
-        //if (!IsOpen) { return; }
+        if (!IsOpen) { return; }
 
         ImGui.Begin("PLX_OverlayWindow",
             ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
@@ -240,25 +239,23 @@ public class OverlayWindow : IDisposable
     /// </summary>
     /// <param name="icons">list of icons to render</param>
     /// <param name="windowId">unique number to prevent overlapping windows</param>
-    /// <param name="curpos">position of the subwindow</param>
-    /// <param name="cursize">size of the subwindow</param>
-    private void DrawStatusIcons(List<StatusIcon> icons, string windowId, Vector2 curpos, Vector2 cursize)
+    /// <param name="position">position of the subwindow</param>
+    /// <param name="size">size of the subwindow</param>
+    private void DrawStatusIcons(List<StatusIcon> icons, string windowId, Vector2 position, Vector2 size)
     {
         // Start child window to make the cursor work "nicer"
-        ImGui.BeginChild("PLX_StatusIconList_{0}".Format(windowId), cursize);
-        ImGui.SetWindowPos(curpos);
+        //ImGui.BeginChild("PLX_StatusIconList_{0}".Format(windowId), size);
+        ImGui.SetWindowPos(position);
 
-        var width = cursize.X;
-        ImGui.SetCursorPosX(width);
-        var startpos = ImGui.GetCursorPos();
+        var width = size.X;
+        var padding = 5f;
+        var cursor = position + new Vector2(width, padding);
 
         // shorten the display mode
         var dm = plugin.Configuration.DisplayMode;
 
         // Set some constants
-        var padding = 5f;
-        var imgsize = cursize.Y - (padding * 2f);
-        var posY = ImGui.GetCursorPosY() + padding;
+        var imgsize = size.Y - (padding * 2f);
 
         // Draw Background
         var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
@@ -270,57 +267,43 @@ public class OverlayWindow : IDisposable
         // Draw Background
         var drawlist = ImGui.GetBackgroundDrawList();
         if (plugin.Configuration.doGradientBackground)
-            drawlist.AddRectFilledMultiColor(curpos, (curpos + cursize), leftcol, rightcol, rightcol, leftcol);
+            drawlist.AddRectFilledMultiColor(position, (position + size), leftcol, rightcol, rightcol, leftcol);
         else
-            drawlist.AddRectFilled(curpos, (curpos + cursize), singlecol);
+            drawlist.AddRectFilled(position, (position + size), singlecol);
 
-        // Draw icons
+        // Draw icons, We go RTL so subtracting the X offset
         // TODO: the widths are mostly guesses here, possible to break with scaling
         foreach (var icon in icons)
         {
-            // To render RTL, we do use the cursor, but set its position back to where it was
-            // before we draw each element. 
-
-            ImGui.SetCursorPosX(ImGui.GetCursorPosX() - padding);
 
             // the label e.g. damage up
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Info == null)))
             {
-                ImGui.SetCursorPos(new Vector2(
-                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Label).X) + (-padding * scaling),
-                    posY * scaling
-                ));
-                startpos = ImGui.GetCursorPos();
-                //ImGui.Text(icon.Label);
-                drawlist.AddText(curpos + startpos, white, icon.Label);
-                ImGui.SetCursorPos(startpos);
+                cursor += new Vector2(
+                    - (1f * ImGui.CalcTextSize(icon.Label).X) + (-padding * scaling),
+                    0
+                );
+                drawlist.AddText(cursor, white, icon.Label);
             }
 
             // The icon itself
-            ImGui.SetCursorPos(new Vector2(
-                ImGui.GetCursorPosX() - (1f * imgsize) - padding,
-                posY * scaling
-            ));
-            startpos = ImGui.GetCursorPos();
-            plugin.pluginLog.Error("{0}", startpos);
-            //ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(imgsize, imgsize));
-            drawlist.AddImage(plugin.textures[icon.FileName].ImGuiHandle, curpos + startpos, curpos + startpos + new Vector2(imgsize, imgsize));
-            ImGui.SetCursorPos(startpos);
+            cursor += new Vector2(
+                -(1f * imgsize) - padding,
+                0
+            );
+            drawlist.AddImage(plugin.textures[icon.FileName].ImGuiHandle, cursor, cursor + new Vector2(imgsize, imgsize));
 
             // Info, e.g. mit percent
             if (icon.Info != null && dm != 3) {
-                ImGui.SetCursorPos(new Vector2(
-                    ImGui.GetCursorPosX() - (1f * ImGui.CalcTextSize(icon.Info).X * scaling) - padding,
-                    posY * scaling
-                ));
-                startpos = ImGui.GetCursorPos();
-                //ImGui.Text(icon.Text);
-                drawlist.AddText(curpos + startpos, white, icon.Info);
-                ImGui.SetCursorPos(startpos);
+                cursor += new Vector2(
+                    - (1f * ImGui.CalcTextSize(icon.Info).X * scaling) - padding,
+                    0
+                );
+                drawlist.AddText(cursor, white, icon.Info);
             }
         }
 
-        ImGui.EndChild();
+        //ImGui.EndChild();
     }
 
     internal bool one_true(IEnumerable<bool?> values)
