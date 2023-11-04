@@ -9,11 +9,11 @@ namespace PartyListExtras
     [Serializable]
     public class Configuration : IPluginConfiguration
     {
-        public int Version { get; set; } = 0;
+        public int Version { get; set; } = 1;
 
         public int DisplayMode { get; set; } = 2;
 
-        public int OverlayOffset { get; set; } = 10;
+        public int OverlayOffsetX { get; set; } = 10;
 
         public bool doGradientBackground { get; set; } = true;
         public Vector4 colorRight { get; set; } = new Vector4(0f, 0f, 0f, 1f);

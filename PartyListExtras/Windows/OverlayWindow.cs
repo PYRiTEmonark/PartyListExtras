@@ -116,7 +116,7 @@ public class OverlayWindow : IDisposable
             if (icon == null) { continue; }
             var node = icon->AtkResNode;
             // TODO: allow repositioning and resizing of the UI element
-            var curpos = new Vector2(node.ScreenX - ((300 * scaling) + plugin.Configuration.OverlayOffset), node.ScreenY);
+            var curpos = new Vector2(node.ScreenX - ((300 * scaling) + plugin.Configuration.OverlayOffsetX), node.ScreenY);
             var cursize = new Vector2(300 * scaling, node.Height * scaling);
 
             //Spin out to helper functions because long

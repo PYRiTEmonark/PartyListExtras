@@ -43,7 +43,6 @@ public class ConfigWindow : Window, IDisposable
                 {
                     configuration.DisplayMode = i;
                     dm = i;
-                    configuration.Save();
                 }
                 if (x)
                 {
@@ -82,12 +81,12 @@ public class ConfigWindow : Window, IDisposable
         ImGui.Separator();
         ImGui.Text("Overlay Position");
 
-        int OverlayOffset = configuration.OverlayOffset;
+        int oox = configuration.OverlayOffsetX;
         ImGui.Text("Offset");
         ImGui.SameLine();
         ImGui.SetNextItemWidth(100);
-        if(ImGui.InputInt("", ref OverlayOffset, 1, 10))
-            configuration.OverlayOffset = OverlayOffset;
+        ImGui.InputInt(" ", ref oox, 1, 10);
+        configuration.OverlayOffsetX = oox;
 
 
         // Background colours
@@ -118,5 +117,8 @@ public class ConfigWindow : Window, IDisposable
                     configuration.colorSingle = singlecol;
             }
         }
+
+        configuration.Save();
+
     }
 }

@@ -198,7 +198,6 @@ namespace PartyListExtras
             if (apl == null) { return; }
             var isvis = apl->AtkUnitBase.IsVisible;
             OverlayWindow.IsOpen = isvis && overlayEnabled;
-
         }
 
         public void DrawConfigUI()
