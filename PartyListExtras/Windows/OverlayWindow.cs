@@ -104,8 +104,10 @@ public class OverlayWindow : IDisposable
             if (icon == null) { continue; }
             var node = icon->AtkResNode;
             // TODO: allow repositioning and resizing of the UI element
-            var curpos = new Vector2(node.ScreenX - ((300 * scaling) + plugin.Configuration.OverlayOffsetX), node.ScreenY);
-            var cursize = new Vector2(300 * scaling, node.Height * scaling);
+            var curpos = new Vector2(
+                node.ScreenX - ((plugin.Configuration.OverlayWidth * scaling) + plugin.Configuration.OverlayOffsetX),
+                node.ScreenY + plugin.Configuration.OverlayOffsetY);
+            var cursize = new Vector2(plugin.Configuration.OverlayWidth * scaling, node.Height * scaling);
 
             //Spin out to helper functions because long
             DrawStatusIcons(ParseStatusList(sl), "party_{0}".Format(i), curpos, cursize);
@@ -262,14 +264,15 @@ public class OverlayWindow : IDisposable
         ImGui.SetWindowPos(position);
 
         var width = size.X;
-        var padding = 5f;
-        var cursor = position + new Vector2(width, padding);
+        var paddingX = plugin.Configuration.OverlayPaddingX;
+        var paddingY = plugin.Configuration.OverlayPaddingY;
+        var cursor = position + new Vector2(width, paddingY);
 
         // shorten the display mode
         var dm = plugin.Configuration.DisplayMode;
 
         // Set some constants
-        var imgsize = size.Y - (padding * 2f);
+        var imgsize = size.Y - (paddingY * 2f);
 
         // Draw Background
         var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
@@ -294,7 +297,7 @@ public class OverlayWindow : IDisposable
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Value == null)))
             {
                 cursor += new Vector2(
-                    - (1f * ImGui.CalcTextSize(icon.Label).X) + (-padding * scaling),
+                    - (1f * ImGui.CalcTextSize(icon.Label).X) + (-paddingX * scaling),
                     0
                 );
                 drawlist.AddText(cursor, white, icon.Label);
@@ -302,7 +305,7 @@ public class OverlayWindow : IDisposable
 
             // The icon itself
             cursor += new Vector2(
-                -(1f * imgsize) - padding,
+                -(1f * imgsize) - paddingX,
                 0
             );
             drawlist.AddImage(plugin.textures[icon.FileName].ImGuiHandle, cursor, cursor + new Vector2(imgsize, imgsize));
@@ -310,7 +313,7 @@ public class OverlayWindow : IDisposable
             // Info, e.g. mit percent
             if (icon.Value != null && dm != 3) {
                 cursor += new Vector2(
-                    - (1f * ImGui.CalcTextSize(icon.Value).X * scaling) - padding,
+                    - (1f * ImGui.CalcTextSize(icon.Value).X * scaling) - paddingX,
                     0
                 );
                 drawlist.AddText(cursor, white, icon.Value);

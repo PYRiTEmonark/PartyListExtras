@@ -22,7 +22,7 @@ public class ConfigWindow : Window, IDisposable
         "Party List Extras Config", ImGuiWindowFlags.AlwaysAutoResize)
     {
         this.Size = new Vector2(500, 500);
-        this.SizeCondition = ImGuiCond.Once;
+        this.SizeCondition = ImGuiCond.Always;
 
         this.configuration = plugin.Configuration;
         this.plugin = plugin;
@@ -103,14 +103,48 @@ public class ConfigWindow : Window, IDisposable
         // Overlay Position
 
         ImGui.Separator();
-        ImGui.Text("Overlay Position");
+        ImGui.Text("Overlay Appearance");
+
+        ImGui.BeginTable("PositionTable", 5);
+
+        int wd = configuration.OverlayWidth;
+        ImGui.TableNextRow();
+        ImGui.TableNextColumn();
+        ImGui.Text("Size");
+        ImGui.TableNextColumn();
+        ImGui.SetNextItemWidth(100);
+        ImGui.InputInt("X##OverlayWidth", ref wd, 1, 10);
+        configuration.OverlayWidth = wd;
 
         int oox = configuration.OverlayOffsetX;
+        int ooy = configuration.OverlayOffsetY;
+        ImGui.TableNextRow();
+        ImGui.TableNextColumn();
         ImGui.Text("Offset");
-        ImGui.SameLine();
+        ImGui.TableNextColumn();
         ImGui.SetNextItemWidth(100);
-        ImGui.InputInt("##OffsetX", ref oox, 1, 10);
+        ImGui.InputInt("X##OverlayOffsetX", ref oox, 1, 10);
+        ImGui.TableNextColumn();
+        ImGui.SetNextItemWidth(100);
+        ImGui.InputInt("Y##OverlayOffsetY", ref ooy, 1, 10);
         configuration.OverlayOffsetX = oox;
+        configuration.OverlayOffsetY = ooy;
+
+        int pdx = configuration.OverlayPaddingX;
+        int pdy = configuration.OverlayPaddingY;
+        ImGui.TableNextRow();
+        ImGui.TableNextColumn();
+        ImGui.Text("Padding");
+        ImGui.TableNextColumn();
+        ImGui.SetNextItemWidth(100);
+        ImGui.InputInt("X##OverlayPaddingX", ref pdx, 1, 10);
+        ImGui.TableNextColumn();
+        ImGui.SetNextItemWidth(100);
+        ImGui.InputInt("Y##OverlayPadding", ref pdy, 1, 10);
+        configuration.OverlayPaddingX = pdx;
+        configuration.OverlayPaddingY = pdy;
+
+        ImGui.EndTable();
 
         // Background colours
         ImGui.Separator();
@@ -136,8 +170,6 @@ public class ConfigWindow : Window, IDisposable
             if (ImGui.ColorEdit4("Colour", ref singlecol))
                 configuration.colorSingle = singlecol;
         }
-
-        configuration.Save();
 
         // Advanced icon config
         ImGui.Separator();
@@ -402,5 +434,8 @@ public class ConfigWindow : Window, IDisposable
 
             ImGui.EndTable();
         }
+
+        configuration.Save();
+
     }
 }

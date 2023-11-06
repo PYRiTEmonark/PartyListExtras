@@ -5,6 +5,7 @@ using ImGuiNET;
 using PartyListExtras;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text.Json.Serialization;
 using System.Threading;
 
@@ -18,6 +19,10 @@ namespace PartyListExtras
         public int DisplayMode { get; set; } = 2;
 
         public int OverlayOffsetX { get; set; } = 10;
+        public int OverlayOffsetY { get; set; } = 0;
+        public int OverlayWidth { get; set; } = 300;
+        public int OverlayPaddingX { get; set; } = 5;
+        public int OverlayPaddingY { get; set; } = 5;
 
         public bool EnableOverlay { get; set; } = true;
         public bool hideOutOfCombat { get; set; } = false;
