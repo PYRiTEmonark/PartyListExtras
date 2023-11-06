@@ -25,20 +25,29 @@ namespace PartyListExtras
         // "othr_mit" unused, may become effective mit
         public float? phys_mit { get; set; }
         public float? magi_mit { get; set; }
-        //public float? othr_mit { get; set; }
+        public float? othr_mit { get; set; }
+        public float? max_hp_up { get; set; }
+        public float? block_rate { get; set; }
 
         // Damage Up by dmg type, "othr_up" as above
         public float? phys_up { get; set; }
         public float? magi_up { get; set; }
-        //public float? othr_up { get; set; }
-        
-        // Various Speed Up
+        public float? othr_up { get; set; }
+        public float? crit_rate_up { get; set; }
+        public float? dhit_rate_up { get; set; }
+
+        // Various stats Up
         public float? attack_speed_up { get; set; }
         public float? cast_speed_up { get; set; }
+        public float? ability_cast_speed_up { get; set; }
         public float? auto_speed_up { get; set; }
+        public float? move_speed_up { get; set; }
+        public float? evade_up { get; set; }
+        public float? max_mp_up { get; set; }
 
-        // Healing Recived Up
+        // Healing Received Up
         public float? healing_up { get; set; }
+        public float? healing_pot { get; set; }
     }
 
     public struct StatusIcon
@@ -73,6 +82,7 @@ namespace PartyListExtras
         dp_r,
         regen,
         crit_rate_up,
+        knockback_immunity,
         max_hp_up, // WAR's Thrill of Battle
         barrier // Currently unused
     }

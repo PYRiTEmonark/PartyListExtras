@@ -1,11 +1,27 @@
 [
     {
-        "row_id": 2597,
+        // Arcane Crest's self 4-sec shield
+        "row_id": 2596,
         "status_name": "Crest of Time Borrowed",
-        "target_type": "PartyMember",
+        "target_type": "Self",
         "special": "barrier"
     },
     {
+        // Arcane Crest's dupe buff
+        "row_id": 2597,
+        "status_name": "Crest of Time Borrowed",
+        "target_type": "Self",
+        "special": "barrier"
+    },
+    {
+        // Arcane Crest's regeneration effect when Crest of Time Borrowed's shield is broken
+        "row_id": 2598,
+        "status_name": "Crest of Time Returned",
+        "target_type": "PartyWide",
+        "special": "regen"
+    },
+    {
+        // Arcane Circle's 20-sec 3% damage up
         "row_id": 2599,
         "status_name": "Arcane Circle",
         "target_type": "PartyWide",

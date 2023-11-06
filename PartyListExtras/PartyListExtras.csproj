@@ -52,6 +52,7 @@
     <None Remove="Icons\vuln_othr.png" />
     <None Remove="Icons\vuln_phys.png" />
     <None Remove="README.md" />
+    <None Remove="StatusData\Adventurer.json" />
     <None Remove="StatusData\AST.json" />
     <None Remove="StatusData\BLM.json" />
     <None Remove="StatusData\BRD.json" />
@@ -68,7 +69,6 @@
     <None Remove="StatusData\SAM.json" />
     <None Remove="StatusData\SGE.json" />
     <None Remove="StatusData\SMN.json" />
-    <None Remove="StatusData\Tank.json" />
     <None Remove="StatusData\WAR.json" />
     <None Remove="StatusInfo.json" />
   </ItemGroup>
@@ -113,15 +113,18 @@
     <Content Include="Icons\regen.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="StatusData\AST.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Content Include="StatusData\Adventurer.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="StatusData\BLM.json">
+    <Content Include="StatusData\AST.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="StatusData\BLM.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="StatusData\BRD.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -158,16 +161,22 @@
     <Content Include="StatusData\SAM.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="StatusData\SaveTheQueen.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\SCH.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="StatusData\SGE.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\SMN.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="StatusData\Tank.json">
+    <Content Include="StatusData\WAR.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="StatusData\WAR.json">
+    <Content Include="StatusData\WHM.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -183,6 +192,7 @@
   
    <ItemGroup>
      <PackageReference Include="DalamudPackager" Version="2.1.12" />
+     <PackageReference Include="Hjson" Version="3.0.0" />
    </ItemGroup>
 
   <ItemGroup>
