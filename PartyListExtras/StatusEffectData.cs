@@ -36,14 +36,16 @@ namespace PartyListExtras
         public float? crit_rate_up { get; set; }
         public float? dhit_rate_up { get; set; }
 
-        // Various stats Up
+        // Speed Ups
         public float? attack_speed_up { get; set; }
         public float? cast_speed_up { get; set; }
         public float? ability_cast_speed_up { get; set; }
         public float? auto_speed_up { get; set; }
-        public float? move_speed_up { get; set; }
-        public float? evade_up { get; set; }
-        public float? max_mp_up { get; set; }
+
+        // Other Stats Up
+        public float? move_speed_up { get; set; } // NOT IMPLIMENTED
+        public float? evade_up { get; set; } // NOT IMPLIMENTED
+        public float? max_mp_up { get; set; } // NOT IMPLIMENTED
 
         // Healing Received Up
         public float? healing_up { get; set; }
@@ -82,9 +84,9 @@ namespace PartyListExtras
         dp_g,
         dp_r,
         regen,
+        knockback_immunity, // NOT IMPLIMENTED
+        barrier,
         crit_rate_up, // DEPRECATED - DO NOT USE - to be removed in 0.2.0.0
-        knockback_immunity,
-        max_hp_up, // DEPRECATED - DO NOT USE - to be removed in 0.2.0.0
-        barrier
+        max_hp_up // DEPRECATED - DO NOT USE - to be removed in 0.2.0.0
     }
 }

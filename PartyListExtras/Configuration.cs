@@ -28,7 +28,7 @@ namespace PartyListExtras
         public Vector4 colorLeft { get; set; } = new Vector4(0f, 0f, 0f, 0f);
         public Vector4 colorSingle { get; set; } = new Vector4(0f, 0f, 0f, 1f);
 
-        public StatusIconConfig iconConfig { get; set; } = new StatusIconConfig();
+        public StatusIconConfig iconConfig = new StatusIconConfig();
 
         // the below exist just to make saving less cumbersome
         [NonSerialized]
@@ -78,6 +78,8 @@ namespace PartyListExtras
         
         public bool showHealUps = true;
         
+        public bool showCritDH = true;
+
         // Effects that should always be up
         public bool showConstSelf = false;
         public bool showConstPartyMember = false;

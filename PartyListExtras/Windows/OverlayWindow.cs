@@ -1,25 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using Dalamud.Configuration;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using Dalamud.Interface;
-using Dalamud.Interface.Windowing;
-using Dalamud.Logging;
 using Dalamud.Utility;
-using FFXIVClientStructs.FFXIV.Client.Game.Gauge;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
-using FFXIVClientStructs.Havok;
 using ImGuiNET;
-using Lumina.Data.Parsing.Layer;
-using Lumina.Excel.GeneratedSheets;
 
 namespace PartyListExtras.Windows;
 
@@ -159,50 +150,87 @@ public class OverlayWindow : IDisposable
             }
         }
 
-        // Mitigation
-        var phys_mit = multi_sum(datas.Select(x => x.phys_mit));
-        var magi_mit = multi_sum(datas.Select(x => x.magi_mit));
-
-        if (phys_mit == magi_mit && phys_mit > 0)
-            output.Add(new StatusIcon { FileName="mit_all.png", Value = "{0}%".Format(phys_mit), Label = "Mitigation"});
-        else
+        if (plugin.Configuration.iconConfig.showMit)
         {
-            if (phys_mit > 0)
-                output.Add(new StatusIcon { FileName = "mit_phys.png", Value = "{0}%".Format(phys_mit), Label = "Physical Mit" });
-            if (magi_mit > 0)
-                output.Add(new StatusIcon { FileName = "mit_magi.png", Value = "{0}%".Format(magi_mit), Label = "Magical Mit" });
+            // Mitigation
+            var phys_mit = multi_sum(datas.Select(x => x.phys_mit));
+            var magi_mit = multi_sum(datas.Select(x => x.magi_mit));
+
+            if (phys_mit == magi_mit && phys_mit > 0 && !plugin.Configuration.iconConfig.alwaysSplitMit)
+                output.Add(new StatusIcon { FileName="mit_all.png", Value = "{0}%".Format(phys_mit), Label = "Mitigation"});
+            else
+            {
+                if (phys_mit > 0)
+                    output.Add(new StatusIcon { FileName = "mit_phys.png", Value = "{0}%".Format(phys_mit), Label = "Physical Mit" });
+                if (magi_mit > 0)
+                    output.Add(new StatusIcon { FileName = "mit_magi.png", Value = "{0}%".Format(magi_mit), Label = "Magical Mit" });
+            }
         }
 
-        // Damage Up
-        var phys_up = multi_sum(datas.Select(x => x.phys_up));
-        var magi_up = multi_sum(datas.Select(x => x.magi_up));
-
-        if (phys_up == magi_up && phys_up > 0)
-            output.Add(new StatusIcon { FileName = "all_up.png", Value = "{0}%".Format(phys_up), Label = "Damage Up"});
-        else
+        if (plugin.Configuration.iconConfig.showDmgUp)
         {
-            if (phys_up > 0)
-                output.Add(new StatusIcon { FileName = "phys_up.png", Value = "{0}%".Format(phys_up), Label = "Phyiscal Dmg Up" });
-            if (magi_up > 0)
-                output.Add(new StatusIcon { FileName = "magi_up.png", Value = "{0}%".Format(magi_up), Label = "Magical Dmg Up" });
+            // Damage Up
+            var phys_up = multi_sum(datas.Select(x => x.phys_up));
+            var magi_up = multi_sum(datas.Select(x => x.magi_up));
+
+            if (phys_up == magi_up && phys_up > 0 && !plugin.Configuration.iconConfig.alwaysSplitDmgUp)
+                output.Add(new StatusIcon { FileName = "all_up.png", Value = "{0}%".Format(phys_up), Label = "Damage Up"});
+            else
+            {
+                if (phys_up > 0)
+                    output.Add(new StatusIcon { FileName = "phys_up.png", Value = "{0}%".Format(phys_up), Label = "Phyiscal Dmg Up" });
+                if (magi_up > 0)
+                    output.Add(new StatusIcon { FileName = "magi_up.png", Value = "{0}%".Format(magi_up), Label = "Magical Dmg Up" });
+            }
         }
 
-        // Attack Speed
-        var attack_speed_up = multi_sum(datas.Select(x => x.attack_speed_up));
-        var cast_speed_up = multi_sum(datas.Select(x => x.cast_speed_up));
-        var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
+        if (plugin.Configuration.iconConfig.showSpeedUps)
+        {
+            // Attack Speed
+            var attack_speed_up = multi_sum(datas.Select(x => x.attack_speed_up).Union(datas.Select(x => x.ability_cast_speed_up)));
+            var cast_speed_up = multi_sum(datas.Select(x => x.cast_speed_up));
+            var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
 
-        if (attack_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(attack_speed_up), Label = "Attack Speed Up" });
-        if (cast_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "cast_speed_up.png", Value = "{0}%".Format(cast_speed_up), Label = "Cast Speed Up" });
-        if (auto_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "auto_speed_up.png", Value = "{0}%".Format(auto_speed_up), Label = "Auto Speed Up" });
+            if (plugin.Configuration.iconConfig.stackSpeedUps)
+            {
+                var speed_up = multi_sum(new List<float?>() { attack_speed_up, cast_speed_up, auto_speed_up });
+                if (speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(speed_up), Label = "Speed Up" });
+            }
+            else
+            {
+                if (attack_speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(attack_speed_up), Label = "Attack Speed Up" });
+                if (cast_speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "cast_speed_up.png", Value = "{0}%".Format(cast_speed_up), Label = "Cast Speed Up" });
+                if (auto_speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "auto_speed_up.png", Value = "{0}%".Format(auto_speed_up), Label = "Auto Speed Up" });
+            }
+        }
 
         // Heal Rate
-        var healing_up = multi_sum(datas.Select(x => x.healing_up));
-        if (healing_up > 0)
-            output.Add(new StatusIcon { FileName = "healing_up.png", Value = "{0}%".Format(healing_up), Label = "Healing Up" });
+        if (plugin.Configuration.iconConfig.showHealUps)
+        {
+            var healing_up = multi_sum(datas.Select(x => x.healing_up));
+            var healing_pot = multi_sum(datas.Select(x => x.healing_pot));
+
+            if (healing_up > 0)
+                output.Add(new StatusIcon { FileName = "healing_up.png", Value = "{0}%".Format(healing_up), Label = "Healing Up" });
+            if (healing_pot > 0)
+                output.Add(new StatusIcon { FileName = "healing_pot.png", Value = "{0}%".Format(healing_pot), Label = "Heal Potency Up" });
+        }
+
+        // Crit and DH
+        if (plugin.Configuration.iconConfig.showCritDH)
+        {
+            var crit_up = multi_sum(datas.Select(x => x.crit_rate_up));
+            var dh_up = multi_sum(datas.Select(x => x.dhit_rate_up));
+
+            if (crit_up > 0)
+                output.Add(new StatusIcon { FileName = "crit_rate_up.png", Value = "{0}%".Format(crit_up), Label = "Crit rate Up" });
+            if (dh_up > 0)
+                output.Add(new StatusIcon { FileName = "dh_rate_up.png", Value = "{0}%".Format(dh_up), Label = "Dhit rate Up" });
+        }
 
         // Send Message to log for status effects that are missing
         var debugMessage = "";
