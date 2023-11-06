@@ -7,6 +7,12 @@
         "requested": "[2.1.12, )",
         "resolved": "2.1.12",
         "contentHash": "Sc0PVxvgg4NQjcI8n10/VfUQBAS4O+Fw2pZrAqBdRMbthYGeogzu5+xmIGCGmsEZ/ukMOBuAqiNiB5qA3MRalg=="
+      },
+      "Hjson": {
+        "type": "Direct",
+        "requested": "[3.0.0, )",
+        "resolved": "3.0.0",
+        "contentHash": "4rcPlG9REnY5aXPoOoWoa4l3cABuP6zlA0qz5wJ1f3vZwgzIJCdoYv/UDkDq9nl5QdesOkNovbv3uf5acneNBw=="
       }
     }
   }

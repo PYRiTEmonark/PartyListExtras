@@ -1,0 +1,40 @@
+// Adventurer data for anything role-related that is shared among one or several jobs
+
+[
+    {
+        // Sprint's self 30% move speed buff
+        "row_id": 50,
+        "status_name": "Sprint",
+        "target_type": "Self",
+        "move_speed_up": 0.3
+    },
+    {
+        // Surecast's buff, giving knockback immunity
+        "row_id": 160,
+        "status_name": "Surecast",
+        "target_type": "Self",
+        "special": "knockback_immunity"
+    },
+    {
+        // Rampart's 20sec 20% mitigation buff
+        "row_id": 1191,
+        "status_name": "Rampart",
+        "target_type": "Self",
+        "phys_mit": 0.2,
+        "magi_mit": 0.2
+    },
+    {
+        // Peloton's 20% move speed buff
+        "row_id": 1199,
+        "status_name": "Peloton",
+        "target_type": "PartyWide",
+        "move_speed_up": 0.2
+    },
+    {
+        // Arm's Length buff, giving knockback immunity
+        "row_id": 1209,
+        "status_name": "Arm's Length",
+        "target_type": "Self",
+        "special": "knockback_immunity"
+    }
+]

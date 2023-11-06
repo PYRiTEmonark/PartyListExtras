@@ -1,17 +1,20 @@
 [
     {
+        // DRK Stance
         "row_id": 743,
         "status_name": "Grit",
         "target_type": "ConstSelf",
         "special": "stance"
     },
     {
+        // Dark Mind's 10sec 20% magical mitigation buff
         "row_id": 746,
         "status_name": "Dark Mind",
         "target_type": "Self",
         "magi_mit": 0.2
     },
     {
+        // Shadow Wall's 15sec 30% mitigation
         "row_id": 747,
         "status_name": "Shadow Wall",
         "target_type": "Self",
@@ -19,22 +22,34 @@
         "magi_mit": 0.3
     },
     {
+        // DRK's invulnerability buff
         "row_id": 810,
         "status_name": "Living Dead",
         "target_type": "Self",
         "special": "living_dead"
     },
     {
+        // The Blackest Night's 7sec self-shielding buff
+        "row_id": 1178,
+        "status_name": "Blackest Night",
+        "target_type": "Self",
+        "special": "barrier"
+    },
+    {
+        // Dark Missionary's 15sec 10% magical mitigation buff
         "row_id": 1894,
         "status_name": "Dark Missionary",
         "target_type": "PartyWide",
         "magi_mit": 0.1
     },
     {
+        // Oblation's 10sec 10% targetable mitigation buff
         "row_id": 2682,
         "status_name": "Oblation",
-        "target_type": "Self",
+        "target_type": "PartyMember",
         "phys_mit": 0.1,
         "magi_mit": 0.1
     }
+
+    //TODO: find a way to check whether Darkside is up or not (+10% increased damage)
 ]

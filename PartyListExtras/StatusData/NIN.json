@@ -1,8 +1,10 @@
 [
     {
+        // Shade Shift's self shield
         "row_id": 488,
         "status_name": "Shade Shift",
         "target_type": "Self",
         "special": "barrier"
     }
+    //TODO : find a way to check whether Huton's up or not (job gauge): 15% of physical haste
 ]

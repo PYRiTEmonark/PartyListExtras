@@ -14,6 +14,7 @@ using Dalamud.Interface.Internal;
 using System.Text.Json.Serialization;
 using System.Diagnostics;
 using System;
+using Hjson;
 
 namespace PartyListExtras
 {
@@ -160,7 +161,8 @@ namespace PartyListExtras
                 {
                     List<StatusEffectData>? rawData;
                     try {
-                         rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(fs);
+                        var jsonString = HjsonValue.Load(fs).ToString();
+                        rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(jsonString);
                     } catch (JsonException ex) {
                         pluginLog.Warning("Error loading file {0} - {1}", dataName, ex.Message);
                         continue;

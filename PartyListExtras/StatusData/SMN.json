@@ -1,9 +1,17 @@
 [
     {
+        // Searing Light's 30-sec 3% damage up party wide
         "row_id": 2703,
         "status_name": "Searing Light",
         "target_type": "PartyWide",
-        "phys_mit": 0.03,
-        "magi_mit": 0.03
+        "phys_up": 0.03,
+        "magi_up": 0.03
+    },
+    {
+        // Radiant Aegis' 30-sec self-shield
+        "row_id": 2702,
+        "status_name": "Radiant Aegis",
+        "target_type": "Self",
+        "special": "barrier"
     }
 ]
