@@ -61,12 +61,12 @@ Currently some buffs aren't applied properly. These are:
 - Bozja Actions: Partially done
 - DRN/DRS Actions: Complete*
 - Zadnor Actions: Complete**
-- 
+
+*Entries needing verification
+**Entries needing additional work (job gauge data, character level, stack handling)
 
 PRs/Issues very welcome.
 
 Status effect IDs are logged as Debug, or use /plx missing to dump all seen ids to the log.
 Row IDs should be identical to the ones in the excel data, however as there may be duplicates in the data in game verification is appreciated (but not required).
 
-*Entries needing verification
-**Entries needing additional work (job gauge data, character level, stack handling, etc)

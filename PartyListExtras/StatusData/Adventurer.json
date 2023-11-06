@@ -2,6 +2,13 @@
 
 [
     {
+        // Sprint's self 30% move speed buff
+        "row_id": 50,
+        "status_name": "Sprint",
+        "target_type": "Self",
+        "move_speed_up": 0.3
+    },
+    {
         // Surecast's buff, giving knockback immunity
         "row_id": 160,
         "status_name": "Surecast",
