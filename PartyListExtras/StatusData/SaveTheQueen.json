@@ -5,7 +5,7 @@
         // Increases damage dealt by 80%.
         "row_id": 2311,
         "status_name": "Spirit of the Aetherweaver",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.8,
         "magi_up": 0.8
     },
@@ -13,7 +13,7 @@
         // Increases damage dealt by 60%.
         "row_id": 2312,
         "status_name": "Spirit of the Martialist",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.6,
         "magi_up": 0.6
     },
@@ -21,14 +21,14 @@
         // Increases healing potency by 60%.
         "row_id": 2313,
         "status_name": "Spirit of the Savior",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "healing_pot": 0.6
     },
     {
         // Increases physical defense by 150%, magic defense by 45%, and maximum HP by 60%.
         "row_id": 2314,
         "status_name": "Spirit of the Veteran",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_mit": 1.5,
         "magi_mit": 0.45,
         "max_hp_up": 0.6
@@ -37,7 +37,7 @@
         // Increases defense by 80% and maximum HP by 45%.
         "row_id": 2315,
         "status_name": "Spirit of the Platebearer",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_mit": 0.8,
         "max_hp_up": 0.45
     },
@@ -45,7 +45,7 @@
         // Increases defense by 30% and maximum HP by 10%.
         "row_id": 2316,
         "status_name": "Spirit of the Guardian",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.3,
         "magi_up": 0.3,
         "max_hp_up": 0.1
@@ -54,7 +54,7 @@
         // Increases damage dealt by 20%, healing potency by 25%, and maximum MP by 50%.
         "row_id": 2317,
         "status_name": "Spirit of the Ordained",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.2,
         "magi_up": 0.2,
         "healing_pot": 0.25,
@@ -64,7 +64,7 @@
         // Increases damage dealt by 20% and critical hit rate by 15%.
         "row_id": 2318,
         "status_name": "Spirit of the Skirmisher",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.2,
         "magi_up": 0.2,
         "crit_rate_up": 0.15
@@ -73,7 +73,7 @@
         // Reduces maximum HP by 5% while increasing evasion by 40%.
         "row_id": 2319,
         "status_name": "Spirit of the Watcher",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "max_hp_up": -0.05,
         "evade_up": 0.4
     },
@@ -81,7 +81,7 @@
         // Reduces healing potency by 70% while increasing damage dealt by 100%.
         "row_id": 2320,
         "status_name": "Spirit of the Profane",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 1,
         "magi_up": 1,
         "healing_pot": -0.7
@@ -90,18 +90,18 @@
         // Increases damage dealt by 90% and damage taken by 200% while reducing maximum HP by 30%.
         "row_id": 2321,
         "status_name": "Spirit of the Irregular",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.9,
         "magi_up": 0.9,
         "phys_mit": -0.66,
         "magi_mit": -0.66,
-        "max_hp_up":  -0.3
+        "max_hp_up": -0.3
     },
     {
         // Increases poison resistance and movement speed, including mount speed, and increases evasion by 10%.
         "row_id": 2322,
         "status_name": "Spirit of the Breathtaker",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "move_speed_up": 0.1,
         "evade": 0.1
     },
@@ -109,7 +109,7 @@
         // Increases damage dealt by 40%. Additional Effect: Absorb a portion of damage dealt as HP
         "row_id": 2323,
         "status_name": "Spirit of the Bloodsucker",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.4,
         "magi_up": 0.4
     },
@@ -117,7 +117,7 @@
         // Increases defense by 50% and maximum HP by 45%. Additional Effect: Absorb a portion of damage dealt as HP
         "row_id": 2324,
         "status_name": "Spirit of the Beast",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_mit": 0.5,
         "magi_mit": 0.5,
         "max_hp_up": 0.45
@@ -126,7 +126,7 @@
         // Increases defense by 50%, maximum HP by 45%, and damage dealt by 60%.
         "row_id": 2325,
         "status_name": "Spirit of the Templar",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.6,
         "magi_up": 0.6,
         "phys_mit": 0.5,
@@ -140,7 +140,7 @@
         // Increases evasion by 11%, critical hit rate by 77%, and direct hit rate by 77%.
         "row_id": 2434,
         "status_name": "Spirit of the Gambler",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "evade_up": 0.11,
         "crit_rate_up": 0.77,
         "dhit_rate_up": 0.77
@@ -149,7 +149,7 @@
         // Increases defense by 25%, damage dealt by 50%, and maximum HP by 100%.
         "row_id": 2435,
         "status_name": "Spirit of the Elder",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.5,
         "magi_up": 0.5,
         "phys_mit": 0.25,
@@ -160,7 +160,7 @@
         // Increases defense by 60%, damage dealt by 60%, and maximum HP by 81%.
         "row_id": 2436,
         "status_name": "Spirit of the Duelist",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.6,
         "magi_up": 0.6,
         "phys_mit": 0.6,
@@ -171,7 +171,7 @@
         // Increases defense by 60%, damage dealt by 50%, and maximum HP by 81%.
         "row_id": 2437,
         "status_name": "Spirit of the Fiendhunter",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.5,
         "magi_up": 0.5,
         "phys_mit": 0.6,
@@ -182,7 +182,7 @@
         // Increases defense by 40%, damage dealt by 72%, and maximum HP by 50%.
         "row_id": 2438,
         "status_name": "Spirit of the Indomitable",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.72,
         "magi_up": 0.72,
         "phys_mit": 0.4,
@@ -193,7 +193,7 @@
         // Increases defense by 25%, damage dealt by 35%, and maximum HP by 100%.
         "row_id": 2439,
         "status_name": "Spirit of the Divine",
-        "target_type": "Self",
+        "target_type": "EssenceSelf",
         "phys_up": 0.35,
         "magi_up": 0.35,
         "phys_mit": 0.25,
@@ -294,14 +294,14 @@
         // Applies a barrier to self or target player reducing physical damage taken by 10%.
         "row_id": 2333,
         "status_name": "Lost Protect",
-        "target_type": "PartyMember",
+        "target_type": "ConstPartyMember",
         "phys_mit": 0.1
     },
     {
         // Applies a barrier to self or target player reducing magic damage taken by 10%.
         "row_id": 2334,
         "status_name": "Lost Shell",
-        "target_type": "PartyMember",
+        "target_type": "ConstPartyMember",
         "magi_mit": 0.1
     },
     {
@@ -385,21 +385,21 @@
         // Applies a barrier to self or target player reducing physical damage taken by 15%.
         "row_id": 2561,
         "status_name": "Lost Protect II",
-        "target_type": "PartyMember",
+        "target_type": "ConstPartyMember",
         "phys_mit": 0.15
     },
     {
         // Applies a barrier to self or target player reducing magic damage taken by 15%.
         "row_id": 2562,
         "status_name": "Lost Shell II",
-        "target_type": "PartyMember",
+        "target_type": "ConstPartyMember",
         "magi_mit": 0.15
     },
     {
         // Increases maximum HP of self or target player by 30%.
         "row_id": 2563,
         "status_name": "Lost Bubble",
-        "target_type": "PartyMember",
+        "target_type": "ConstPartyMember",
         "max_hp_up": 0.3
     },
     {

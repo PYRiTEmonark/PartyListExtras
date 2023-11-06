@@ -62,7 +62,9 @@ namespace PartyListExtras
     {
         Self, // Given to self only, e.g. Tank's Rampart
         ConstSelf, // Can/should always be up, e.g. SAM's Fuka and Fugetsu
-        PartyMember, // Granted to targeted party member (or self if no target) e.g. WHM's Regen
+        EssenceSelf, // Save the Queen Essences and Deep Essences
+        PartyMember, // Granted to self or targeted party member e.g. WHM's Regen
+        ConstPartyMember, // Can/Should always be up and granted to self or targeted party member e.g. Some StQ lost actions
         PartyShared, // e.g. DNC's Dance Partner
         PartyWide, // Granted to all party members e.g. GNB's Heart of Light or DRG's Battle Litany
         PartyAoE // Granted by standing in an AoE e.g. BLM's Ley Lines

@@ -85,7 +85,7 @@
         // Neutral Sect's +20% healing potency buff
         "row_id": 1892,
         "status_name": "Neutral Sect",
-        "target_type": "self",
+        "target_type": "Self",
         "healing_pot": 0.2
     },
     {
