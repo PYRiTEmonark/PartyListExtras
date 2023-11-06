@@ -14,6 +14,8 @@ using Dalamud.Interface.Internal;
 using System.Text.Json.Serialization;
 using System.Diagnostics;
 using System;
+using System.Threading;
+using Dalamud.Game.ClientState.Conditions;
 
 namespace PartyListExtras
 {
@@ -22,8 +24,6 @@ namespace PartyListExtras
     {
         public string Name => "PartyListExtras";
         private const string CommandName = "/plx";
-
-        private bool overlayEnabled = true;
 
         private DalamudPluginInterface PluginInterface { get; init; }
         private ICommandManager CommandManager { get; init; }
@@ -34,7 +34,8 @@ namespace PartyListExtras
         public IClientState ClientState { get; init; }
         public IObjectTable ObjectTable { get; init; }
         public IPartyList PartyList { get; init; }
-        public IPluginLog pluginLog { get; init; }
+        public ICondition Condition { get; init; }
+        public IPluginLog log { get; init; }
 
 
         private ConfigWindow ConfigWindow { get; init; }
@@ -50,6 +51,7 @@ namespace PartyListExtras
             [RequiredVersion("1.0")] IClientState clientState,
             [RequiredVersion("1.0")] IObjectTable objectTable,
             [RequiredVersion("1.0")] IPartyList partyList,
+            [RequiredVersion("1.0")] ICondition condition,
             [RequiredVersion("1.0")] IPluginLog pluginLog)
         {
             this.PluginInterface = pluginInterface;
@@ -58,15 +60,15 @@ namespace PartyListExtras
             this.ChatGui = chatGui;
             this.ClientState = clientState;
             this.PartyList = partyList;
+            this.Condition = condition;
             this.ObjectTable = objectTable;
-            this.pluginLog = pluginLog;
+            this.log = pluginLog;
 
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);
 
             ConfigWindow = new ConfigWindow(this);
             OverlayWindow = new OverlayWindow(this);
-            OverlayWindow.IsOpen = true;
 
             WindowSystem.AddWindow(ConfigWindow);
 
@@ -107,16 +109,28 @@ namespace PartyListExtras
             }
             else if (args == "missing")
             {
-                pluginLog.Information(
+                log.Information(
                     "Missing Status Ids: {0}",
                     string.Join("", OverlayWindow.missing_ids
                         .Select(x => string.Format("{0} = {1}; ", x.Item1, x.Item2))));
             }
             else if (args == "missing clear") OverlayWindow.missing_ids.Clear();
             else if (args == "reload") LoadAssets();
-            else if (args == "on") overlayEnabled = true;
-            else if (args == "off") overlayEnabled = false;
-            else if (args == "toggle") overlayEnabled = !overlayEnabled;
+            else if (args == "on")
+            {
+                Configuration.EnableOverlay = true;
+                Configuration.Save();
+            }
+            else if (args == "off")
+            {
+                Configuration.EnableOverlay = false;
+                Configuration.Save();
+            }
+            else if (args == "toggle")
+            {
+                Configuration.EnableOverlay = !Configuration.EnableOverlay;
+                Configuration.Save();
+            }
             else if (args == "") ConfigWindow.IsOpen = true;
             else ChatGui.Print("Unknown command - use /plx help for information");
         }
@@ -127,14 +141,14 @@ namespace PartyListExtras
             statusEffectData = new Dictionary<int, StatusEffectData>();
 
             // Loads/Reloads icons and data files
-            pluginLog.Information("Loading/Reloading PartyListExtras assets");
+            log.Information("Loading/Reloading PartyListExtras assets");
 
             // Find our image files
             var baseImagePath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "Icons");
             var imageNames = Directory.GetFiles(baseImagePath, "*.png").Select(Path.GetFileName).ToArray();
 
             // Logging cus VS refuses to copy images sometimes
-            pluginLog.Debug("Loading images from {0}", baseImagePath);
+            log.Debug("Loading images from {0}", baseImagePath);
 
             // Load images into the dict
             foreach (var imageName in imageNames)
@@ -144,13 +158,13 @@ namespace PartyListExtras
                 this.textures.Add(imageName, this.PluginInterface.UiBuilder.LoadImage(imagePath));
             }
 
-            pluginLog.Debug("Images Loaded: {0}", string.Join(',', imageNames));
+            log.Debug("Images Loaded: {0}", string.Join(',', imageNames));
 
             // as above but for status .json files in /StatusData
             var baseDataPath = Path.Combine(PluginInterface.AssemblyLocation.Directory?.FullName!, "StatusData");
             var dataNames = Directory.GetFiles(baseDataPath, "*.json").Select(Path.GetFileName).ToArray();
 
-            pluginLog.Debug("Loading data files from {0}", baseDataPath);
+            log.Debug("Loading data files from {0}", baseDataPath);
 
             foreach (var dataName in dataNames)
             {
@@ -162,13 +176,13 @@ namespace PartyListExtras
                     try {
                          rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(fs);
                     } catch (JsonException ex) {
-                        pluginLog.Warning("Error loading file {0} - {1}", dataName, ex.Message);
+                        log.Warning("Error loading file {0} - {1}", dataName, ex.Message);
                         continue;
                     }
 
                     if (rawData == null)
                     {
-                        pluginLog.Warning("Data file {0} didn't load - Badly formatted?");
+                        log.Warning("Data file {0} didn't load - Badly formatted?");
                         continue;
                     }
 
@@ -176,7 +190,7 @@ namespace PartyListExtras
                     {
                         if (statusEffectData.ContainsKey(sxd.row_id))
                         {
-                            pluginLog.Warning("Key {0} exists twice; accepted {1}, rejected {2}",
+                            log.Warning("Key {0} exists twice; accepted {1}, rejected {2}",
                                 sxd.row_id, statusEffectData[sxd.row_id].status_name, sxd.status_name);
                             continue;
                         }
@@ -185,19 +199,29 @@ namespace PartyListExtras
                 }
             }
 
-            pluginLog.Debug("Data files Loaded: {0}", string.Join(", ", dataNames));
+            log.Debug("Data files Loaded: {0}", string.Join(", ", dataNames));
         }
 
         private unsafe void DrawUI()
         {
             this.WindowSystem.Draw();
-            this.OverlayWindow.Draw();
 
             // show overlay if open
             AddonPartyList* apl = (AddonPartyList*)GameGui.GetAddonByName("_PartyList");
             if (apl == null) { return; }
-            var isvis = apl->AtkUnitBase.IsVisible;
-            OverlayWindow.IsOpen = isvis && overlayEnabled;
+            bool isvis = apl->AtkUnitBase.IsVisible;
+
+            bool show = true;
+            // Hide if not in combat
+            if (Configuration.hideOutOfCombat && !Condition[ConditionFlag.InCombat])
+                show = false;
+
+            // But show if in dt
+            if (Configuration.alwaysShowInDuty && Condition[ConditionFlag.BoundByDuty])
+                show = true;
+            
+            if (isvis && Configuration.EnableOverlay && show)
+                this.OverlayWindow.Draw();
         }
 
         public void DrawConfigUI()

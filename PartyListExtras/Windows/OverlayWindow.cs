@@ -39,8 +39,6 @@ public class OverlayWindow : IDisposable
     public Vector2 Size;
     public Vector2 Position;
 
-    public bool IsOpen;
-
     public unsafe OverlayWindow(Plugin plugin)
     {
         this.Size = new Vector2(10000, 10000);
@@ -53,7 +51,6 @@ public class OverlayWindow : IDisposable
 
     public unsafe void Draw()
     {
-        if (!IsOpen) { return; }
 
         ImGui.Begin("PLX_OverlayWindow",
             ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
@@ -76,7 +73,7 @@ public class OverlayWindow : IDisposable
             apl_node = apl->BackgroundNineGridNode->AtkResNode;
         }
         catch (NullReferenceException e) {
-            plugin.pluginLog.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
+            plugin.log.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
             return;
         }
         // resize window
@@ -121,7 +118,6 @@ public class OverlayWindow : IDisposable
 
             //Spin out to helper functions because long
             DrawStatusIcons(ParseStatusList(sl), "party_{0}".Format(i), curpos, cursize);
-
         }
 
         ImGui.End();
@@ -151,26 +147,16 @@ public class OverlayWindow : IDisposable
         }
 
         // Read properties out of data
+        var special_fstrings = plugin.Configuration.iconConfig.SpecialIcons;
 
-        // This Needs to be paralell to the `SpecialEffects` enum
-        Dictionary<SpecialEffects, StatusIcon> special_fstrings = new Dictionary<SpecialEffects, StatusIcon> {
-            { SpecialEffects.stance, new StatusIcon {FileName = "stance.png", Label = "Stance"} },
-            { SpecialEffects.invuln, new StatusIcon {FileName = "invuln.png", Label = "Invuln"} },
-            { SpecialEffects.living_dead, new StatusIcon { FileName = "living_dead.png", Label = "Living Dead" } },
-            { SpecialEffects.block_all, new StatusIcon {FileName = "block_all.png", Label = "Block All"} },
-            { SpecialEffects.kardion, new StatusIcon {FileName = "kardion.png", Label = "Recv"} },
-            { SpecialEffects.kardia, new StatusIcon {FileName = "kardia.png", Label = "Sent"} },
-            { SpecialEffects.dp_g, new StatusIcon {FileName = "dp_g.png", Label = "Sent"} },
-            { SpecialEffects.dp_r, new StatusIcon {FileName = "dp_r.png", Label = "Recv"} },
-            { SpecialEffects.regen, new StatusIcon {FileName = "regen.png", Label = "Regen"} },
-            { SpecialEffects.crit_rate_up, new StatusIcon {FileName = "crit_rate_up.png", Label = "Crit Up"} }
-            //{ SpecialEffects.barrier, new StatusIcon {FileName = "barrier.png", Label = "Barrier"} }
-        };
-
-        foreach (var sx in special_fstrings.Keys)
-        {
-            if (datas.Select(x => x.special).Contains((SpecialEffects)sx))
-                output.Add(special_fstrings[sx]);
+        // For each non-null special effect...
+        foreach (var sfx in datas.Select(x => x.special).OfType<SpecialEffects>()) {
+            // ...If the special effect is in the special_fstrings list...
+            if (special_fstrings.ContainsKey(sfx) && !plugin.Configuration.iconConfig.hiddenSpecialEffects.Contains(sfx))
+            {
+                // ...add it to the list of things to be rendered
+                output.Add(special_fstrings[sfx]);
+            }
         }
 
         // Mitigation
@@ -178,13 +164,13 @@ public class OverlayWindow : IDisposable
         var magi_mit = multi_sum(datas.Select(x => x.magi_mit));
 
         if (phys_mit == magi_mit && phys_mit > 0)
-            output.Add(new StatusIcon { FileName="mit_all.png", Info = "{0}%".Format(phys_mit), Label = "Mitigation"});
+            output.Add(new StatusIcon { FileName="mit_all.png", Value = "{0}%".Format(phys_mit), Label = "Mitigation"});
         else
         {
             if (phys_mit > 0)
-                output.Add(new StatusIcon { FileName = "mit_phys.png", Info = "{0}%".Format(phys_mit), Label = "Physical Mit" });
+                output.Add(new StatusIcon { FileName = "mit_phys.png", Value = "{0}%".Format(phys_mit), Label = "Physical Mit" });
             if (magi_mit > 0)
-                output.Add(new StatusIcon { FileName = "mit_magi.png", Info = "{0}%".Format(magi_mit), Label = "Magical Mit" });
+                output.Add(new StatusIcon { FileName = "mit_magi.png", Value = "{0}%".Format(magi_mit), Label = "Magical Mit" });
         }
 
         // Damage Up
@@ -192,13 +178,13 @@ public class OverlayWindow : IDisposable
         var magi_up = multi_sum(datas.Select(x => x.magi_up));
 
         if (phys_up == magi_up && phys_up > 0)
-            output.Add(new StatusIcon { FileName = "all_up.png", Info = "{0}%".Format(phys_up), Label = "Damage Up"});
+            output.Add(new StatusIcon { FileName = "all_up.png", Value = "{0}%".Format(phys_up), Label = "Damage Up"});
         else
         {
             if (phys_up > 0)
-                output.Add(new StatusIcon { FileName = "phys_up.png", Info = "{0}%".Format(phys_up), Label = "Phyiscal Dmg Up" });
+                output.Add(new StatusIcon { FileName = "phys_up.png", Value = "{0}%".Format(phys_up), Label = "Phyiscal Dmg Up" });
             if (magi_up > 0)
-                output.Add(new StatusIcon { FileName = "magi_up.png", Info = "{0}%".Format(magi_up), Label = "Magical Dmg Up" });
+                output.Add(new StatusIcon { FileName = "magi_up.png", Value = "{0}%".Format(magi_up), Label = "Magical Dmg Up" });
         }
 
         // Attack Speed
@@ -207,16 +193,16 @@ public class OverlayWindow : IDisposable
         var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
 
         if (attack_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "attack_speed_up.png", Info = "{0}%".Format(attack_speed_up), Label = "Attack Speed Up" });
+            output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(attack_speed_up), Label = "Attack Speed Up" });
         if (cast_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "cast_speed_up.png", Info = "{0}%".Format(cast_speed_up), Label = "Cast Speed Up" });
+            output.Add(new StatusIcon { FileName = "cast_speed_up.png", Value = "{0}%".Format(cast_speed_up), Label = "Cast Speed Up" });
         if (auto_speed_up > 0)
-            output.Add(new StatusIcon { FileName = "auto_speed_up.png", Info = "{0}%".Format(auto_speed_up), Label = "Auto Speed Up" });
+            output.Add(new StatusIcon { FileName = "auto_speed_up.png", Value = "{0}%".Format(auto_speed_up), Label = "Auto Speed Up" });
 
         // Heal Rate
         var healing_up = multi_sum(datas.Select(x => x.healing_up));
         if (healing_up > 0)
-            output.Add(new StatusIcon { FileName = "healing_up.png", Info = "{0}%".Format(healing_up), Label = "Healing Up" });
+            output.Add(new StatusIcon { FileName = "healing_up.png", Value = "{0}%".Format(healing_up), Label = "Healing Up" });
 
         // Send Message to log for status effects that are missing
         var debugMessage = "";
@@ -228,7 +214,7 @@ public class OverlayWindow : IDisposable
                 missing_ids.Add(item);
             }
         }
-        if (debugMessage.Length > 0) plugin.pluginLog.Debug("Missing Status Ids: " + debugMessage);
+        if (debugMessage.Length > 0) plugin.log.Debug("Missing Status Ids: " + debugMessage);
 
         return output;
     }
@@ -277,7 +263,7 @@ public class OverlayWindow : IDisposable
         {
 
             // the label e.g. damage up
-            if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Info == null)))
+            if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Value == null)))
             {
                 cursor += new Vector2(
                     - (1f * ImGui.CalcTextSize(icon.Label).X) + (-padding * scaling),
@@ -294,12 +280,12 @@ public class OverlayWindow : IDisposable
             drawlist.AddImage(plugin.textures[icon.FileName].ImGuiHandle, cursor, cursor + new Vector2(imgsize, imgsize));
 
             // Info, e.g. mit percent
-            if (icon.Info != null && dm != 3) {
+            if (icon.Value != null && dm != 3) {
                 cursor += new Vector2(
-                    - (1f * ImGui.CalcTextSize(icon.Info).X * scaling) - padding,
+                    - (1f * ImGui.CalcTextSize(icon.Value).X * scaling) - padding,
                     0
                 );
-                drawlist.AddText(cursor, white, icon.Info);
+                drawlist.AddText(cursor, white, icon.Value);
             }
         }
 

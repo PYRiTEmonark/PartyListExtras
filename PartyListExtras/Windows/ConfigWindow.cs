@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
+using Dalamud.Utility;
 using ImGuiNET;
 
 namespace PartyListExtras.Windows;
@@ -25,6 +26,23 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
+        // Enabled
+        bool enable = configuration.EnableOverlay;
+        if (ImGui.Checkbox("Enable", ref enable))
+            configuration.EnableOverlay = enable;
+
+        bool hic = configuration.hideOutOfCombat;
+        if (ImGui.Checkbox("Hide when not in combat", ref hic))
+            configuration.hideOutOfCombat = hic;
+
+        bool asid = configuration.alwaysShowInDuty;
+        if (ImGui.Checkbox("Always show when in Duty", ref asid))
+            configuration.alwaysShowInDuty = asid;
+
+        // Display Mode
+        ImGui.Separator();
+        ImGui.Text("Icon Appearance");
+
         int dm = configuration.DisplayMode;
         ImGui.Text("Text to show next to icons");
         var options = new string[]
@@ -34,7 +52,7 @@ public class ConfigWindow : Window, IDisposable
             "Information only",
             "None",
         };
-        if (ImGui.BeginCombo(" ", options[dm]))
+        if (ImGui.BeginCombo("##DisplayMode", options[dm]))
         {
             for (int i = 0; i < options.Length; i++)
             {
@@ -85,40 +103,95 @@ public class ConfigWindow : Window, IDisposable
         ImGui.Text("Offset");
         ImGui.SameLine();
         ImGui.SetNextItemWidth(100);
-        ImGui.InputInt(" ", ref oox, 1, 10);
+        ImGui.InputInt("##OffsetX", ref oox, 1, 10);
         configuration.OverlayOffsetX = oox;
-
 
         // Background colours
         ImGui.Separator();
 
-        if (ImGui.TreeNode("Background Colours"))
-        {
-            bool gradbkg = configuration.doGradientBackground;
-            if (ImGui.Checkbox("Gradient Background", ref gradbkg))
-                configuration.doGradientBackground = gradbkg;
+        ImGui.Text("Background Colours");
+        bool gradbkg = configuration.doGradientBackground;
+        if (ImGui.Checkbox("Gradient Background", ref gradbkg))
+            configuration.doGradientBackground = gradbkg;
             
-            if (gradbkg)
-            {
-                Vector4 leftcol = configuration.colorLeft;
-                if (ImGui.ColorPicker4("Left Hand Colour", ref leftcol))
-                    configuration.colorLeft = leftcol;
-                
-                ImGui.SameLine();
-                
-                Vector4 rightcol = configuration.colorRight;
-                if (ImGui.ColorPicker4("Right Hand Colour", ref rightcol))
-                    configuration.colorRight = rightcol;
-            }
-            else
-            {
-                Vector4 singlecol = configuration.colorSingle;
-                if (ImGui.ColorPicker4("Colour", ref singlecol))
-                    configuration.colorSingle = singlecol;
-            }
+        if (gradbkg)
+        {
+            Vector4 leftcol = configuration.colorLeft;
+            if (ImGui.ColorEdit4("Left Hand Colour", ref leftcol))
+                configuration.colorLeft = leftcol;
+
+            Vector4 rightcol = configuration.colorRight;
+            if (ImGui.ColorEdit4("Right Hand Colour", ref rightcol))
+                configuration.colorRight = rightcol;
+        }
+        else
+        {
+            Vector4 singlecol = configuration.colorSingle;
+            if (ImGui.ColorEdit4("Colour", ref singlecol))
+                configuration.colorSingle = singlecol;
         }
 
         configuration.Save();
 
+        // Advanced icon config
+        ImGui.Separator();
+        if (ImGui.TreeNode("Advanced Icon Configuration"))
+        {
+            ImGui.BeginTable("iconconfig", 5);
+
+            ImGui.TableNextColumn();
+            ImGui.TableHeader("Name");
+            ImGui.TableNextColumn();
+            ImGui.TableHeader(""); // Explaination
+            ImGui.TableNextColumn();
+            ImGui.TableHeader("Icon");
+            ImGui.TableNextColumn();
+            ImGui.TableHeader("Show");
+            ImGui.TableNextColumn();
+            ImGui.TableHeader("Label");
+
+            foreach(var effect in configuration.iconConfig.SpecialIcons.Keys)
+            {
+                var icon = configuration.iconConfig.SpecialIcons[effect];
+
+                // Title
+                ImGui.TableNextRow();
+                ImGui.TableNextColumn();
+                ImGui.Text(effect.ToString());
+
+                // Hover
+                ImGui.TableNextColumn();
+                ImGui.TextDisabled("(?)");
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text(icon.Tooltip ?? "[tooltip missing]");
+                    ImGui.EndTooltip();
+                }
+
+                // Icon
+                ImGui.TableNextColumn();
+                ImGui.Image(plugin.textures[icon.FileName].ImGuiHandle, new Vector2(20, 20));
+
+                // Enabled
+                ImGui.TableNextColumn();
+                bool enableEffect = !configuration.iconConfig.hiddenSpecialEffects.Contains(effect);
+                if (ImGui.Checkbox("##enableEffect{0}".Format(effect), ref enableEffect))
+                {
+                plugin.log.Debug("a: {0}", configuration.iconConfig.hiddenSpecialEffects);
+                    if (enableEffect)
+                        configuration.iconConfig.hiddenSpecialEffects.Remove(effect);
+                    else
+                        configuration.iconConfig.hiddenSpecialEffects.Add(effect);
+                }
+
+                // Label
+                ImGui.TableNextColumn();
+                string temp2 = icon.Label!;
+                ImGui.Text(temp2);
+            }
+
+            ImGui.EndTable();
+        }
     }
 }

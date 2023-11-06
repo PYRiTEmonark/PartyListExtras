@@ -25,13 +25,13 @@ namespace PartyListExtras
         // "othr_mit" unused, may become effective mit
         public float? phys_mit { get; set; }
         public float? magi_mit { get; set; }
-        public float? othr_mit { get; set; }
+        //public float? othr_mit { get; set; }
 
         // Damage Up by dmg type, "othr_up" as above
         public float? phys_up { get; set; }
         public float? magi_up { get; set; }
-        public float? othr_up { get; set; }
-
+        //public float? othr_up { get; set; }
+        
         // Various Speed Up
         public float? attack_speed_up { get; set; }
         public float? cast_speed_up { get; set; }
@@ -41,14 +41,15 @@ namespace PartyListExtras
         public float? healing_up { get; set; }
     }
 
-    internal struct StatusIcon
+    public struct StatusIcon
     {
         public string FileName { get; set; } // The path to the icon image, e.g. "mit_all.png"
         public string? Label { get; set; } // Static label on the icon, e.g. "Mitigation"
-        public string? Info { get; set; } // Info on the icon, e.g. the actual mit percentage
+        public string? Value { get; set; } // Info on the icon, e.g. the actual mit percentage
+        public string? Tooltip { get; set; } // Tooltop to show on hover
     }
 
-    internal enum TargetType
+    public enum TargetType
     {
         Self, // Given to self only, e.g. Tank's Rampart
         ConstSelf, // Can/should always be up, e.g. SAM's Fuka and Fugetsu
@@ -60,7 +61,7 @@ namespace PartyListExtras
 
     // TODO: find/replace these to be capitals and/or better names
     // Also general todo to move away from the special field
-    internal enum SpecialEffects
+    public enum SpecialEffects
     {
         stance, // Tank Stances
         invuln, // Tank Invulnrabilities
