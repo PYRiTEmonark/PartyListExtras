@@ -15,6 +15,9 @@ public class ConfigWindow : Window, IDisposable
     private Configuration configuration;
     private Plugin plugin;
 
+    // Used for arming the icon config reset button
+    private bool armIconReset = false;
+
     public ConfigWindow(Plugin plugin) : base(
         "Party List Extras Config", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -141,6 +144,23 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.TreeNode("Advanced Icon Configuration"))
         {
             var imagesize = new Vector2(20, 20);
+
+            if (!armIconReset)
+            {
+                if (ImGui.Button("Reset icons to Default"))
+                    armIconReset = true;
+            } else {
+                ImGui.Text("Are you Sure?");
+                ImGui.SameLine();
+                if (ImGui.Button("Reset"))
+                {
+                    plugin.Configuration.iconConfig = new StatusIconConfig();
+                    armIconReset = false;
+                }
+                ImGui.SameLine();
+                if (ImGui.Button("Cancel"))
+                    armIconReset = false;
+            }
 
             ImGui.BeginTable("iconconfig", 6);
 

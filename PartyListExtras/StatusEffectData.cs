@@ -79,8 +79,8 @@ namespace PartyListExtras
         invuln, // Tank Invulnrabilities
         living_dead, // DRK's Living Dead (before invuln pops)
         block_all, // PLD's Bulwark
-        kardion,
         kardia,
+        kardion,
         dp_g,
         dp_r,
         regen,
