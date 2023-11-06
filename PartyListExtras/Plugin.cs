@@ -17,6 +17,7 @@ using System;
 using System.Threading;
 using Dalamud.Game.ClientState.Conditions;
 using Hjson;
+using Newtonsoft.Json;
 
 namespace PartyListExtras
 {
@@ -65,7 +66,21 @@ namespace PartyListExtras
             this.ObjectTable = objectTable;
             this.log = pluginLog;
 
+            try
+            {
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
+            }
+            catch (JsonSerializationException)
+            {
+                var fname = this.PluginInterface.ConfigFile.FullName;
+                File.Move(fname, fname + "BAK", true);
+
+                ChatGui.Print("Invalid Configuration file - The old file has been backed up\n" +
+                    "If you've recently updated, especially if you've skipped versions, this may be expected\n" +
+                    "If the error persists please send feedback in the plugin installer", "PartyListExtras", 16);
+                this.Configuration = new Configuration();
+            }
+
             this.Configuration.Initialize(this.PluginInterface);
 
             ConfigWindow = new ConfigWindow(this);
@@ -176,8 +191,8 @@ namespace PartyListExtras
                     List<StatusEffectData>? rawData;
                     try {
                         var jsonString = HjsonValue.Load(fs).ToString();
-                        rawData = JsonSerializer.Deserialize<List<StatusEffectData>>(jsonString);
-                    } catch (JsonException ex) {
+                        rawData = System.Text.Json.JsonSerializer.Deserialize<List<StatusEffectData>>(jsonString);
+                    } catch (System.Text.Json.JsonException ex) {
                         log.Warning("Error loading file {0} - {1}", dataName, ex.Message);
                         continue;
                     }

@@ -5,6 +5,7 @@ using ImGuiNET;
 using PartyListExtras;
 using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using System.Threading;
 
 namespace PartyListExtras
@@ -37,7 +38,7 @@ namespace PartyListExtras
         {
             this.pluginInterface = pluginInterface;
             // preemtive config migration
-            this.iconConfig.ensureAllIcons();
+            this.iconConfig.validateIcons();
         }
 
         public void Save()
@@ -46,6 +47,7 @@ namespace PartyListExtras
         }
     }
 
+    [Serializable]
     public struct StatusIconConfig
     {
         public Dictionary<SpecialEffects, StatusIcon> SpecialIcons;
@@ -60,7 +62,6 @@ namespace PartyListExtras
             { SpecialEffects.dp_g, new StatusIcon { FileName = "dp_g.png", Label = "Sent" } },
             { SpecialEffects.dp_r, new StatusIcon { FileName = "dp_r.png", Label = "Recv" } },
             { SpecialEffects.regen, new StatusIcon { FileName = "regen.png", Label = "Regen" } },
-            { SpecialEffects.crit_rate_up, new StatusIcon { FileName = "crit_rate_up.png", Label = "Crit Up" } },
             { SpecialEffects.barrier, new StatusIcon { FileName = "barrier.png", Label = "Barrier" } }
         };
 
@@ -68,20 +69,46 @@ namespace PartyListExtras
 
         public bool showMit = true;
         public bool alwaysSplitMit = false;
+        
         public bool showDmgUp = true;
         public bool alwaysSplitDmgUp = false;
+        
         public bool showSpeedUps = true;
         public bool stackSpeedUps = false;
+        
         public bool showHealUps = true;
+        
+        // Effects that should always be up
+        public bool showConstSelf = false;
+        public bool showConstPartyMember = false;
 
         public StatusIconConfig()
         {
             SpecialIcons = DefaultIcons;
         }
 
-        public void ensureAllIcons()
+        /// <summary>
+        /// Adds missing icon fields and removes deprecated ones
+        /// </summary>
+        public void validateIcons()
         {
+            SpecialIcons.Remove(SpecialEffects.crit_rate_up);
+            SpecialIcons.Remove(SpecialEffects.max_hp_up);
 
+            foreach (var icon in DefaultIcons)
+            {
+                // Add missing Icons
+                if (!SpecialIcons.ContainsKey(icon.Key))
+                    SpecialIcons.Add(icon.Key, icon.Value);
+
+                // Add missing tooltips
+                else if (SpecialIcons[icon.Key].Tooltip == null)
+                {
+                    var x = SpecialIcons[icon.Key];
+                    x.Tooltip = DefaultIcons[icon.Key].Tooltip;
+                    SpecialIcons[icon.Key] = x;
+                }
+            }
         }
     }
 }

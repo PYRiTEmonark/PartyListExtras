@@ -71,7 +71,6 @@ namespace PartyListExtras
     }
 
     // TODO: find/replace these to be capitals and/or better names
-    // Also general todo to move away from the special field
     public enum SpecialEffects
     {
         stance, // Tank Stances
@@ -83,9 +82,9 @@ namespace PartyListExtras
         dp_g,
         dp_r,
         regen,
-        crit_rate_up,
+        crit_rate_up, // DEPRECATED - DO NOT USE - to be removed in 0.2.0.0
         knockback_immunity,
-        max_hp_up, // WAR's Thrill of Battle
-        barrier // Currently unused
+        max_hp_up, // DEPRECATED - DO NOT USE - to be removed in 0.2.0.0
+        barrier
     }
 }
