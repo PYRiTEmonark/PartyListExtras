@@ -1,17 +1,20 @@
 [
     {
+        // Closed Position's self-buff
         "row_id": 1823,
         "status_name": "Closed Position",
         "target_type": "PartyShared",
         "special": "dp_g"
     },
     {
+        // Closed Position's targeted buff
         "row_id": 1824,
         "status_name": "Dance Partner",
         "target_type": "PartyShared",
         "special": "dp_r"
     },
     {
+        // Standard Finish's increased damage buff. Assuming that the DNC's always doing the 2 required steps, this is a +5% damage buff for the DNC and their partner.
         "row_id": 1821,
         "status_name": "Standard Finish",
         "target_type": "PartyMember",
@@ -19,6 +22,7 @@
         "magi_up": 0.05
     },
     {
+        // Technical Finish's increased damage buff. Assuming that the DNC's always doing the 4 required steps, this is a +5% damage buff for the entire party.
         "row_id": 1822,
         "status_name": "Technical Finish",
         "target_type": "PartyWide",
@@ -26,6 +30,7 @@
         "magi_up": 0.05
     },
     {
+        // Shield Samba's partywide 15sec 10% mitigation buff
         "row_id": 1826,
         "status_name": "Shield Samba",
         "target_type": "PartyWide",
@@ -33,6 +38,21 @@
         "magi_mit": 0.1
     },
     {
+        // Improvisation's regen
+        "row_id": 1827,
+        "status_name": "Improvisation",
+        "target_type": "PartyWide",
+        "special": "regen"
+    },
+    {
+        // Improvised Finish's regen
+        "row_id": 2695,
+        "status_name": "Improvisation",
+        "target_type": "PartyWide",
+        "special": "regen"
+    },
+    {
+        // Improvised Finish's bonus shield
         "row_id": 2697,
         "status_name": "Improvised Finish",
         "target_type": "PartyWide",

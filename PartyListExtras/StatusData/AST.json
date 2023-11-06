@@ -1,5 +1,33 @@
 [
     {
+        // Collective Unconscious's partywide 10% mitigation
+        "row_id": 849,
+        "status_name": "Collective Unconscious",
+        "target_type": "PartyWide",
+        "phys_mit": 0.1,
+        "magi_mit": 0.1
+    },
+    {
+        // Collective Unconscious's partywide 15sec regen
+        "row_id": 956,
+        "status_name": "Collective Unconscious",
+        "target_type": "PartyWide",
+        "special": "regen"
+    },
+    {
+        // Celestial Opposition's partywide 15sec regen
+        "row_id": 1879,
+        "status_name": "Opposition",
+        "target_type": "PartyWide",
+        "special": "regen"
+    },
+
+    // Balance, Arrow, Spear, Bole, Ewer & Spire are 3/6% damage increase buffs according to their target's range
+    // TODO : add a melee/ranged check to determine if the buff is 3% or 6% for the cards
+
+
+    {
+        // Melee card
         "row_id": 1882,
         "status_name": "The Balance",
         "target_type": "PartyMember",
@@ -7,6 +35,7 @@
         "magi_up": 0.06
     },
     {
+        // Ranged card
         "row_id": 1883,
         "status_name": "The Bole",
         "target_type": "PartyMember",
@@ -14,6 +43,7 @@
         "magi_up": 0.06
     },
     {
+        // Melee card
         "row_id": 1884,
         "status_name": "The Arrow",
         "target_type": "PartyMember",
@@ -21,6 +51,7 @@
         "magi_up": 0.06
     },
     {
+        // Melee card
         "row_id": 1885,
         "status_name": "The Spear",
         "target_type": "PartyMember",
@@ -28,6 +59,7 @@
         "magi_up": 0.06
     },
     {
+        // Ranged card
         "row_id": 1886,
         "status_name": "The Ewer",
         "target_type": "PartyMember",
@@ -35,6 +67,7 @@
         "magi_up": 0.06
     },
     {
+        // Ranged card
         "row_id": 1887,
         "status_name": "The Spire",
         "target_type": "PartyMember",
@@ -42,14 +75,37 @@
         "magi_up": 0.06
     },
     {
+        // Celestial Intersection's shield
+        "row_id": 1889,
+        "status_name": "Intersection",
+        "target_type": "PartyMember",
+        "special": "barrier"
+    },
+    {
+        // Neutral Sect's +20% healing potency buff
+        "row_id": 1892,
+        "status_name": "Neutral Sect",
+        "target_type": "self",
+        "healing_pot": 0.2
+    },
+    {
+        // Neutral Sect's bonus shield when using Aspected Benefic or Aspected Helios
+        "row_id": 1921,
+        "status_name": "Neutral Sect",
+        "target_type": "PartyMember",
+        "special": "barrier"
+    },
+    {
+        // Astrodyne's self +5% damage up & +5% healing potency
         "row_id": 2716,
         "status_name": "Harmony of Mind",
         "target_type": "Self",
         "phys_up": 0.05,
         "magi_up": 0.05,
-        "healing_up": 0.05
+        "healing_pot": 0.05
     },
     {
+        // Astrodyne's self +10% magical haste
         "row_id": 2715,
         "status_name": "Harmony of Body",
         "target_type": "Self",
@@ -57,6 +113,7 @@
         "auto_speed_up": 0.1
     },
     {
+        // Divination's partywide 6% increased damage buff
         "row_id": 1878,
         "status_name": "Divination",
         "target_type": "PartyWide",
@@ -64,6 +121,7 @@
         "magi_up": 0.06
     },
     {
+        // Divination dupe
         "row_id": 2034,
         "status_name": "Divination",
         "target_type": "PartyWide",
@@ -71,8 +129,9 @@
         "magi_up": 0.06
     },
     {
-        "row_id": -1,
-        "status_name": "Divination",
+        // Exaltation's targeted 10% mitigation buff
+        "row_id": 2717,
+        "status_name": "Exaltation",
         "target_type": "PartyMember",
         "phys_mit": 0.1,
         "magi_mit": 0.1

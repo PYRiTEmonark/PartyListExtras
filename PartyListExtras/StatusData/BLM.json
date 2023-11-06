@@ -1,11 +1,13 @@
 [
     {
+        // Manaward's shield buff
         "row_id": 168,
         "status_name": "Manaward",
         "target_type": "Self",
         "special": "barrier"
     },
     {
+        // Ley Lines' buff when you are inside the Ley Lines, granting 15% magical haste
         "row_id": 738,
         "status_name": "Circle of Power",
         "target_type": "PartyAoE",

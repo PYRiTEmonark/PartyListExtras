@@ -1,5 +1,20 @@
 [
     {
+        // Life Surge's guaranteed crit
+        "row_id": 116,
+        "status_name": "Life Surge",
+        "target_type": "Self",
+        "crit_rate_up": 1
+    },
+    {
+        // Battle Litany's partywide 10% critical hit rate buff
+        "row_id": 786,
+        "status_name": "Battle Litany",
+        "target_type": "PartyWide",
+        "crit_rate_up": 0.1
+    },
+    {
+        // Dragon Sight's self-buff giving +10% damage increase
         "row_id": 1183,
         "status_name": "Right Eye",
         "target_type": "Self",
@@ -7,6 +22,7 @@
         "magi_up": 0.1
     },
     {
+        // Dragon Sight's target buff giving +5% damage increase
         "row_id": 1184,
         "status_name": "Left Eye",
         "target_type": "PartyMember",
@@ -14,6 +30,7 @@
         "magi_up": 0.05
     },
     {
+        // Dragon Sight's dupe self-buff 
         "row_id": 1453,
         "status_name": "Right Eye",
         "target_type": "Self",
@@ -21,6 +38,7 @@
         "magi_up": 0.1
     },
     {
+        // Dragon Sight's target dupe buff 
         "row_id": 1454,
         "status_name": "Left Eye",
         "target_type": "PartyMember",
@@ -28,19 +46,7 @@
         "magi_up": 0.05
     },
     {
-        "row_id": 1910,
-        "status_name": "Right Eye",
-        "target_type": "Self",
-        "phys_up": 0.1,
-        "magi_up": 0.1
-    },
-    {
-        "row_id": 786,
-        "status_name": "Battle Litany",
-        "target_type": "PartyWide",
-        "crit_rate_up": 0.1
-    },
-    {
+        // Lance Charge's self 10% increased damage buff
         "row_id": 1864,
         "status_name": "Lance Charge",
         "target_type": "Self",
@@ -48,6 +54,15 @@
         "magi_up": 0.1
     },
     {
+        // Dragon Sight's dupe self-buff 
+        "row_id": 1910,
+        "status_name": "Right Eye",
+        "target_type": "Self",
+        "phys_up": 0.1,
+        "magi_up": 0.1
+    },
+    {
+        // Lance Charge dupe
         "row_id": 2358,
         "status_name": "Lance Charge",
         "target_type": "Self",
