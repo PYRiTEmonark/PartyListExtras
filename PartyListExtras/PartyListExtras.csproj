@@ -25,14 +25,16 @@
     <None Remove="Icons\attack_speed_up.png" />
     <None Remove="Icons\auto_speed_up.png" />
     <None Remove="Icons\barrier.png" />
-    <None Remove="Icons\block_all.png" />
+    <None Remove="Icons\block_rate.png" />
     <None Remove="Icons\cast_speed_up.png" />
     <None Remove="Icons\crit_rate_up.png" />
     <None Remove="Icons\dh_rate_up.png" />
     <None Remove="Icons\dp_g.png" />
     <None Remove="Icons\dp_r.png" />
+    <None Remove="Icons\evasion.png" />
     <None Remove="Icons\healing_pot.png" />
     <None Remove="Icons\healing_up.png" />
+    <None Remove="Icons\hp_up.png" />
     <None Remove="Icons\invuln.png" />
     <None Remove="Icons\kardia.png" />
     <None Remove="Icons\kardion.png" />
@@ -43,6 +45,7 @@
     <None Remove="Icons\mit_magi.png" />
     <None Remove="Icons\mit_othr.png" />
     <None Remove="Icons\mit_phys.png" />
+    <None Remove="Icons\mp_up.png" />
     <None Remove="Icons\othr_down.png" />
     <None Remove="Icons\othr_up.png" />
     <None Remove="Icons\phys_down.png" />
@@ -86,7 +89,7 @@
     <Content Include="Icons\barrier.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\block_all.png">
+    <Content Include="Icons\block_rate.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\cast_speed_up.png">
@@ -101,10 +104,16 @@
     <Content Include="Icons\dp_r.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Icons\evasion.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Icons\healing_pot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\healing_up.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\hp_up.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\mit_all.png">
@@ -117,6 +126,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\living_dead.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Icons\mp_up.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\regen.png">

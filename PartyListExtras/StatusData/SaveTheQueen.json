@@ -103,7 +103,7 @@
         "status_name": "Spirit of the Breathtaker",
         "target_type": "EssenceSelf",
         "move_speed_up": 0.1,
-        "evade": 0.1
+        "evade_up": 0.1
     },
     {
         // Increases damage dealt by 40%. Additional Effect: Absorb a portion of damage dealt as HP

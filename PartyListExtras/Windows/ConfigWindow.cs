@@ -45,6 +45,10 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.Checkbox("Always show when in Duty", ref asid))
             configuration.alwaysShowInDuty = asid;
 
+        bool ses = configuration.showEssenceSelfs;
+        if (ImGui.Checkbox("Show Save the Queen Essences", ref ses))
+            configuration.showEssenceSelfs = ses;
+
         // Display Mode
         ImGui.Separator();
         ImGui.Text("Icon Appearance");
@@ -389,6 +393,116 @@ public class ConfigWindow : Window, IDisposable
                 bool enablecritdh = plugin.Configuration.iconConfig.showCritDH;
                 if (ImGui.Checkbox("##enableCritDH", ref enablecritdh))
                     plugin.Configuration.iconConfig.showCritDH = enablecritdh;
+            }
+
+            // Block Rate
+            {
+                ImGui.TableNextRow();
+                ImGui.TableNextColumn();
+                ImGui.Text("Block Rate");
+
+                ImGui.TableNextColumn();
+                ImGui.TextDisabled("(?)");
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text("Effects that increase chances of blocking physical attacks");
+                    ImGui.EndTooltip();
+                }
+
+                ImGui.TableNextColumn();
+
+                ImGui.Image(plugin.textures["block_rate.png"].ImGuiHandle, imagesize);
+
+                ImGui.TableNextColumn();
+                ImGui.Text("Block Rate");
+
+                ImGui.TableNextColumn();
+                bool enableblockup = plugin.Configuration.iconConfig.showBlockUp;
+                if (ImGui.Checkbox("##enableBlockUp", ref enableblockup))
+                    plugin.Configuration.iconConfig.showBlockUp = enableblockup;
+            }
+
+            // Move Speed Up
+            {
+                ImGui.TableNextRow();
+                ImGui.TableNextColumn();
+                ImGui.Text("Move Speed Up");
+
+                ImGui.TableNextColumn();
+                ImGui.TextDisabled("(?)");
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text("Effects that increase your move speed");
+                    ImGui.EndTooltip();
+                }
+
+                ImGui.TableNextColumn();
+
+                ImGui.Image(plugin.textures["speed_up.png"].ImGuiHandle, imagesize);
+
+                ImGui.TableNextColumn();
+                ImGui.Text("Move Speed");
+
+                ImGui.TableNextColumn();
+                bool showMoveSpeed = plugin.Configuration.iconConfig.showMoveSpeed;
+                if (ImGui.Checkbox("##enableMoveSpeed", ref showMoveSpeed))
+                    plugin.Configuration.iconConfig.showMoveSpeed = showMoveSpeed;
+            }
+
+            // Max HP up
+            {
+                ImGui.TableNextRow();
+                ImGui.TableNextColumn();
+                ImGui.Text("Max HP Up");
+
+                ImGui.TableNextColumn();
+                ImGui.TextDisabled("(?)");
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text("Effects that increase your maximum HP");
+                    ImGui.EndTooltip();
+                }
+
+                ImGui.TableNextColumn();
+                ImGui.Image(plugin.textures["hp_up.png"].ImGuiHandle, imagesize);
+
+                ImGui.TableNextColumn();
+                ImGui.Text("Max HP up");
+
+                ImGui.TableNextColumn();
+                bool showHPup = plugin.Configuration.iconConfig.showHPup;
+                if (ImGui.Checkbox("##showHPup", ref showHPup))
+                    plugin.Configuration.iconConfig.showHPup = showHPup;
+            }
+
+            // Max MP up
+            {
+                ImGui.TableNextRow();
+                ImGui.TableNextColumn();
+                ImGui.Text("Max MP Up");
+
+                ImGui.TableNextColumn();
+                ImGui.TextDisabled("(?)");
+                if (ImGui.IsItemHovered())
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text("Effects that increase your maximum MP");
+                    ImGui.EndTooltip();
+                }
+
+                ImGui.TableNextColumn();
+                ImGui.Image(plugin.textures["mp_up.png"].ImGuiHandle, imagesize);
+
+                ImGui.TableNextColumn();
+                ImGui.Text("Max MP Up");
+
+                ImGui.TableNextColumn();
+                bool showMPup = plugin.Configuration.iconConfig.showMPup;
+                if (ImGui.Checkbox("##showMPup", ref showMPup))
+                    plugin.Configuration.iconConfig.showMPup = showMPup;
             }
 
             // Special Effects

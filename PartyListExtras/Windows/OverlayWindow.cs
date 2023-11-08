@@ -5,6 +5,7 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using Dalamud.Logging;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI;
@@ -139,9 +140,12 @@ public class OverlayWindow : IDisposable
             }
         }
 
-        // Read properties out of data
-        var special_fstrings = plugin.Configuration.iconConfig.SpecialIcons;
+        // Filters
+        // StQ essences
+        if (!plugin.Configuration.showEssenceSelfs)
+            datas = datas.Where(x => x.target_type != TargetType.EssenceSelf).ToList();
 
+        var special_fstrings = plugin.Configuration.iconConfig.SpecialIcons;
         // For each non-null special effect...
         foreach (var sfx in datas.Select(x => x.special).OfType<SpecialEffects>()) {
             // ...If the special effect is in the special_fstrings list...
@@ -159,7 +163,7 @@ public class OverlayWindow : IDisposable
             var magi_mit = multi_sum(datas.Select(x => x.magi_mit));
 
             if (phys_mit == magi_mit && phys_mit > 0 && !plugin.Configuration.iconConfig.alwaysSplitMit)
-                output.Add(new StatusIcon { FileName="mit_all.png", Value = "{0}%".Format(phys_mit), Label = "Mitigation"});
+                output.Add(new StatusIcon { FileName = "mit_all.png", Value = "{0}%".Format(phys_mit), Label = "Mitigation" });
             else
             {
                 if (phys_mit > 0)
@@ -176,7 +180,7 @@ public class OverlayWindow : IDisposable
             var magi_up = multi_sum(datas.Select(x => x.magi_up));
 
             if (phys_up == magi_up && phys_up > 0 && !plugin.Configuration.iconConfig.alwaysSplitDmgUp)
-                output.Add(new StatusIcon { FileName = "all_up.png", Value = "{0}%".Format(phys_up), Label = "Damage Up"});
+                output.Add(new StatusIcon { FileName = "all_up.png", Value = "{0}%".Format(phys_up), Label = "Damage Up" });
             else
             {
                 if (phys_up > 0)
@@ -232,6 +236,47 @@ public class OverlayWindow : IDisposable
                 output.Add(new StatusIcon { FileName = "crit_rate_up.png", Value = "{0}%".Format(crit_up), Label = "Crit rate Up" });
             if (dh_up > 0)
                 output.Add(new StatusIcon { FileName = "dh_rate_up.png", Value = "{0}%".Format(dh_up), Label = "Dhit rate Up" });
+        }
+
+        // Block Rate
+        if (plugin.Configuration.iconConfig.showBlockUp)
+        {
+            var block_rate = sum(datas.Select(x => x.block_rate));
+
+            if (block_rate > 0)
+            {
+                // Extra special "dont go over 100" maths
+                block_rate += 20;
+                block_rate = Math.Min(block_rate, 100);
+                output.Add(new StatusIcon { FileName = "block_rate.png", Value = "{0}%".Format(block_rate), Label = "Block Rate" });
+            }
+        }
+
+        // Move Speed
+        if (plugin.Configuration.iconConfig.showMoveSpeed)
+        {
+            var movspeed = sum(datas.Select(x => x.move_speed_up));
+
+            if (movspeed > 0)
+                output.Add(new StatusIcon { FileName = "speed_up.png", Value = "{0}%".Format(movspeed), Label = "Move Speed" });
+        }
+
+        // Max HP
+        if (plugin.Configuration.iconConfig.showHPup)
+        {
+            var hp_up = sum(datas.Select(x => x.max_hp_up));
+
+            if (hp_up > 0)
+                output.Add(new StatusIcon { FileName = "max_hp.png", Value = "{0}%".Format(hp_up), Label = "Max HP Up" });
+        }
+
+        // Max MP
+        if (plugin.Configuration.iconConfig.showMPup)
+        {
+            var mp_up = sum(datas.Select(x => x.max_mp_up));
+
+            if (mp_up > 0)
+                output.Add(new StatusIcon { FileName = "max_mp.png", Value = "{0}%".Format(mp_up), Label = "Max MP Up" });
         }
 
         // Send Message to log for status effects that are missing
@@ -297,7 +342,7 @@ public class OverlayWindow : IDisposable
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Value == null)))
             {
                 cursor += new Vector2(
-                    - (1f * ImGui.CalcTextSize(icon.Label).X) + (-paddingX * scaling),
+                    -(1f * ImGui.CalcTextSize(icon.Label).X) + (-paddingX * scaling),
                     0
                 );
                 drawlist.AddText(cursor, white, icon.Label);
@@ -313,7 +358,7 @@ public class OverlayWindow : IDisposable
             // Info, e.g. mit percent
             if (icon.Value != null && dm != 3) {
                 cursor += new Vector2(
-                    - (1f * ImGui.CalcTextSize(icon.Value).X * scaling) - paddingX,
+                    -(1f * ImGui.CalcTextSize(icon.Value).X * scaling) - paddingX,
                     0
                 );
                 drawlist.AddText(cursor, white, icon.Value);
@@ -327,6 +372,13 @@ public class OverlayWindow : IDisposable
     {
         // filter out null values then aggregate using or
         return values.Where(x => x != null).Aggregate(false, (a, b) => a || b.Value);
+    }
+
+    internal float sum(IEnumerable<float?> values)
+    {
+        // filter out null values then sum
+        float x = values.Where(x => x != null).Sum() ?? 0;
+        return to_percent(x);
     }
 
     internal float multi_sum(IEnumerable<float?> values)

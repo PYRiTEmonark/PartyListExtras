@@ -12,7 +12,7 @@
         "row_id": 77,
         "status_name": "Bulwark",
         "target_type": "Self",
-        "special": "block_all"
+        "block_rate": 1
     },
     {
         // PLD Stance
@@ -47,7 +47,7 @@
         "row_id": 1175,
         "status_name": "Passage of Arms",
         "target_type": "Self",
-        "special": "block_all"
+        "block_rate": 1
     },
     {
         // Passage of Arms' partywide 15% mitigation buff

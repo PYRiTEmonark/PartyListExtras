@@ -27,6 +27,7 @@ namespace PartyListExtras
         public bool EnableOverlay { get; set; } = true;
         public bool hideOutOfCombat { get; set; } = false;
         public bool alwaysShowInDuty { get; set; } = false;
+        public bool showEssenceSelfs { get; set; } = true;
 
         public bool doGradientBackground { get; set; } = true;
         public Vector4 colorRight { get; set; } = new Vector4(0f, 0f, 0f, 1f);
@@ -61,7 +62,6 @@ namespace PartyListExtras
             { SpecialEffects.stance, new StatusIcon { FileName = "stance.png", Label = "Stance" } },
             { SpecialEffects.invuln, new StatusIcon { FileName = "invuln.png", Label = "Invuln" } },
             { SpecialEffects.living_dead, new StatusIcon { FileName = "living_dead.png", Label = "Living Dead" } },
-            { SpecialEffects.block_all, new StatusIcon { FileName = "block_all.png", Label = "Block All" } },
             { SpecialEffects.kardia, new StatusIcon { FileName = "kardia.png", Label = "Sent" } },
             { SpecialEffects.kardion, new StatusIcon { FileName = "kardion.png", Label = "Recv" } },
             { SpecialEffects.dp_g, new StatusIcon { FileName = "dp_g.png", Label = "Sent" } },
@@ -80,10 +80,14 @@ namespace PartyListExtras
         
         public bool showSpeedUps = true;
         public bool stackSpeedUps = false;
-        
+
+        public bool showBlockUp = true;
+
         public bool showHealUps = true;
-        
         public bool showCritDH = true;
+        public bool showMoveSpeed = true;
+        public bool showHPup = true;
+        public bool showMPup = true;
 
         // Effects that should always be up
         public bool showConstSelf = false;
@@ -101,6 +105,7 @@ namespace PartyListExtras
         {
             SpecialIcons.Remove(SpecialEffects.crit_rate_up);
             SpecialIcons.Remove(SpecialEffects.max_hp_up);
+            SpecialIcons.Remove(SpecialEffects.block_all);
 
             foreach (var icon in DefaultIcons)
             {

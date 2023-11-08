@@ -26,7 +26,7 @@ namespace PartyListExtras
         public float? phys_mit { get; set; }
         public float? magi_mit { get; set; }
         public float? othr_mit { get; set; }
-        public float? max_hp_up { get; set; }
+        public float? max_hp_up { get; set; } // NOT IMPLINMENTED
         public float? block_rate { get; set; }
 
         // Damage Up by dmg type, "othr_up" as above
@@ -43,9 +43,9 @@ namespace PartyListExtras
         public float? auto_speed_up { get; set; }
 
         // Other Stats Up
-        public float? move_speed_up { get; set; } // NOT IMPLIMENTED
-        public float? evade_up { get; set; } // NOT IMPLIMENTED
-        public float? max_mp_up { get; set; } // NOT IMPLIMENTED
+        public float? move_speed_up { get; set; }
+        public float? evade_up { get; set; }
+        public float? max_mp_up { get; set; }
 
         // Healing Received Up
         public float? healing_up { get; set; }
@@ -78,7 +78,7 @@ namespace PartyListExtras
         stance, // Tank Stances
         invuln, // Tank Invulnrabilities
         living_dead, // DRK's Living Dead (before invuln pops)
-        block_all, // PLD's Bulwark
+        block_all, // DEPRECATED - DO NOT USE - to be removed in 0.2.0.0
         kardia,
         kardion,
         dp_g,
