@@ -85,9 +85,10 @@ namespace PartyListExtras
 
         public bool showHealUps = true;
         public bool showCritDH = true;
-        public bool showMoveSpeed = true;
+
+        public bool showMoveSpeed = false;
         public bool showHPup = true;
-        public bool showMPup = true;
+        public bool showMPup = false;
 
         // Effects that should always be up
         public bool showConstSelf = false;

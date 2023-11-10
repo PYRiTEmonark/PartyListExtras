@@ -346,7 +346,7 @@ public class ConfigWindow : Window, IDisposable
                 if (ImGui.IsItemHovered())
                 {
                     ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase the healing given or recived");
+                    ImGui.Text("Effects that increase the healing given or received");
                     ImGui.EndTooltip();
                 }
 
