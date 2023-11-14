@@ -255,7 +255,7 @@ public class OverlayWindow : IDisposable
         // Move Speed
         if (plugin.Configuration.iconConfig.showMoveSpeed)
         {
-            var movspeed = sum(datas.Select(x => x.move_speed_up));
+            var movspeed = max(datas.Select(x => x.move_speed_up));
 
             if (movspeed > 0)
                 output.Add(new StatusIcon { FileName = "speed_up.png", Value = "{0}%".Format(movspeed), Label = "Move Speed" });
@@ -378,6 +378,13 @@ public class OverlayWindow : IDisposable
     {
         // filter out null values then sum
         float x = values.Where(x => x != null).Sum() ?? 0;
+        return to_percent(x);
+    }
+
+    internal float max(IEnumerable<float?> values)
+    {
+        // filter out null values then sum
+        float x = values.Where(x => x != null).Max() ?? 0;
         return to_percent(x);
     }
 
