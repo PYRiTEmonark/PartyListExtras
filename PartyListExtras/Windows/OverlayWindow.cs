@@ -194,18 +194,32 @@ public class OverlayWindow : IDisposable
         if (plugin.Configuration.iconConfig.showSpeedUps)
         {
             // Attack Speed
-            var attack_speed_up = multi_sum(datas.Select(x => x.attack_speed_up).Union(datas.Select(x => x.ability_cast_speed_up)));
-            var cast_speed_up = multi_sum(datas.Select(x => x.cast_speed_up));
-            var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
-
             if (plugin.Configuration.iconConfig.stackSpeedUps)
             {
-                var speed_up = attack_speed_up + cast_speed_up + auto_speed_up;
+                // This bit is to make sure we don't take multiple speed ups from one buff
+                List<float?> spdups = new List<float?>();
+                foreach (StatusEffectData data in datas) {
+                    if (data.attack_speed_up.HasValue)
+                        spdups.Add(data.attack_speed_up.Value);
+
+                    else if (data.ability_cast_speed_up.HasValue)
+                        spdups.Add(data.ability_cast_speed_up.Value);
+                    
+                    else if (data.cast_speed_up.HasValue)
+                        spdups.Add(data.cast_speed_up.Value);
+
+                    else if (data.auto_speed_up.HasValue)
+                        spdups.Add(data.auto_speed_up.Value);
+                }
+                var speed_up = multi_sum(spdups);
                 if (speed_up > 0)
                     output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(speed_up), Label = "Speed Up" });
             }
             else
             {
+                var attack_speed_up = multi_sum(datas.Select(x => x.attack_speed_up).Union(datas.Select(x => x.ability_cast_speed_up)));
+                var cast_speed_up = multi_sum(datas.Select(x => x.cast_speed_up));
+                var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
                 if (attack_speed_up > 0)
                     output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(attack_speed_up), Label = "Attack Speed Up" });
                 if (cast_speed_up > 0)
