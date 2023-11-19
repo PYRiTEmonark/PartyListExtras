@@ -93,6 +93,12 @@ namespace PartyListExtras
 
             LoadAssets();
 
+            // Open plugin config on first open
+            if (pluginInterface.Reason == PluginLoadReason.Installer)
+            {
+                this.ConfigWindow.IsOpen = true;
+            }
+
             // DO THIS LAST
             // otherwise if there's an error the command gets registered
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
