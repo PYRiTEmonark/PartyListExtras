@@ -20,8 +20,6 @@
         "row_id": 1299,
         "status_name": "Fuka",
         "target_type": "ConstSelf",
-        "attack_speed_up": 0.13,
-        "cast_speed_up": 0.13,
-        "auto_speed_up": 0.13
+        "attack_speed_up": 0.13
     }
 ]
