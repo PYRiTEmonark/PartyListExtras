@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.SubKinds;
@@ -199,7 +200,7 @@ public class OverlayWindow : IDisposable
 
             if (plugin.Configuration.iconConfig.stackSpeedUps)
             {
-                var speed_up = multi_sum(new List<float?>() { attack_speed_up, cast_speed_up, auto_speed_up });
+                var speed_up = attack_speed_up + cast_speed_up + auto_speed_up;
                 if (speed_up > 0)
                     output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(speed_up), Label = "Speed Up" });
             }
@@ -294,6 +295,58 @@ public class OverlayWindow : IDisposable
         return output;
     }
 
+    private void DrawOverlayBackground(Vector2 position, Vector2 size)
+    {
+        // Draw Single Colour Background
+        var singlecol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorSingle);
+        ImGui.GetBackgroundDrawList().AddRectFilled(position, (position + size), singlecol);
+    }
+
+    private void DrawOverlayBackgroundGradient(Vector2 position, Vector2 size)
+    {
+        // Draw Gradient Background
+        var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
+        var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
+        ImGui.GetBackgroundDrawList().AddRectFilledMultiColor(position, (position + size), leftcol, rightcol, rightcol, leftcol);
+    }
+
+
+    // Draw Advanced background imitating the native UI
+    // Abandoned due to ImGui Weirdness
+    private void DrawOverlayBackgroundAdv(Vector2 position, Vector2 size)
+    {
+        uint leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
+        uint rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
+
+        var drawlist = ImGui.GetBackgroundDrawList();
+
+        float[] xs = [0, (float)(size.X * 0.4), (float)(size.X * 0.95), (float)(size.X)];
+        float[] ys = [0, (float)(size.Y * 0.2), (float)(size.Y * 0.8), (float)(size.Y)];
+
+        uint[,] colours = new uint[4,4]
+        {
+            { leftcol, leftcol, leftcol, leftcol },
+            { leftcol, rightcol, rightcol, leftcol },
+            { leftcol, rightcol, rightcol, leftcol },
+            { leftcol, leftcol, leftcol, leftcol }
+        };
+
+        for (var y = 0; y < ys.Length - 1; y++)
+        {
+            for (var x = 0; x < xs.Length - 1; x++)
+            {
+                drawlist.AddRectFilledMultiColor(
+                    position + new Vector2(xs[x], ys[y]),
+                    position + new Vector2(xs[x+1], ys[y+1]),
+                    colours[y, x],
+                    colours[y, x+1],
+                    colours[y+1, x+1],
+                    colours[y+1, x]
+                );
+            }
+        }
+    }
+
     /// <summary>
     /// Draw a formatted list of status icons
     /// Depends on config settings
@@ -318,20 +371,18 @@ public class OverlayWindow : IDisposable
 
         // Set some constants
         var imgsize = size.Y - (paddingY * 2f);
-
-        // Draw Background
-        var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
-        var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
-        var singlecol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorSingle);
-
         var white = ImGui.ColorConvertFloat4ToU32(new Vector4(1, 1, 1, 1));
+        var drawlist = ImGui.GetBackgroundDrawList();
 
         // Draw Background
-        var drawlist = ImGui.GetBackgroundDrawList();
         if (plugin.Configuration.doGradientBackground)
-            drawlist.AddRectFilledMultiColor(position, (position + size), leftcol, rightcol, rightcol, leftcol);
+        {
+            DrawOverlayBackgroundGradient(position, size);
+        }
         else
-            drawlist.AddRectFilled(position, (position + size), singlecol);
+        {
+            DrawOverlayBackground(position, size);
+        }
 
         // Draw icons, We go RTL so subtracting the X offset
         // TODO: the widths are mostly guesses here, possible to break with scaling
