@@ -76,7 +76,7 @@ namespace PartyListExtras
                 File.Move(fname, fname + "BAK", true);
 
                 ChatGui.Print("Invalid Configuration file - The old file has been backed up\n" +
-                    "If you've recently updated, especially if you've skipped versions, this may be expected\n" +
+                    "If you've recently updated, especially if you've skipped versions, this may be unavoidable\n" +
                     "If the error persists please send feedback in the plugin installer", "PartyListExtras", 16);
                 this.Configuration = new Configuration();
             }
@@ -124,9 +124,10 @@ namespace PartyListExtras
             {
                 ChatGui.Print("Party List Extras commands:\n" +
                     "/plx - opens config window\n" +
-                    "/plx help - sends this message\n" +
+                    "/plx on/off/toggle - enables, disables and toggles the overlay respectively\n" +
                     "/plx reload - load data files and images\n" +
-                    "/plx on/off/toggle - enables, disables and toggles the overlay respectively");
+                    "/plx help - sends this message"
+                );
                 //ChatGui.UpdateQueue();
             }
             else if (args == "missing")
@@ -194,6 +195,7 @@ namespace PartyListExtras
                 var dataPath = Path.Combine(baseDataPath, dataName);
                 using (FileStream fs = File.OpenRead(dataPath))
                 {
+                    // Load a data file into StatusEffectData objects
                     List<StatusEffectData>? rawData;
                     try {
                         var jsonString = HjsonValue.Load(fs).ToString();
@@ -234,16 +236,16 @@ namespace PartyListExtras
             if (apl == null) { return; }
             bool isvis = apl->AtkUnitBase.IsVisible;
 
-            bool show = true;
+            bool showOverlay = true;
             // Hide if not in combat
             if (Configuration.hideOutOfCombat && !Condition[ConditionFlag.InCombat])
-                show = false;
+                showOverlay = false;
 
             // But show if in dt
             if (Configuration.alwaysShowInDuty && Condition[ConditionFlag.BoundByDuty])
-                show = true;
+                showOverlay = true;
             
-            if (isvis && Configuration.EnableOverlay && show)
+            if (isvis && Configuration.EnableOverlay && showOverlay)
                 this.OverlayWindow.Draw();
         }
 

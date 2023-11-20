@@ -27,7 +27,8 @@ namespace PartyListExtras
         public bool EnableOverlay { get; set; } = true;
         public bool hideOutOfCombat { get; set; } = false;
         public bool alwaysShowInDuty { get; set; } = false;
-        public bool showEssenceSelfs { get; set; } = true;
+        public bool showConstSelfs {  get; set; } = false;
+        public bool showEssenceSelfs { get; set; } = false;
 
         public bool doGradientBackground { get; set; } = true;
         public Vector4 colorRight { get; set; } = new Vector4(0f, 0f, 0f, 1f);

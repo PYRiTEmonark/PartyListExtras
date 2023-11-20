@@ -45,6 +45,17 @@ public class ConfigWindow : Window, IDisposable
         if (ImGui.Checkbox("Always show when in Duty", ref asid))
             configuration.alwaysShowInDuty = asid;
 
+        bool consts = configuration.showConstSelfs;
+        if (ImGui.Checkbox("Show effects that should always be up", ref consts))
+            configuration.showConstSelfs = consts;
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.BeginTooltip();
+            ImGui.Text("This includes buffs that should always be refreshed, e.g. SAM's buffs from doing their combo");
+            ImGui.Text("This explicitly doesn't include tank stances, DNC Dance Partner and SGE's Kardion");
+            ImGui.EndTooltip();
+        }
+
         bool ses = configuration.showEssenceSelfs;
         if (ImGui.Checkbox("Show Save the Queen Essences", ref ses))
             configuration.showEssenceSelfs = ses;
