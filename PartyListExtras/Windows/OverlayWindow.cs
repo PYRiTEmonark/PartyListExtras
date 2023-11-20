@@ -331,39 +331,39 @@ public class OverlayWindow : IDisposable
 
     // Draw Advanced background imitating the native UI
     // Abandoned due to ImGui Weirdness
-    private void DrawOverlayBackgroundAdv(Vector2 position, Vector2 size)
-    {
-        uint leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
-        uint rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
+    //private void DrawOverlayBackgroundAdv(Vector2 position, Vector2 size)
+    //{
+        //uint leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
+        //uint rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
 
-        var drawlist = ImGui.GetBackgroundDrawList();
+        //var drawlist = ImGui.GetBackgroundDrawList();
 
-        float[] xs = [0, (float)(size.X * 0.4), (float)(size.X * 0.95), (float)(size.X)];
-        float[] ys = [0, (float)(size.Y * 0.2), (float)(size.Y * 0.8), (float)(size.Y)];
+        //float[] xs = [0, (float)(size.X * 0.4), (float)(size.X * 0.95), (float)(size.X)];
+        //float[] ys = [0, (float)(size.Y * 0.2), (float)(size.Y * 0.8), (float)(size.Y)];
 
-        uint[,] colours = new uint[4,4]
-        {
-            { leftcol, leftcol, leftcol, leftcol },
-            { leftcol, rightcol, rightcol, leftcol },
-            { leftcol, rightcol, rightcol, leftcol },
-            { leftcol, leftcol, leftcol, leftcol }
-        };
+        //uint[,] colours = new uint[4,4]
+        //{
+        //    { leftcol, leftcol, leftcol, leftcol },
+        //    { leftcol, rightcol, rightcol, leftcol },
+        //    { leftcol, rightcol, rightcol, leftcol },
+        //    { leftcol, leftcol, leftcol, leftcol }
+        //};
 
-        for (var y = 0; y < ys.Length - 1; y++)
-        {
-            for (var x = 0; x < xs.Length - 1; x++)
-            {
-                drawlist.AddRectFilledMultiColor(
-                    position + new Vector2(xs[x], ys[y]),
-                    position + new Vector2(xs[x+1], ys[y+1]),
-                    colours[y, x],
-                    colours[y, x+1],
-                    colours[y+1, x+1],
-                    colours[y+1, x]
-                );
-            }
-        }
-    }
+        //for (var y = 0; y < ys.Length - 1; y++)
+        //{
+        //    for (var x = 0; x < xs.Length - 1; x++)
+        //    {
+        //        drawlist.AddRectFilledMultiColor(
+        //            position + new Vector2(xs[x], ys[y]),
+        //            position + new Vector2(xs[x+1], ys[y+1]),
+        //            colours[y, x],
+        //            colours[y, x+1],
+        //            colours[y+1, x+1],
+        //            colours[y+1, x]
+        //        );
+        //    }
+        //}
+    //}
 
     /// <summary>
     /// Draw a formatted list of status icons
