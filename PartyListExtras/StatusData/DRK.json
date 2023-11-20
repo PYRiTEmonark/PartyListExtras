@@ -3,7 +3,7 @@
         // DRK Stance
         "row_id": 743,
         "status_name": "Grit",
-        "target_type": "ConstSelf",
+        "target_type": "StanceSelf",
         "special": "stance"
     },
     {

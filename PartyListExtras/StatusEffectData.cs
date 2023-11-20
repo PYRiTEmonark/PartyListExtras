@@ -63,6 +63,7 @@ namespace PartyListExtras
     public enum TargetType
     {
         Self, // Given to self only, e.g. Tank's Rampart
+        StanceSelf, // Tank stances
         ConstSelf, // Can/should always be up, e.g. SAM's Fuka and Fugetsu
         EssenceSelf, // Save the Queen Essences and Deep Essences
         PartyMember, // Granted to self or targeted party member e.g. WHM's Regen

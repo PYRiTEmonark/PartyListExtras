@@ -18,7 +18,7 @@
         // PLD Stance
         "row_id": 79,
         "status_name": "Iron Will",
-        "target_type": "Self",
+        "target_type": "StanceSelf",
         "special": "stance"
     },
     {

@@ -3,21 +3,21 @@
         // WAR Tank Stance
         "row_id": 91,
         "status_name": "Defiance",
-        "target_type": "Self",
+        "target_type": "StanceSelf",
         "special": "stance"
     },
     {
         // WAR Tank Stance
         "row_id": 1396,
         "status_name": "Defiance",
-        "target_type": "Self",
+        "target_type": "StanceSelf",
         "special": "stance"
     },
     {
         // WAR Tank Stance
         "row_id": 3124,
         "status_name": "Defiance",
-        "target_type": "Self",
+        "target_type": "StanceSelf",
         "special": "stance"
     },
     {

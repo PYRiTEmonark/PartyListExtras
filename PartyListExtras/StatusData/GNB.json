@@ -20,7 +20,7 @@
         // GNB Stance
         "row_id": 1833,
         "status_name": "Royal Guard",
-        "target_type": "Self",
+        "target_type": "StanceSelf",
         "special": "stance"
     },
     {
