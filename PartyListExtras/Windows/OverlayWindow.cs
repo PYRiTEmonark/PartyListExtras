@@ -144,7 +144,12 @@ public class OverlayWindow : IDisposable
         // Filters
         // ConstSelf
         if (!plugin.Configuration.showConstSelfs)
-            datas = datas.Where(x => x.target_type != TargetType.ConstSelf).ToList();
+        {
+            datas = datas
+                .Where(x => x.target_type != TargetType.ConstSelf)
+                .Where(x => x.target_type != TargetType.ConstPartyMember)
+                .ToList();
+        }
 
         // StQ essences
         if (!plugin.Configuration.showEssenceSelfs)

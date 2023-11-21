@@ -52,7 +52,7 @@ public class ConfigWindow : Window, IDisposable
         {
             ImGui.BeginTooltip();
             ImGui.Text("This includes buffs that should always be refreshed, e.g. SAM's buffs from doing their combo");
-            ImGui.Text("This explicitly doesn't include tank stances, DNC Dance Partner and SGE's Kardion");
+            ImGui.Text("This explicitly doesn't include tank stances, DNC Dance Partner, and SGE's Kardion");
             ImGui.EndTooltip();
         }
 

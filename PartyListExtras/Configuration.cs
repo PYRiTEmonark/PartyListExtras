@@ -27,6 +27,8 @@ namespace PartyListExtras
         public bool EnableOverlay { get; set; } = true;
         public bool hideOutOfCombat { get; set; } = false;
         public bool alwaysShowInDuty { get; set; } = false;
+
+        // Also filters out ConstPartyMember, Name not changed to prevent config migration
         public bool showConstSelfs {  get; set; } = false;
         public bool showEssenceSelfs { get; set; } = false;
 
