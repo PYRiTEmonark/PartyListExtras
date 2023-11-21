@@ -15,9 +15,10 @@
     },
     {
         // Standard Finish's increased damage buff. Assuming that the DNC's always doing the 2 required steps, this is a +5% damage buff for the DNC and their partner.
+        // Considered a ConstPartyMember for the sake of filtering only
         "row_id": 1821,
         "status_name": "Standard Finish",
-        "target_type": "PartyMember",
+        "target_type": "ConstPartyMember",
         "phys_up": 0.05,
         "magi_up": 0.05
     },
