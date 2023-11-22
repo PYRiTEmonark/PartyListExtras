@@ -107,6 +107,7 @@ namespace PartyListExtras
         /// </summary>
         public void validateIcons()
         {
+            // Deprecated icons removed
             SpecialIcons.Remove(SpecialEffects.crit_rate_up);
             SpecialIcons.Remove(SpecialEffects.max_hp_up);
             SpecialIcons.Remove(SpecialEffects.block_all);

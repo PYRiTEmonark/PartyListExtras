@@ -53,6 +53,7 @@ public class ConfigWindow : Window, IDisposable
             ImGui.BeginTooltip();
             ImGui.Text("This includes buffs that should always be refreshed, e.g. SAM's buffs from doing their combo");
             ImGui.Text("This explicitly doesn't include tank stances, DNC Dance Partner, and SGE's Kardion");
+            ImGui.Text("The intent is to make it clearer when an ability is used as part of a burst phase rather than just as part of the rotation");
             ImGui.EndTooltip();
         }
 
@@ -188,7 +189,7 @@ public class ConfigWindow : Window, IDisposable
 
         // Advanced icon config
         ImGui.Separator();
-        if (ImGui.TreeNode("Advanced Icon Configuration"))
+        if (ImGui.TreeNode("Icon Configuration"))
         {
             var imagesize = new Vector2(20, 20);
 
@@ -226,118 +227,65 @@ public class ConfigWindow : Window, IDisposable
 
             // Mitigation
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Mitigation");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that reduce incoming damage");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-                if (!plugin.Configuration.iconConfig.alwaysSplitMit)
-                    ImGui.Image(plugin.textures["mit_all.png"].ImGuiHandle, imagesize);
-                ImGui.Image(plugin.textures["mit_phys.png"].ImGuiHandle, imagesize);
-                ImGui.Image(plugin.textures["mit_magi.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                if (!plugin.Configuration.iconConfig.alwaysSplitMit)
-                    ImGui.Text("Mitigation");
-                ImGui.Text("Physical Mit");
-                ImGui.Text("Magical Mit");
-
-                ImGui.TableNextColumn();
                 bool enablemit = plugin.Configuration.iconConfig.showMit;
-                if (ImGui.Checkbox("##enableMit", ref enablemit))
+
+                if (IconConfigRow(
+                    name: "Mitigation",
+                    icon_paths: plugin.Configuration.iconConfig.alwaysSplitMit ?
+                        new string[] { "mit_phys.png", "mit_magi.png" } :
+                        new string[] { "mit_all.png", "mit_phys.png", "mit_magi.png" },
+                    labels: plugin.Configuration.iconConfig.alwaysSplitMit ?
+                        new string[] { "Phyiscal Dmg Up", "Magical Dmg Up" } :
+                        new string[] { "Mitigation", "Physical Mit", "Magical Mit" },
+                    tooltip: "Effects that reduce incoming damage",
+                    outp: ref enablemit
+                    ))
                     plugin.Configuration.iconConfig.showMit = enablemit;
 
                 ImGui.TableNextColumn();
-                bool alwaysstackmit = plugin.Configuration.iconConfig.alwaysSplitMit;
-                if (ImGui.Checkbox("Always Split Mit", ref alwaysstackmit))
-                    plugin.Configuration.iconConfig.alwaysSplitMit = alwaysstackmit;
+                bool alwaysplitmit = plugin.Configuration.iconConfig.alwaysSplitMit;
+                if (ImGui.Checkbox("Always Split Mit", ref alwaysplitmit))
+                    plugin.Configuration.iconConfig.alwaysSplitMit = alwaysplitmit;
             }
 
             // Damage Up
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Damage Up");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase outgoing damage");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-                if (!plugin.Configuration.iconConfig.alwaysSplitDmgUp)
-                    ImGui.Image(plugin.textures["all_up.png"].ImGuiHandle, imagesize);
-                ImGui.Image(plugin.textures["phys_up.png"].ImGuiHandle, imagesize);
-                ImGui.Image(plugin.textures["magi_up.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                if (!plugin.Configuration.iconConfig.alwaysSplitDmgUp)
-                    ImGui.Text("Damage Up");
-                ImGui.Text("Phyiscal Dmg Up");
-                ImGui.Text("Magical Dmg Up");
-
-                ImGui.TableNextColumn();
                 bool enabledmg = plugin.Configuration.iconConfig.showDmgUp;
-                if (ImGui.Checkbox("##enableDmgUp", ref enabledmg))
+
+                if (IconConfigRow(
+                    name: "Damage Up",
+                    icon_paths: plugin.Configuration.iconConfig.alwaysSplitDmgUp ?
+                        new string[] { "phys_up.png", "magi_up.png" } :
+                        new string[] { "all_up.png", "phys_up.png", "magi_up.png" },
+                    labels: plugin.Configuration.iconConfig.alwaysSplitDmgUp ?
+                        new string[] { "Phyiscal Dmg Up", "Magical Dmg Up" } :
+                        new string[] { "Damage Up", "Phyiscal Dmg Up", "Magical Dmg Up" },
+                    tooltip: "Effects that increase outgoing damage",
+                    outp: ref enabledmg
+                    ))
                     plugin.Configuration.iconConfig.showDmgUp = enabledmg;
 
                 ImGui.TableNextColumn();
                 bool alwaysplitdmg = plugin.Configuration.iconConfig.alwaysSplitDmgUp;
-                if (ImGui.Checkbox("Always Split Damage Up", ref alwaysplitdmg))
+                if (ImGui.Checkbox("Always Split Dmg", ref alwaysplitdmg))
                     plugin.Configuration.iconConfig.alwaysSplitDmgUp = alwaysplitdmg;
             }
 
             // Speed Ups
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Speed Up");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase the speed of some abilities");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-                if (plugin.Configuration.iconConfig.stackSpeedUps)
-                    ImGui.Image(plugin.textures["attack_speed_up.png"].ImGuiHandle, imagesize);
-                else
-                {
-                    ImGui.Image(plugin.textures["attack_speed_up.png"].ImGuiHandle, imagesize);
-                    ImGui.Image(plugin.textures["cast_speed_up.png"].ImGuiHandle, imagesize);
-                    ImGui.Image(plugin.textures["auto_speed_up.png"].ImGuiHandle, imagesize);
-                }
-
-                ImGui.TableNextColumn();
-                if (plugin.Configuration.iconConfig.stackSpeedUps)
-                    ImGui.Text("Speed Up");
-                else
-                {
-                    ImGui.Text("Attack Speed Up");
-                    ImGui.Text("Cast Speed Up");
-                    ImGui.Text("Auto Speed Up");
-                }
-
-                ImGui.TableNextColumn();
                 bool enablespdup = plugin.Configuration.iconConfig.showSpeedUps;
-                if (ImGui.Checkbox("##enableSpeedUp", ref enablespdup))
+
+                if (IconConfigRow(
+                    name: "Speed Up",
+                    icon_paths: plugin.Configuration.iconConfig.stackSpeedUps ?
+                        new string[] { "attack_speed_up.png" } :
+                        new string[] { "attack_speed_up.png", "cast_speed_up.png", "auto_speed_up.png" },
+                    labels: plugin.Configuration.iconConfig.stackSpeedUps ?
+                        new string[] { "Speed Up" } :
+                        new string[] { "Attack Speed Up", "Cast Speed Up", "Auto Speed Up" },
+                    tooltip: "Effects that increase the speed of some abilities",
+                    outp: ref enablespdup
+                    ))
                     plugin.Configuration.iconConfig.showSpeedUps = enablespdup;
 
                 ImGui.TableNextColumn();
@@ -348,178 +296,92 @@ public class ConfigWindow : Window, IDisposable
 
             // Heal Ups
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Healing Up");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase the healing given or received");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-
-                ImGui.Image(plugin.textures["healing_up.png"].ImGuiHandle, imagesize);
-                ImGui.Image(plugin.textures["healing_pot.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                ImGui.Text("Healing Up");
-                ImGui.Text("Heal Potency Up");
-
-                ImGui.TableNextColumn();
                 bool enablehealup = plugin.Configuration.iconConfig.showHealUps;
-                if (ImGui.Checkbox("##enableHealUp", ref enablehealup))
+
+                if (IconConfigRow(
+                    name: "Healing Up",
+                    icon_paths: new string[] { "healing_up.png", "healing_pot.png" },
+                    labels: new string[] { "Healing Up", "Heal Potency Up" },
+                    tooltip: "Effects that increase the healing given or received",
+                    outp: ref enablehealup
+                    ))
                     plugin.Configuration.iconConfig.showHealUps = enablehealup;
             }
 
             // DH/Crit
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Crit/Direct Hit");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase chances of crits or direct hits");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-
-                ImGui.Image(plugin.textures["crit_rate_up.png"].ImGuiHandle, imagesize);
-                ImGui.Image(plugin.textures["dh_rate_up.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                ImGui.Text("Crit rate Up");
-                ImGui.Text("Dhit rate Up");
-
-                ImGui.TableNextColumn();
                 bool enablecritdh = plugin.Configuration.iconConfig.showCritDH;
-                if (ImGui.Checkbox("##enableCritDH", ref enablecritdh))
+
+                if (IconConfigRow(
+                    name: "Crit/Direct Hit",
+                    icon_paths: new string[] { "crit_rate_up.png", "dh_rate_up.png" },
+                    labels: new string[] { "Crit rate Up", "Dhit rate Up" },
+                    tooltip: "Effects that increase chances of blocking physical attacks",
+                    outp: ref enablecritdh
+                    ))
                     plugin.Configuration.iconConfig.showCritDH = enablecritdh;
             }
 
             // Block Rate
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Block Rate");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase chances of blocking physical attacks");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-
-                ImGui.Image(plugin.textures["block_rate.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                ImGui.Text("Block Rate");
-
-                ImGui.TableNextColumn();
                 bool enableblockup = plugin.Configuration.iconConfig.showBlockUp;
-                if (ImGui.Checkbox("##enableBlockUp", ref enableblockup))
+
+                if (IconConfigRow(
+                    name: "Block Rate",
+                    icon_path: "block_rate.png",
+                    label: "Block Rate",
+                    tooltip: "Effects that increase chances of blocking physical attacks",
+                    outp: ref enableblockup
+                    ))
                     plugin.Configuration.iconConfig.showBlockUp = enableblockup;
             }
 
             // Move Speed Up
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Move Speed Up");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase your move speed");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-
-                ImGui.Image(plugin.textures["speed_up.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                ImGui.Text("Move Speed");
-
-                ImGui.TableNextColumn();
                 bool showMoveSpeed = plugin.Configuration.iconConfig.showMoveSpeed;
-                if (ImGui.Checkbox("##enableMoveSpeed", ref showMoveSpeed))
+
+                if (IconConfigRow(
+                    name: "Move Speed Up",
+                    icon_path: "speed_up.png",
+                    label: "Move Speed",
+                    tooltip: "Effects that increase your move speed",
+                    outp: ref showMoveSpeed
+                    ))
                     plugin.Configuration.iconConfig.showMoveSpeed = showMoveSpeed;
             }
 
             // Max HP up
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Max HP Up");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase your maximum HP");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-                ImGui.Image(plugin.textures["hp_up.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                ImGui.Text("Max HP up");
-
-                ImGui.TableNextColumn();
                 bool showHPup = plugin.Configuration.iconConfig.showHPup;
-                if (ImGui.Checkbox("##showHPup", ref showHPup))
+
+                if (IconConfigRow(
+                    name: "Max HP Up",
+                    icon_path: "hp_up.png",
+                    label: "Max HP up",
+                    tooltip: "Effects that increase your maximum HP",
+                    outp: ref showHPup
+                    ))
                     plugin.Configuration.iconConfig.showHPup = showHPup;
             }
 
             // Max MP up
             {
-                ImGui.TableNextRow();
-                ImGui.TableNextColumn();
-                ImGui.Text("Max MP Up");
-
-                ImGui.TableNextColumn();
-                ImGui.TextDisabled("(?)");
-                if (ImGui.IsItemHovered())
-                {
-                    ImGui.BeginTooltip();
-                    ImGui.Text("Effects that increase your maximum MP");
-                    ImGui.EndTooltip();
-                }
-
-                ImGui.TableNextColumn();
-                ImGui.Image(plugin.textures["mp_up.png"].ImGuiHandle, imagesize);
-
-                ImGui.TableNextColumn();
-                ImGui.Text("Max MP Up");
-
-                ImGui.TableNextColumn();
                 bool showMPup = plugin.Configuration.iconConfig.showMPup;
-                if (ImGui.Checkbox("##showMPup", ref showMPup))
+
+                if (IconConfigRow(
+                    name: "Max MP Up",
+                    icon_path: "mp_up.png",
+                    label: "Max MP Up",
+                    tooltip: "Effects that increase your maximum MP",
+                    outp: ref showMPup
+                    ))
                     plugin.Configuration.iconConfig.showMPup = showMPup;
             }
 
             // Special Effects
-            foreach (var effect in configuration.iconConfig.SpecialIcons.Keys)
+            foreach (SpecialEffects effect in configuration.iconConfig.SpecialIcons.Keys)
             {
-                var icon = configuration.iconConfig.SpecialIcons[effect];
+                StatusIcon icon = configuration.iconConfig.SpecialIcons[effect];
 
                 // Title
                 ImGui.TableNextRow();
@@ -542,8 +404,7 @@ public class ConfigWindow : Window, IDisposable
 
                 // Label
                 ImGui.TableNextColumn();
-                string temp2 = icon.Label!;
-                ImGui.Text(temp2);
+                ImGui.Text(icon.Label ?? "[label missing]");
 
                 // Enabled
                 ImGui.TableNextColumn();
@@ -562,5 +423,50 @@ public class ConfigWindow : Window, IDisposable
 
         configuration.Save();
 
+    }
+
+    private bool IconConfigRow(string name, string icon_path, string? tooltip, string? label, ref bool outp)
+    {
+        return IconConfigRow(name, new string[1] { icon_path }, tooltip, new string?[1] { label }, ref outp);
+    }
+
+    private bool IconConfigRow(string name, string[] icon_paths, string? tooltip, string?[] labels, ref bool outp)
+    {
+        var imagesize = new Vector2(20, 20);
+
+        ImGui.TableNextRow();
+        ImGui.TableNextColumn();
+        ImGui.Text(name);
+
+        ImGui.TableNextColumn();
+        ImGui.TextDisabled("(?)");
+        if (ImGui.IsItemHovered())
+        {
+            ImGui.BeginTooltip();
+            ImGui.Text(tooltip ?? "[tooltip missing]");
+            ImGui.EndTooltip();
+        }
+
+        ImGui.TableNextColumn();
+        foreach (var icon_path in icon_paths)
+            ImGui.Image(plugin.textures[icon_path].ImGuiHandle, imagesize);
+
+        ImGui.TableNextColumn();
+        foreach (var label in labels)
+            ImGui.Text(label ?? "[label missing]");
+
+        ImGui.TableNextColumn();
+        return ImGui.Checkbox("##IconConfigRow_{0}".Format(name), ref outp);
+    }
+
+    private bool IconConfigRow(SpecialEffects effect, StatusIcon icon, ref bool outp)
+    {
+        return IconConfigRow(effect.ToString(), icon.FileName, icon.Tooltip, icon.Label, ref outp);
+    }
+
+    private bool IconConfigExtraOpt(string label, ref bool outp)
+    {
+        ImGui.TableNextColumn();
+        return ImGui.Checkbox(label, ref outp);
     }
 }
