@@ -31,6 +31,14 @@
         "magi_up": 0.05
     },
     {
+        // Technical Finish's increased damage buff. Assuming that the DNC's always doing the 4 required steps, this is a +5% damage buff for the entire party.
+        "row_id": 1825,
+        "status_name": "Devilment",
+        "target_type": "PartyMember",
+        "crit_rate_up": 0.2,
+        "dhit_rate_up": 0.2
+    },
+    {
         // Shield Samba's partywide 15sec 10% mitigation buff
         "row_id": 1826,
         "status_name": "Shield Samba",
