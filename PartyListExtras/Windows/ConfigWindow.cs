@@ -379,7 +379,7 @@ public class ConfigWindow : Window, IDisposable
             }
 
             // Special Effects
-            foreach (SpecialEffects effect in configuration.iconConfig.SpecialIcons.Keys)
+            foreach (Utils.BoolEffect effect in configuration.iconConfig.SpecialIcons.Keys)
             {
                 StatusIcon icon = configuration.iconConfig.SpecialIcons[effect];
 
@@ -459,7 +459,7 @@ public class ConfigWindow : Window, IDisposable
         return ImGui.Checkbox("##IconConfigRow_{0}".Format(name), ref outp);
     }
 
-    private bool IconConfigRow(SpecialEffects effect, StatusIcon icon, ref bool outp)
+    private bool IconConfigRow(Utils.BoolEffect effect, StatusIcon icon, ref bool outp)
     {
         return IconConfigRow(effect.ToString(), icon.FileName, icon.Tooltip, icon.Label, ref outp);
     }

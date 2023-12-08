@@ -1,27 +1,21 @@
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Command;
+using Dalamud.Interface.Internal;
+using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
-using System.IO;
-using Dalamud.Interface.Windowing;
-using System.Collections.Generic;
-using ImGuiScene;
-using System.Linq;
-using FFXIVClientStructs.FFXIV.Client.UI;
-using System.Text.Json;
 using Dalamud.Plugin.Services;
-using PartyListExtras.Windows;
-using Dalamud.Interface.Internal;
-using System.Text.Json.Serialization;
-using System.Diagnostics;
-using System;
-using System.Threading;
-using Dalamud.Game.ClientState.Conditions;
+using FFXIVClientStructs.FFXIV.Client.UI;
 using Hjson;
 using Newtonsoft.Json;
+using PartyListExtras.Windows;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace PartyListExtras
 {
-    // number to update so the DLL actually changes: 9
+    // number to update so the DLL actually changes: 10
     public sealed class Plugin : IDalamudPlugin
     {
         public string Name => "PartyListExtras";
@@ -199,8 +193,8 @@ namespace PartyListExtras
                     List<StatusEffectData>? rawData;
                     try {
                         var jsonString = HjsonValue.Load(fs).ToString();
-                        rawData = System.Text.Json.JsonSerializer.Deserialize<List<StatusEffectData>>(jsonString);
-                    } catch (System.Text.Json.JsonException ex) {
+                        rawData = JsonConvert.DeserializeObject<List<StatusEffectData>>(jsonString);
+                    } catch (JsonException ex) {
                         log.Warning("Error loading file {0} - {1}", dataName, ex.Message);
                         continue;
                     }

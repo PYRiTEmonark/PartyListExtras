@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Serialization;
 using System.Threading;
+using static PartyListExtras.Utils;
 
 namespace PartyListExtras
 {
@@ -59,21 +60,21 @@ namespace PartyListExtras
     [Serializable]
     public struct StatusIconConfig
     {
-        public Dictionary<SpecialEffects, StatusIcon> SpecialIcons;
+        public Dictionary<BoolEffect, StatusIcon> SpecialIcons;
 
-        static readonly Dictionary<SpecialEffects, StatusIcon> DefaultIcons = new Dictionary<SpecialEffects, StatusIcon> {
-            { SpecialEffects.stance, new StatusIcon { FileName = "stance.png", Label = "Stance" } },
-            { SpecialEffects.invuln, new StatusIcon { FileName = "invuln.png", Label = "Invuln" } },
-            { SpecialEffects.living_dead, new StatusIcon { FileName = "living_dead.png", Label = "Living Dead" } },
-            { SpecialEffects.kardia, new StatusIcon { FileName = "kardia.png", Label = "Sent" } },
-            { SpecialEffects.kardion, new StatusIcon { FileName = "kardion.png", Label = "Recv" } },
-            { SpecialEffects.dp_g, new StatusIcon { FileName = "dp_g.png", Label = "Sent" } },
-            { SpecialEffects.dp_r, new StatusIcon { FileName = "dp_r.png", Label = "Recv" } },
-            { SpecialEffects.regen, new StatusIcon { FileName = "regen.png", Label = "Regen" } },
-            { SpecialEffects.barrier, new StatusIcon { FileName = "barrier.png", Label = "Barrier" } }
+        static readonly Dictionary<BoolEffect, StatusIcon> DefaultIcons = new Dictionary<BoolEffect, StatusIcon> {
+            { BoolEffect.stance, new StatusIcon { FileName = "stance.png", Label = "Stance" } },
+            { BoolEffect.invuln, new StatusIcon { FileName = "invuln.png", Label = "Invuln" } },
+            { BoolEffect.living_dead, new StatusIcon { FileName = "living_dead.png", Label = "Living Dead" } },
+            { BoolEffect.kardia, new StatusIcon { FileName = "kardia.png", Label = "Sent" } },
+            { BoolEffect.kardion, new StatusIcon { FileName = "kardion.png", Label = "Recv" } },
+            { BoolEffect.dp_g, new StatusIcon { FileName = "dp_g.png", Label = "Sent" } },
+            { BoolEffect.dp_r, new StatusIcon { FileName = "dp_r.png", Label = "Recv" } },
+            { BoolEffect.regen, new StatusIcon { FileName = "regen.png", Label = "Regen" } },
+            { BoolEffect.barrier, new StatusIcon { FileName = "barrier.png", Label = "Barrier" } }
         };
 
-        public List<SpecialEffects> hiddenSpecialEffects = new List<SpecialEffects>();
+        public List<BoolEffect> hiddenSpecialEffects = new List<BoolEffect>();
 
         public bool showMit = true;
         public bool alwaysSplitMit = false;
@@ -108,9 +109,9 @@ namespace PartyListExtras
         public void validateIcons()
         {
             // Deprecated icons removed
-            SpecialIcons.Remove(SpecialEffects.crit_rate_up);
-            SpecialIcons.Remove(SpecialEffects.max_hp_up);
-            SpecialIcons.Remove(SpecialEffects.block_all);
+            SpecialIcons.Remove(BoolEffect.crit_rate_up);
+            SpecialIcons.Remove(BoolEffect.max_hp_up);
+            SpecialIcons.Remove(BoolEffect.block_all);
 
             foreach (var icon in DefaultIcons)
             {

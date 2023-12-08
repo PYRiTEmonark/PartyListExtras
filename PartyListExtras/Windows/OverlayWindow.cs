@@ -13,6 +13,7 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
+using static PartyListExtras.Utils;
 
 namespace PartyListExtras.Windows;
 
@@ -81,17 +82,19 @@ public class OverlayWindow : IDisposable
         for (var i = 0; i < count; i++)
         {
             // Pull the status list of the party member
-            PlayerCharacter pc; BattleNpc bc;
+            PlayerCharacter pc; BattleNpc bc; BattleChara battleChara;
             StatusList sl;
             var result = plugin.ObjectTable.SearchById(partyMemberList[i].ObjectId);
             if (result?.GetType() == typeof(PlayerCharacter))
             {
                 pc = (PlayerCharacter)result;
+                battleChara = (BattleChara)result;
                 sl = pc.StatusList;
             }
             else if (result?.GetType() == typeof(BattleNpc))
             {
                 bc = (BattleNpc)result;
+                battleChara = (BattleChara)result;
                 sl = bc.StatusList;
             }
             else
@@ -111,8 +114,18 @@ public class OverlayWindow : IDisposable
                 node.ScreenY + plugin.Configuration.OverlayOffsetY);
             var cursize = new Vector2(plugin.Configuration.OverlayWidth * scaling, node.Height * scaling);
 
+            // Variables for checking status effects
+            var tla = battleChara.ClassJob.GameData!.Abbreviation.ToString();
+            Enum.TryParse<Utils.Job>(tla, out var job);
+
+            CondVars cvars = new CondVars()
+            {
+                targetLevel = battleChara.Level,
+                targetJob = job,
+            };
+
             //Spin out to helper functions because long
-            DrawStatusIcons(ParseStatusList(sl), "party_{0}".Format(i), curpos, cursize);
+            DrawStatusIcons(ParseStatusList(sl, cvars), "party_{0}".Format(i), curpos, cursize);
         }
 
         ImGui.End();
@@ -123,184 +136,22 @@ public class OverlayWindow : IDisposable
     /// </summary>
     /// <param name="sl">The status list as found in a BattleChara object</param>
     /// <returns>A list of parsed status icons</returns>
-    private List<StatusIcon> ParseStatusList(StatusList sl)
+    private List<StatusIcon> ParseStatusList(StatusList sl, CondVars cvars)
     {
         var output = new List<StatusIcon>();
 
         var debug = new List<Tuple<string, string>>();
 
-        List<StatusEffectData> datas = new List<StatusEffectData>();
+        List<StatusEffectData> sed = new List<StatusEffectData>();
 
         // Gather up status data
         foreach (var status in sl) {
             if (status == null) continue;
             if (plugin.statusEffectData.ContainsKey((int)status.GameData.RowId)) {
-                datas.Add(plugin.statusEffectData[(int)status.GameData.RowId]);
+                sed.Add(plugin.statusEffectData[(int)status.GameData.RowId]);
             } else {
                 debug.Add(new Tuple<string, string>(status.GameData.Name.ToString(), status.GameData.RowId.ToString()));
             }
-        }
-
-        // Filters
-        // ConstSelf
-        if (!plugin.Configuration.showConstSelfs)
-        {
-            datas = datas
-                .Where(x => x.target_type != TargetType.ConstSelf)
-                .Where(x => x.target_type != TargetType.ConstPartyMember)
-                .ToList();
-        }
-
-        // StQ essences
-        if (!plugin.Configuration.showEssenceSelfs)
-            datas = datas.Where(x => x.target_type != TargetType.EssenceSelf).ToList();
-
-        var special_fstrings = plugin.Configuration.iconConfig.SpecialIcons;
-        // For each non-null special effect...
-        foreach (var sfx in datas.Select(x => x.special).OfType<SpecialEffects>()) {
-            // ...If the special effect is in the special_fstrings list...
-            if (special_fstrings.ContainsKey(sfx) && !plugin.Configuration.iconConfig.hiddenSpecialEffects.Contains(sfx))
-            {
-                // ...add it to the list of things to be rendered
-                output.Add(special_fstrings[sfx]);
-            }
-        }
-
-        if (plugin.Configuration.iconConfig.showMit)
-        {
-            // Mitigation
-            var phys_mit = multi_sum(datas.Select(x => x.phys_mit));
-            var magi_mit = multi_sum(datas.Select(x => x.magi_mit));
-
-            if (phys_mit == magi_mit && phys_mit > 0 && !plugin.Configuration.iconConfig.alwaysSplitMit)
-                output.Add(new StatusIcon { FileName = "mit_all.png", Value = "{0}%".Format(phys_mit), Label = "Mitigation" });
-            else
-            {
-                if (phys_mit > 0)
-                    output.Add(new StatusIcon { FileName = "mit_phys.png", Value = "{0}%".Format(phys_mit), Label = "Physical Mit" });
-                if (magi_mit > 0)
-                    output.Add(new StatusIcon { FileName = "mit_magi.png", Value = "{0}%".Format(magi_mit), Label = "Magical Mit" });
-            }
-        }
-
-        if (plugin.Configuration.iconConfig.showDmgUp)
-        {
-            // Damage Up
-            var phys_up = multi_sum(datas.Select(x => x.phys_up));
-            var magi_up = multi_sum(datas.Select(x => x.magi_up));
-
-            if (phys_up == magi_up && phys_up > 0 && !plugin.Configuration.iconConfig.alwaysSplitDmgUp)
-                output.Add(new StatusIcon { FileName = "all_up.png", Value = "{0}%".Format(phys_up), Label = "Damage Up" });
-            else
-            {
-                if (phys_up > 0)
-                    output.Add(new StatusIcon { FileName = "phys_up.png", Value = "{0}%".Format(phys_up), Label = "Phyiscal Dmg Up" });
-                if (magi_up > 0)
-                    output.Add(new StatusIcon { FileName = "magi_up.png", Value = "{0}%".Format(magi_up), Label = "Magical Dmg Up" });
-            }
-        }
-
-        if (plugin.Configuration.iconConfig.showSpeedUps)
-        {
-            // Attack Speed
-            if (plugin.Configuration.iconConfig.stackSpeedUps)
-            {
-                // This bit is to make sure we don't take multiple speed ups from one buff
-                List<float?> spdups = new List<float?>();
-                foreach (StatusEffectData data in datas) {
-                    if (data.attack_speed_up.HasValue)
-                        spdups.Add(data.attack_speed_up.Value);
-
-                    else if (data.ability_cast_speed_up.HasValue)
-                        spdups.Add(data.ability_cast_speed_up.Value);
-                    
-                    else if (data.cast_speed_up.HasValue)
-                        spdups.Add(data.cast_speed_up.Value);
-
-                    else if (data.auto_speed_up.HasValue)
-                        spdups.Add(data.auto_speed_up.Value);
-                }
-                var speed_up = multi_sum(spdups);
-                if (speed_up > 0)
-                    output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(speed_up), Label = "Speed Up" });
-            }
-            else
-            {
-                var attack_speed_up = multi_sum(datas.Select(x => x.attack_speed_up).Union(datas.Select(x => x.ability_cast_speed_up)));
-                var cast_speed_up = multi_sum(datas.Select(x => x.cast_speed_up));
-                var auto_speed_up = multi_sum(datas.Select(x => x.auto_speed_up));
-                if (attack_speed_up > 0)
-                    output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = "{0}%".Format(attack_speed_up), Label = "Attack Speed Up" });
-                if (cast_speed_up > 0)
-                    output.Add(new StatusIcon { FileName = "cast_speed_up.png", Value = "{0}%".Format(cast_speed_up), Label = "Cast Speed Up" });
-                if (auto_speed_up > 0)
-                    output.Add(new StatusIcon { FileName = "auto_speed_up.png", Value = "{0}%".Format(auto_speed_up), Label = "Auto Speed Up" });
-            }
-        }
-
-        // Heal Rate
-        if (plugin.Configuration.iconConfig.showHealUps)
-        {
-            var healing_up = multi_sum(datas.Select(x => x.healing_up));
-            var healing_pot = multi_sum(datas.Select(x => x.healing_pot));
-
-            if (healing_up > 0)
-                output.Add(new StatusIcon { FileName = "healing_up.png", Value = "{0}%".Format(healing_up), Label = "Healing Up" });
-            if (healing_pot > 0)
-                output.Add(new StatusIcon { FileName = "healing_pot.png", Value = "{0}%".Format(healing_pot), Label = "Heal Potency Up" });
-        }
-
-        // Crit and DH
-        if (plugin.Configuration.iconConfig.showCritDH)
-        {
-            var crit_up = multi_sum(datas.Select(x => x.crit_rate_up));
-            var dh_up = multi_sum(datas.Select(x => x.dhit_rate_up));
-
-            if (crit_up > 0)
-                output.Add(new StatusIcon { FileName = "crit_rate_up.png", Value = "{0}%".Format(crit_up), Label = "Crit rate Up" });
-            if (dh_up > 0)
-                output.Add(new StatusIcon { FileName = "dh_rate_up.png", Value = "{0}%".Format(dh_up), Label = "Dhit rate Up" });
-        }
-
-        // Block Rate
-        if (plugin.Configuration.iconConfig.showBlockUp)
-        {
-            var block_rate = sum(datas.Select(x => x.block_rate));
-
-            if (block_rate > 0)
-            {
-                // Extra special "dont go over 100" maths
-                block_rate += 20;
-                block_rate = Math.Min(block_rate, 100);
-                output.Add(new StatusIcon { FileName = "block_rate.png", Value = "{0}%".Format(block_rate), Label = "Block Rate" });
-            }
-        }
-
-        // Move Speed
-        if (plugin.Configuration.iconConfig.showMoveSpeed)
-        {
-            var movspeed = max(datas.Select(x => x.move_speed_up));
-
-            if (movspeed > 0)
-                output.Add(new StatusIcon { FileName = "speed_up.png", Value = "{0}%".Format(movspeed), Label = "Move Speed" });
-        }
-
-        // Max HP
-        if (plugin.Configuration.iconConfig.showHPup)
-        {
-            var hp_up = sum(datas.Select(x => x.max_hp_up));
-
-            if (hp_up > 0)
-                output.Add(new StatusIcon { FileName = "max_hp.png", Value = "{0}%".Format(hp_up), Label = "Max HP Up" });
-        }
-
-        // Max MP
-        if (plugin.Configuration.iconConfig.showMPup)
-        {
-            var mp_up = sum(datas.Select(x => x.max_mp_up));
-
-            if (mp_up > 0)
-                output.Add(new StatusIcon { FileName = "max_mp.png", Value = "{0}%".Format(mp_up), Label = "Max MP Up" });
         }
 
         // Send Message to log for status effects that are missing
@@ -314,6 +165,168 @@ public class OverlayWindow : IDisposable
             }
         }
         if (debugMessage.Length > 0) plugin.log.Debug("Missing Status Ids: " + debugMessage);
+
+        // Filters
+        // ConstSelf
+        if (!plugin.Configuration.showConstSelfs)
+        {
+            sed = sed
+                .Where(x => x.target_type != TargetType.ConstSelf)
+                .Where(x => x.target_type != TargetType.ConstPartyMember)
+                .ToList();
+        }
+
+        // StQ essences
+        if (!plugin.Configuration.showEssenceSelfs)
+            sed = sed.Where(x => x.target_type != TargetType.EssenceSelf).ToList();
+
+        AppliedEffects applied;
+        if (sed.Count > 0)
+            applied = sed.Select(x => x.Compute(cvars)).Aggregate((a, b) => a.Combine(b));
+        else
+            return new List<StatusIcon>();
+
+        var special_fstrings = plugin.Configuration.iconConfig.SpecialIcons;
+        // For each non-null special effect...
+        foreach (var sfx in applied.special ?? []) {
+            // ...If the special effect is in the special_fstrings list...
+            if (special_fstrings.ContainsKey(sfx) && !plugin.Configuration.iconConfig.hiddenSpecialEffects.Contains(sfx))
+            {
+                // ...add it to the list of things to be rendered
+                output.Add(special_fstrings[sfx]);
+            }
+        }
+
+        if (plugin.Configuration.iconConfig.showMit)
+        {
+            // Mitigation
+            var phys_mit = applied.GetEffectOrDefault(FloatEffect.phys_mit);
+            var magi_mit = applied.GetEffectOrDefault(FloatEffect.magi_mit);
+
+            if (phys_mit == magi_mit && phys_mit > 0 && !plugin.Configuration.iconConfig.alwaysSplitMit)
+                output.Add(new StatusIcon { FileName = "mit_all.png", Value = phys_mit, Label = "Mitigation" });
+            else
+            {
+                if (phys_mit > 0)
+                    output.Add(new StatusIcon { FileName = "mit_phys.png", Value = phys_mit, Label = "Physical Mit" });
+                if (magi_mit > 0)
+                    output.Add(new StatusIcon { FileName = "mit_magi.png", Value = magi_mit, Label = "Magical Mit" });
+            }
+        }
+
+        if (plugin.Configuration.iconConfig.showDmgUp)
+        {
+            // Damage Up
+            var phys_up = applied.GetEffectOrDefault(FloatEffect.phys_up);
+            var magi_up = applied.GetEffectOrDefault(FloatEffect.magi_up);
+
+            if (phys_up == magi_up && phys_up > 0 && !plugin.Configuration.iconConfig.alwaysSplitDmgUp)
+                output.Add(new StatusIcon { FileName = "all_up.png", Value = phys_up, Label = "Damage Up" });
+            else
+            {
+                if (phys_up > 0)
+                    output.Add(new StatusIcon { FileName = "phys_up.png", Value = phys_up, Label = "Phyiscal Dmg Up" });
+                if (magi_up > 0)
+                    output.Add(new StatusIcon { FileName = "magi_up.png", Value = magi_up, Label = "Magical Dmg Up" });
+            }
+        }
+
+        if (plugin.Configuration.iconConfig.showSpeedUps)
+        {
+            // Attack Speed
+            if (plugin.Configuration.iconConfig.stackSpeedUps)
+            {
+                // this only takes the maximum
+                List<float?> spdups = new List<float?>();
+                foreach (StatusEffectData data in sed) {
+                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.attack_speed_up));
+                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.ability_cast_speed_up));
+                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.cast_speed_up));
+                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.auto_speed_up));
+                }
+                var speed_up = spdups.Max();
+                if (speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = speed_up, Label = "Speed Up" });
+            }
+            else
+            {
+                var attack_speed_up = Utils.multi_sum(
+                    applied.GetEffectOrDefault(FloatEffect.attack_speed_up),
+                    applied.GetEffectOrDefault(FloatEffect.ability_cast_speed_up));
+                var cast_speed_up = applied.GetEffectOrDefault(FloatEffect.cast_speed_up);
+                var auto_speed_up = applied.GetEffectOrDefault(FloatEffect.auto_speed_up);
+                if (attack_speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = attack_speed_up, Label = "Attack Speed Up" });
+                if (cast_speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "cast_speed_up.png", Value = cast_speed_up, Label = "Cast Speed Up" });
+                if (auto_speed_up > 0)
+                    output.Add(new StatusIcon { FileName = "auto_speed_up.png", Value = auto_speed_up, Label = "Auto Speed Up" });
+            }
+        }
+
+        // Heal Rate
+        if (plugin.Configuration.iconConfig.showHealUps)
+        {
+            var healing_up = applied.GetEffectOrDefault(FloatEffect.healing_up);
+            var healing_pot = applied.GetEffectOrDefault(FloatEffect.healing_pot);
+
+            if (healing_up > 0)
+                output.Add(new StatusIcon { FileName = "healing_up.png", Value = healing_up, Label = "Healing Up" });
+            if (healing_pot > 0)
+                output.Add(new StatusIcon { FileName = "healing_pot.png", Value = healing_pot, Label = "Heal Potency Up" });
+        }
+
+        // Crit and DH
+        if (plugin.Configuration.iconConfig.showCritDH)
+        {
+            var crit_rate_up = applied.GetEffectOrDefault(FloatEffect.crit_rate_up);
+            var dhit_rate_up = applied.GetEffectOrDefault(FloatEffect.dhit_rate_up);
+
+            if (crit_rate_up > 0)
+                output.Add(new StatusIcon { FileName = "crit_rate_up.png", Value = crit_rate_up, Label = "Crit rate Up" });
+            if (dhit_rate_up > 0)
+                output.Add(new StatusIcon { FileName = "dh_rate_up.png", Value = dhit_rate_up, Label = "Dhit rate Up" });
+        }
+
+        // Block Rate
+        if (plugin.Configuration.iconConfig.showBlockUp)
+        {
+            var block_rate = applied.GetEffectOrDefault(FloatEffect.block_rate);
+
+            if (block_rate > 0)
+            {
+                // Extra special "dont go over 100" maths
+                block_rate = Math.Min(block_rate, 100);
+                output.Add(new StatusIcon { FileName = "block_rate.png", Value = block_rate, Label = "Block Rate" });
+            }
+        }
+
+        // Move Speed
+        if (plugin.Configuration.iconConfig.showMoveSpeed)
+        {
+            var move_speed_up = applied.GetEffectOrDefault(FloatEffect.move_speed_up);
+
+            if (move_speed_up > 0)
+                output.Add(new StatusIcon { FileName = "speed_up.png", Value = move_speed_up, Label = "Move Speed" });
+        }
+
+        // Max HP
+        if (plugin.Configuration.iconConfig.showHPup)
+        {
+            var max_hp_up = applied.GetEffectOrDefault(FloatEffect.max_hp_up);
+
+            if (max_hp_up > 0)
+                output.Add(new StatusIcon { FileName = "max_hp.png", Value = max_hp_up, Label = "Max HP Up" });
+        }
+
+        // Max MP
+        if (plugin.Configuration.iconConfig.showMPup)
+        {
+            var max_mp_up = applied.GetEffectOrDefault(FloatEffect.max_mp_up);
+
+            if (max_mp_up > 0)
+                output.Add(new StatusIcon { FileName = "max_mp.png", Value = max_mp_up, Label = "Max MP Up" });
+        }
 
         return output;
     }
@@ -432,10 +445,10 @@ public class OverlayWindow : IDisposable
             // Info, e.g. mit percent
             if (icon.Value != null && dm != 3) {
                 cursor += new Vector2(
-                    -(1f * ImGui.CalcTextSize(icon.Value).X * scaling) - paddingX,
+                    -(1f * ImGui.CalcTextSize(icon.ValueStr()).X * scaling) - paddingX,
                     0
                 );
-                drawlist.AddText(cursor, white, icon.Value);
+                drawlist.AddText(cursor, white, icon.ValueStr());
             }
         }
 
@@ -445,7 +458,7 @@ public class OverlayWindow : IDisposable
     internal bool one_true(IEnumerable<bool?> values)
     {
         // filter out null values then aggregate using or
-        return values.Where(x => x != null).Aggregate(false, (a, b) => a || b.Value);
+        return values.Where(x => x != null).Aggregate(false, (a, b) => a || b!.Value);
     }
 
     internal float sum(IEnumerable<float?> values)
@@ -465,7 +478,7 @@ public class OverlayWindow : IDisposable
     internal float multi_sum(IEnumerable<float?> values)
     {
         // filter out null values then do the multiplicative application
-        var x = values.Where(x => x != null).Select(x => 1 - x).Aggregate(1f, (a, b) => a * b.Value);
+        var x = values.Where(x => x != null).Select(x => 1 - x).Aggregate(1f, (a, b) => a * b!.Value);
         return to_percent(1f - x);
     }
 

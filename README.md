@@ -13,10 +13,9 @@ Note that the end goal isn't to perfectly illustrate damage, just to simplify th
 ## Progress
 
 Currently some buffs aren't applied properly. These are:
-- AST: Role Related buffs from arcana
-- BRD: Radiant Finale depending on job gauge
+- BRD: Radiant Finale depending on job gauge (This may be impossible due to the origin of the buff being ambiguous)
+- DNC: Technical and Standard Finish assume a full dance (Same issue as above)
 - PLD: Intervention buffed when sentinel/rampart active, Block rate on Passage of Arms
-- SGE: Kerachole and Taurochole cannot be stacked
 - WAR: Thrill of Battle assumes the enhanced version (WAR gets no healing up below lvl78)
 - Tank: Reprisal and Arm's Length. Potential for "effective" mitigation to be calculated
 - Ditto for "effective" damage for things that are currently fuzzed under "special"
