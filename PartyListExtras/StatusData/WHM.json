@@ -4,65 +4,91 @@
         "row_id": 158,
         "status_name": "Regen",
         "target_type": "PartyMember",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Medica II's partywide regen
         "row_id": 150,
         "status_name": "Medica II",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Presence of Mind's self 20% magical haste
         "row_id": 157,
         "status_name": "Presence of Mind",
         "target_type": "Self",
-        "cast_speed_up": 0.2,
-        "auto_speed_up": 0.2
+        "cond_default": {
+            "cast_speed_up": 0.2,
+            "auto_speed_up": 0.2
+        }
     },
     {
         // Divine Benison's targeted shield
         "row_id": 1218,
         "status_name": "Divine Benison",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Asylum's partywide regen
         "row_id": 1911,
         "status_name": "Asylum",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Asylum's partywide increased received healing
         "row_id": 1912,
         "status_name": "Asylum",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "healing_up": 0.1
+        }
     },
     {
         // Aquaveil's targeted 15% mitigation
         "row_id": 2708,
         "status_name": "Aquaveil",
         "target_type": "PartyMember",
-        "phys_mit": 0.15,
-        "magi_mit": 0.15
+        "cond_default": {
+            "phys_mit": 0.15,
+            "magi_mit": 0.15
+        }
     },
     {
         // Temperance's self 20% increased healing potency
         "row_id": 1872,
         "status_name": "Temperance",
         "target_type": "Self",
-        "healing_pot": 0.2
+        "cond_default": {
+            "healing_pot": 0.2
+        }
     },
     {
         // Temperance's partywide 10% damage mitigation
         "row_id": 1873,
         "status_name": "Temperance",
         "target_type": "PartyWide",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     }
 ]

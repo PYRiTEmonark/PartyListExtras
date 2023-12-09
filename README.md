@@ -4,7 +4,7 @@ A Dalamud plugin to add some extra information about personal/party status effec
 Note that the information is restricted to buffs provided by players only, fight-related effects will not be added to the plugin.
 
 For want of a better method, what the statuses actually do is explained in JSON files under `./ffxivPartyListExtras/StatusData`.
-All json files are read in and converted to a `StatusEffectData` struct.
+All json files are read in and converted to `StatusEffectData` structs.
 This is because the client holds no information on what the status effects actually do, just who has what.
 Files are split into Job/Role, this is for readability only and isn't strictly necessary.
 
@@ -24,33 +24,33 @@ Currently some buffs aren't applied properly. These are:
 ### Jobs
 
 #### Tank
-- DRK: Complete**
-- GNB: Complete*
-- PLD: Complete*
-- WAR: Complete**
+- DRK: Missing job gauge buff
+- GNB: Complete
+- PLD: Needs Verification
+- WAR: Needs Verification
 
 #### Healer
-- AST: Complete*
-- SCH: Complete*
-- SGE: Complete*
-- WHM: Complete*
+- AST: Needs Verification
+- SCH: Needs Verification
+- SGE: Needs Verification
+- WHM: Needs Verification
 
 #### Melee
-- DRG: Complete*
-- MNK: Complete*
-- NIN: Complete**
-- RPR: Complete*
-- SAM: Complete*
+- DRG: Needs Verification
+- MNK: Needs Verification
+- NIN: Missing job gauge buff
+- RPR: Complete
+- SAM: Needs Verification
 
 #### Magical Ranged
-- BLM: Complete*
-- SMN: Complete*
-- RDM: Complete*
+- BLM: Complete
+- SMN: Needs Verification
+- RDM: Complete
 
 #### Physical Ranged
-- BRD: Complete*
-- DNC: Complete*
-- MCH: Complete*
+- BRD: Needs Verification
+- DNC: Needs Verification
+- MCH: Needs Verification
 
 
 #### Save-The-Queen content

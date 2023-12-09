@@ -4,140 +4,197 @@
         "row_id": 74,
         "status_name": "Sentinel",
         "target_type": "Self",
-        "phys_mit": 0.3,
-        "magi_mit": 0.3
+        "cond_default": {
+            "phys_mit": 0.3,
+            "magi_mit": 0.3
+        }
     },
     {
         // Bulwark's 10sec 100% block rate buff
         "row_id": 77,
         "status_name": "Bulwark",
         "target_type": "Self",
-        "block_rate": 1
+        "cond_default": {
+            "block_rate": 1
+        }
     },
     {
         // PLD Stance
         "row_id": 79,
         "status_name": "Iron Will",
         "target_type": "StanceSelf",
-        "special": "stance"
+        "cond_default": {
+            "special": [
+                "stance"
+            ]
+        }
     },
     {
         // PLD 10sec Invulnerability
         "row_id": 82,
         "status_name": "Hallowed Ground",
         "target_type": "Self",
-        "special": "invuln"
+        "cond_default": {
+            "special": [
+                "invuln"
+            ]
+        }
     },
     {
         // PLD Stance dupe
         "row_id": 393,
         "status_name": "Iron Will",
         "target_type": "Self",
-        "special": "stance"
+        "cond_default": {
+            "special": [
+                "stance"
+            ]
+        }
     },
     {
         // Divine Veil's dupe
         "row_id": 727,
         "status_name": "Divine Veil",
         "target_type": "PartyWide",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Passage of Arms' self 100% block rate buff
         "row_id": 1175,
         "status_name": "Passage of Arms",
         "target_type": "Self",
-        "block_rate": 1
+        "cond_default": {
+            "block_rate": 1
+        }
     },
     {
         // Passage of Arms' partywide 15% mitigation buff
         "row_id": 1176,
         "status_name": "Arms Up",
         "target_type": "PartyAoE",
-        "phys_mit": 0.15,
-        "magi_mit": 0.15
+        "cond_default": {
+            "phys_mit": 0.15,
+            "magi_mit": 0.15
+        }
     },
     {
         // PLD 10sec Invulnerability dupe
         "row_id": 1302,
         "status_name": "Hallowed Ground",
         "target_type": "Self",
-        "special": "invuln"
+        "cond_default": {
+            "special": [
+                "invuln"
+            ]
+        }
     },
     {
         // Intervention's self 10% mitigation buff
-        // TODO: find a way to differentiate a 10% vs a 20% mitigation buff (if Sentinel/Rampart were up upon using it)
+        // TODO: 20% mitigation if Sentinel/Rampart active
         "row_id": 1174,
         "status_name": "Intervention",
         "target_type": "PartyMember",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Divine Veil's partywide shield
         "row_id": 1362,
         "status_name": "Divine Veil",
         "target_type": "PartyWide",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Sheltron's self 15% mitigation buff
         "row_id": 1856,
         "status_name": "Sheltron",
         "target_type": "Self",
-        "phys_mit": 0.15,
-        "magi_mit": 0.15
+        "cond_default": {
+            "phys_mit": 0.15,
+            "magi_mit": 0.15
+        }
     },
     {
         // Intervention dupe
         "row_id": 2020,
         "status_name": "Intervention",
         "target_type": "PartyMember",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Divine Veil's dupe
         "row_id": 2169,
         "status_name": "Divine Veil",
         "target_type": "PartyWide",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Holy Sheltron's self 15% mitigation buff
         "row_id": 2674,
         "status_name": "Holy Sheltron",
         "target_type": "Self",
-        "phys_mit": 0.15,
-        "magi_mit": 0.15
+        "cond_default": {
+            "phys_mit": 0.15,
+            "magi_mit": 0.15
+        }
     },
     {
         // Intervention & Holy Sheltron's 4sec 10% mitigation
         "row_id": 2675,
         "status_name": "Knight's Resolve",
         "target_type": "PartyMember",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Intervention & Holy Sheltron's 12sec regen
         "row_id": 2676,
         "status_name": "Knight's Benediction",
         "target_type": "PartyMember",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // PLD Stance dupe
         "row_id": 2843,
         "status_name": "Iron Will",
         "target_type": "Self",
-        "special": "stance"
+        "cond_default": {
+            "special": [
+                "stance"
+            ]
+        }
     },
     {
+        // Knight's Resolve Dupe
         "row_id": 3188,
         "status_name": "Knight's Resolve",
         "target_type": "PartyMember",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     }
 ]

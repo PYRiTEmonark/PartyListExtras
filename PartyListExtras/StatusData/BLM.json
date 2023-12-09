@@ -4,14 +4,20 @@
         "row_id": 168,
         "status_name": "Manaward",
         "target_type": "Self",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Ley Lines' buff when you are inside the Ley Lines, granting 15% magical haste
         "row_id": 738,
         "status_name": "Circle of Power",
         "target_type": "PartyAoE",
-        "cast_speed_up": 0.15,
-        "auto_speed_up": 0.15
+        "cond_default": {
+            "cast_speed_up": 0.15,
+            "auto_speed_up": 0.15
+        }
     }
 ]

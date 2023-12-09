@@ -4,136 +4,223 @@
         "row_id": 849,
         "status_name": "Collective Unconscious",
         "target_type": "PartyWide",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Collective Unconscious's partywide 15sec regen
         "row_id": 956,
         "status_name": "Collective Unconscious",
         "target_type": "PartyWide",
-        "special": "regen"
+        "default": {
+            "special": [ "regen" ]
+        }
     },
     {
         // Celestial Opposition's partywide 15sec regen
         "row_id": 1879,
         "status_name": "Opposition",
         "target_type": "PartyWide",
-        "special": "regen"
+        "default": {
+            "special": [ "regen" ]
+        }
     },
 
     // Balance, Arrow, Spear, Bole, Ewer & Spire are 3/6% damage increase buffs according to their target's range
     // TODO : add a melee/ranged check to determine if the buff is 3% or 6% for the cards
-
 
     {
         // Melee card
         "row_id": 1882,
         "status_name": "The Balance",
         "target_type": "PartyMember",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond": [
+            {
+                "playerRole": "Melee",
+                "then": {
+                    "phys_up": 0.06,
+                    "magi_up": 0.06
+                }
+            }
+        ],
+        "cond_else": {
+            "phys_up": 0.03,
+            "magi_up": 0.03
+        }
     },
     {
         // Ranged card
         "row_id": 1883,
         "status_name": "The Bole",
         "target_type": "PartyMember",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond": [
+            {
+                "playerRole": "Ranged",
+                "then": {
+                    "phys_up": 0.06,
+                    "magi_up": 0.06
+                }
+            }
+        ],
+        "cond_else": {
+            "phys_up": 0.03,
+            "magi_up": 0.03
+        }
     },
     {
         // Melee card
         "row_id": 1884,
         "status_name": "The Arrow",
         "target_type": "PartyMember",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond": [
+            {
+                "playerRole": "Melee",
+                "then": {
+                    "phys_up": 0.06,
+                    "magi_up": 0.06
+                }
+            }
+        ],
+        "cond_else": {
+            "phys_up": 0.03,
+            "magi_up": 0.03
+        }
     },
     {
         // Melee card
         "row_id": 1885,
         "status_name": "The Spear",
         "target_type": "PartyMember",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond": [
+            {
+                "playerRole": "Melee",
+                "then": {
+                    "phys_up": 0.06,
+                    "magi_up": 0.06
+                }
+            }
+        ],
+        "cond_else": {
+            "phys_up": 0.03,
+            "magi_up": 0.03
+        }
     },
     {
         // Ranged card
         "row_id": 1886,
         "status_name": "The Ewer",
         "target_type": "PartyMember",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond": [
+            {
+                "playerRole": "Ranged",
+                "then": {
+                    "phys_up": 0.06,
+                    "magi_up": 0.06
+                }
+            }
+        ],
+        "cond_else": {
+            "phys_up": 0.03,
+            "magi_up": 0.03
+        }
     },
     {
         // Ranged card
         "row_id": 1887,
         "status_name": "The Spire",
         "target_type": "PartyMember",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond": [
+            {
+                "playerRole": "Ranged",
+                "then": {
+                    "phys_up": 0.06,
+                    "magi_up": 0.06
+                }
+            }
+        ],
+        "cond_else": {
+            "phys_up": 0.03,
+            "magi_up": 0.03
+        }
     },
     {
         // Celestial Intersection's shield
         "row_id": 1889,
         "status_name": "Intersection",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [ "barrier" ]
+        }
     },
     {
         // Neutral Sect's +20% healing potency buff
         "row_id": 1892,
         "status_name": "Neutral Sect",
         "target_type": "Self",
-        "healing_pot": 0.2
+        "cond_default": {
+            "healing_pot": 0.2
+        }
     },
     {
         // Neutral Sect's bonus shield when using Aspected Benefic or Aspected Helios
         "row_id": 1921,
         "status_name": "Neutral Sect",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [ "barrier" ]
+        }
     },
     {
         // Astrodyne's self +5% damage up & +5% healing potency
         "row_id": 2716,
         "status_name": "Harmony of Mind",
         "target_type": "Self",
-        "phys_up": 0.05,
-        "magi_up": 0.05,
-        "healing_pot": 0.05
+        "cond_default": {
+            "phys_up": 0.05,
+            "magi_up": 0.05,
+            "healing_pot": 0.05
+        }
     },
     {
         // Astrodyne's self +10% magical haste
         "row_id": 2715,
         "status_name": "Harmony of Body",
         "target_type": "Self",
-        "cast_speed_up": 0.1,
-        "auto_speed_up": 0.1
+        "cond_default": {
+            "cast_speed_up": 0.1,
+            "auto_speed_up": 0.1
+        }
     },
     {
         // Divination's partywide 6% increased damage buff
         "row_id": 1878,
         "status_name": "Divination",
         "target_type": "PartyWide",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond_default": {
+            "phys_up": 0.06,
+            "magi_up": 0.06
+        }
     },
     {
         // Divination dupe
         "row_id": 2034,
         "status_name": "Divination",
         "target_type": "PartyWide",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond_default": {
+            "phys_up": 0.06,
+            "magi_up": 0.06
+        }
     },
     {
         // Exaltation's targeted 10% mitigation buff
         "row_id": 2717,
         "status_name": "Exaltation",
         "target_type": "PartyMember",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     }
 ]

@@ -4,118 +4,186 @@
         "row_id": 91,
         "status_name": "Defiance",
         "target_type": "StanceSelf",
-        "special": "stance"
+        "cond_default": {
+            "special": [
+                "stance"
+            ]
+        }
     },
     {
         // WAR Tank Stance
         "row_id": 1396,
         "status_name": "Defiance",
         "target_type": "StanceSelf",
-        "special": "stance"
+        "cond_default": {
+            "special": [
+                "stance"
+            ]
+        }
     },
     {
         // WAR Tank Stance
         "row_id": 3124,
         "status_name": "Defiance",
         "target_type": "StanceSelf",
-        "special": "stance"
+        "cond_default": {
+            "special": [
+                "stance"
+            ]
+        }
     },
     {
         // Bloodwhetting's 8-sec self-10% mitigation
         "row_id": 2678,
         "status_name": "Bloodwhetting",
         "target_type": "Self",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Blooodwhetting & Nascent Flash's 4-sec 10% mitigation
         "row_id": 2679,
         "status_name": "Stem the Flow",
         "target_type": "Self",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Blooodwhetting & Nascent Flash's 20-sec shield
         "row_id": 2680,
         "status_name": "Stem the Tide",
         "target_type": "Self",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Nascent Flash's 8-sec 10% mitigation on a party member
         "row_id": 1858,
         "status_name": "Nascent Glint",
         "target_type": "PartyMember",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Thrill of Battle's +20% max HP & +20% incoming healing
-        // TODO : add a way to check the required lvl for the healing_up (84+)
         "row_id": 87,
         "status_name": "Thrill of Battle",
         "target_type": "Self",
-        "special": "max_hp_up",
-        "healing_up": 0.2
+        "cond": [
+            {
+                "playerLevel_gte": 78,
+                "then": {
+                    "healing_up": 0.2
+                }
+            }
+        ],
+        "cond_default": {
+            "special": [
+                "max_hp_up"
+            ]
+        }
     },
     {
-        // Thrill of Battle's old ID, probably a dupe
+        // Thrill of Battle's dupe
         "row_id": 31,
         "status_name": "Thrill of Battle",
         "target_type": "Self",
-        "special": "max_hp_up"
+        "cond": [
+            {
+                "playerLevel_gte": 78,
+                "then": {
+                    "healing_up": 0.2
+                }
+            }
+        ],
+        "cond_default": {
+            "special": [
+                "max_hp_up"
+            ]
+        }
     },
     {
         // Vengeance's 15-sec 30% mitigation with a "reflecting" damage part
         "row_id": 89,
         "status_name": "Vengeance",
         "target_type": "Self",
-        "phys_mit": 0.3,
-        "magi_mit": 0.3
+        "cond_default": {
+            "phys_mit": 0.3,
+            "magi_mit": 0.3
+        }
     },
     {
         // Raw Intuition's 6-sec 10% mitigation
         "row_id": 735,
         "status_name": "Raw Intuition",
         "target_type": "Self",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Shake it Off (gives a shield, so not effective mitigation there at all)
         "row_id": 1457,
         "status_name": "Shake it Off",
         "target_type": "Self",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Shake it Off dupe
         "row_id": 1993,
         "status_name": "Shake it Off",
         "target_type": "Self",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Shake it Off's post use regen effect (lvl 76+)
         "row_id": 2108,
         "status_name": "Shake it Off (Over Time)",
         "target_type": "Self",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Equilibrium's post use regen effect (lvl 84+)
         "row_id": 2681,
         "status_name": "Equilibrium",
         "target_type": "Self",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Inner Release's knockback immunity (lvl 70+)
         "row_id": 1177,
         "status_name": "Inner Release",
         "target_type": "Self",
-        "special": "knockback_immunity"
+        "cond_default": {
+            "special": [
+                "knockback_immunity"
+            ]
+        }
     }
 ]

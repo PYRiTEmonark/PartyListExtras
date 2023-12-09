@@ -4,75 +4,97 @@
         "row_id": 1185,
         "status_name": "Brotherhood",
         "target_type": "PartyWide",
-        "phys_up": 0.05,
-        "magi_up": 0.05
+        "cond_default": {
+            "phys_up": 0.05,
+            "magi_up": 0.05
+        }
     },
     {
         // Brotherhood dupe
         "row_id": 2174,
         "status_name": "Brotherhood",
         "target_type": "PartyWide",
-        "phys_up": 0.05,
-        "magi_up": 0.05
+        "cond_default": {
+            "phys_up": 0.05,
+            "magi_up": 0.05
+        }
     },
     {
         // Riddle of Earth's 20% self-mitigation
         "row_id": 1179,
         "status_name": "Riddle of Earth",
         "target_type": "Self",
-        "phys_mit": 0.2,
-        "magi_mit": 0.2
+        "cond_default": {
+            "phys_mit": 0.2,
+            "magi_mit": 0.2
+        }
     },
     {
         // Regen triggered when damaged while under Riddle of Earth's buff
         "row_id": 1180,
         "status_name": "Earth's Reply",
         "target_type": "Self",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Riddle of Earth's dupe
         "row_id": 2008,
         "status_name": "Riddle of Earth",
         "target_type": "Self",
-        "phys_mit": 0.2,
-        "magi_mit": 0.2
+        "cond_default": {
+            "phys_mit": 0.2,
+            "magi_mit": 0.2
+        }
     },
     {
         // Riddle of Fire's 15% self-damage up
         "row_id": 1181,
         "status_name": "Riddle of Fire",
         "target_type": "Self",
-        "phys_up": 0.15,
-        "magi_up": 0.15
+        "cond_default": {
+            "phys_up": 0.15,
+            "magi_up": 0.15
+        }
     },
     {
         // Riddle of Fire's dupe
         "row_id": 1413,
         "status_name": "Riddle of Fire",
         "target_type": "Self",
-        "phys_up": 0.15,
-        "magi_up": 0.15
+        "cond_default": {
+            "phys_up": 0.15,
+            "magi_up": 0.15
+        }
     },
     {
         // Riddle of Wind's 50% auto-attack delay decrease
         "row_id": 2687,
         "status_name": "Riddle of Wind",
         "target_type": "Self",
-        "auto_delay_down": 0.5
+        "cond_default": {
+            "auto_delay_down": 0.5
+        }
     },
     {
         // Twin Snakes's 50% auto-attack delay decrease
         "row_id": 3001,
         "status_name": "Disciplined Fist",
         "target_type": "Self",
-        "auto_delay_down": 0.5
+        "cond_default": {
+            "auto_delay_down": 0.5
+        }
     },
     {
         // Mantra's 10% party-wide increased received healing
         "row_id": 102,
         "status_name": "Mantra",
         "target_type": "PartyWide",
-        "healing_up": 0.1
+        "cond_default": {
+            "healing_up": 0.1
+        }
     }
 ]

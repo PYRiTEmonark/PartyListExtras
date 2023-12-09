@@ -4,83 +4,105 @@
         "row_id": 1831,
         "status_name": "No Mercy",
         "target_type": "Self",
-        "phys_up": 0.2,
-        "magi_up": 0.2
+        "cond_default": {
+            "phys_up": 0.2,
+            "magi_up": 0.2
+        }
     },
     {
         // Camouflage's 20sec 10% self-mitigation buff + 50% block rate
         "row_id": 1832,
         "status_name": "Camouflage",
         "target_type": "Self",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1,
-        "block_rate": 0.5
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1,
+            "block_rate": 0.5
+        }
     },
     {
         // GNB Stance
         "row_id": 1833,
         "status_name": "Royal Guard",
         "target_type": "StanceSelf",
-        "special": "stance"
+        "cond_default": {
+            "special": [ "stance" ]
+        }
     },
     {
         // Nebula's 15sec 30% self-mitigation buff
         "row_id": 1834,
         "status_name": "Nebula",
         "target_type": "Self",
-        "phys_mit": 0.3,
-        "magi_mit": 0.3
+        "cond_default": {
+            "phys_mit": 0.3,
+            "magi_mit": 0.3
+        }
     },
     {
         // Aurora's 18sec regen buff
         "row_id": 1835,
         "status_name": "Aurora",
         "target_type": "PartyMember",
-        "special": "regen"
+        "cond_default": {
+            "special": [ "regen" ]
+        }
     },
     {
         // Bolide's 10sec invulnerability buff
         "row_id": 1836,
         "status_name": "Superbolide",
         "target_type": "Self",
-        "special": "invuln"
+        "cond_default": {
+            "special": [ "invuln" ]
+        }
     },
     {
         // Heart of Light's 15sec partywide 10% magical mitigation buff
         "row_id": 1839,
         "status_name": "Heart of Light",
         "target_type": "PartyWide",
-        "magi_mit": 0.1
+        "cond_default": {
+            "magi_mit": 0.1
+        }
     },
     {
         // Heart of Stone's 7sec 15% targetable mitigation (shield is ignored)
         "row_id": 1840,
         "status_name": "Heart of Stone",
         "target_type": "PartyMember",
-        "phys_mit": 0.15,
-        "magi_mit": 0.15
+        "cond_default": {
+            "phys_mit": 0.15,
+            "magi_mit": 0.15
+        }
     },
     {
         // Brutal Shell's shield on impact
         "row_id": 1898,
         "status_name": "Brutal Shell",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [ "barrier" ]
+        }
     },
     {
         // Heart of Corundum's 8sec 15% targetable mitigation (shield is ignored)
         "row_id": 2683,
         "status_name": "Heart of Corundum",
         "target_type": "PartyMember",
-        "phys_mit": 0.15,
-        "magi_mit": 0.15
+        "cond_default": {
+            "phys_mit": 0.15,
+            "magi_mit": 0.15
+        }
     },
     {
         // Heart of Corundum's 4sec 15% targetable mitigation
         "row_id": 2684,
         "status_name": "Clarity of Corundum",
         "target_type": "PartyMember",
-        "phys_mit": 0.15,
-        "magi_mit": 0.15
+        "cond_default": {
+            "phys_mit": 0.15,
+            "magi_mit": 0.15
+        }
     }
 ]

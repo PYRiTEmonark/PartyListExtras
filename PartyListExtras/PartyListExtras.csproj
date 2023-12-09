@@ -58,20 +58,25 @@
     <None Remove="Icons\vuln_othr.png" />
     <None Remove="Icons\vuln_phys.png" />
     <None Remove="README.md" />
-    <None Remove="OLD_StatusData\Adventurer.json" />
-    <None Remove="OLD_StatusData\BLM.json" />
-    <None Remove="OLD_StatusData\BRD.json" />
-    <None Remove="OLD_StatusData\MCH.json" />
-    <None Remove="OLD_StatusData\MNK.json" />
-    <None Remove="OLD_StatusData\NIN.json" />
-    <None Remove="OLD_StatusData\PLD.json" />
-    <None Remove="OLD_StatusData\RDM.json" />
-    <None Remove="OLD_StatusData\RPR.json" />
-    <None Remove="OLD_StatusData\SAM.json" />
-    <None Remove="OLD_StatusData\SGE.json" />
-    <None Remove="OLD_StatusData\SMN.json" />
-    <None Remove="OLD_StatusData\WAR.json" />
+    <None Remove="StatusData\BLM.json" />
+    <None Remove="StatusData\BRD.json" />
+    <None Remove="StatusData\DNC.json" />
+    <None Remove="StatusData\DRG.json" />
+    <None Remove="StatusData\DRK.json" />
     <None Remove="StatusData\GNB.json" />
+    <None Remove="StatusData\MCH.json" />
+    <None Remove="StatusData\MNK.json" />
+    <None Remove="StatusData\NIN.json" />
+    <None Remove="StatusData\PLD.json" />
+    <None Remove="StatusData\RDM.json" />
+    <None Remove="StatusData\README.md" />
+    <None Remove="StatusData\RPR.json" />
+    <None Remove="StatusData\SAM.json" />
+    <None Remove="StatusData\SaveTheQueen.json" />
+    <None Remove="StatusData\SCH.json" />
+    <None Remove="StatusData\SMN.json" />
+    <None Remove="StatusData\WAR.json" />
+    <None Remove="StatusData\WHM.json" />
     <None Remove="StatusInfo.json" />
     <None Remove="StatusData\AST.json" />
   </ItemGroup>
@@ -137,52 +142,70 @@
     <Content Include="StatusData\Adventurer.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="StatusData\BLM.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\BRD.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\DNC.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\DRG.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\DRK.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\MCH.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\MNK.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\NIN.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\PLD.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\RDM.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\README.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\RPR.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\SAM.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\SaveTheQueen.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\SCH.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="OLD_StatusData\MCH.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\MNK.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\NIN.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\PLD.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\RDM.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\RPR.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\SAM.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\SaveTheQueen.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\SCH.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\SGE.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\SMN.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\WAR.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="OLD_StatusData\WHM.json">
+    <Content Include="StatusData\SGE.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\AST.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\GNB.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\SMN.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\WAR.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\WHM.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

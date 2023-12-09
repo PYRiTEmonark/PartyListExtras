@@ -4,29 +4,37 @@
         "row_id": 1239,
         "status_name": "Embolden",
         "target_type": "Self",
-        "magi_up": 0.05
+        "cond_default": {
+            "magi_up": 0.05
+        }
     },
     {
         // Embolden's party 5% damage increase
         "row_id": 1297,
         "status_name": "Embolden",
         "target_type": "PartyWide",
-        "phys_up": 0.05,
-        "magi_up": 0.05
+        "cond_default": {
+            "phys_up": 0.05,
+            "magi_up": 0.05
+        }
     },
     {
         // Manafication's self 5% magical damage increase (granted at lvl 78+)
         "row_id": 1971,
         "status_name": "Manafication",
         "target_type": "Self",
-        "magi_up": 0.05
+        "cond_default": {
+            "magi_up": 0.05
+        }
     },
     {
         // Magick Barrier's party-wide 10% magical mitigation & 5% increased received healing
         "row_id": 2707,
         "status_name": "Magick Barrier",
         "target_type": "PartyWide",
-        "magi_mit": 0.1,
-        "healing_up": 0.05
+        "cond_default": {
+            "magi_mit": 0.1,
+            "healing_up": 0.05
+        }
     }
 ]

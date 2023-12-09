@@ -4,98 +4,136 @@
         "row_id": 297,
         "status_name": "Galvanize",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
-        // Adloquium's critical bonus shield 
+        // Adloquium's critical bonus shield
         "row_id": 1918,
         "status_name": "Catalyze",
         "target_type": "Self",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Eos' Whispering Dawn's regen
         "row_id": 315,
         "status_name": "Whispering Dawn",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Seraph's Whispering Dawn's regen
         "row_id": 1874,
         "status_name": "Angel's Whisper",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Eos' Fey Illumination's party-wide +10% increased received healing & 5% magical mitigation
         "row_id": 317,
         "status_name": "Fey Illumination",
         "target_type": "PartyWide",
-        "magi_mit": 0.05,
-        "healing_up": 0.1
+        "cond_default": {
+            "magi_mit": 0.05,
+            "healing_up": 0.1
+        }
     },
     {
         // Seraph's Fey Illumination's party-wide +10% increased received healing & 5% magical mitigation
         "row_id": 1875,
         "status_name": "Seraphic Illumination",
         "target_type": "PartyWide",
-        "magi_mit": 0.05,
-        "healing_up": 0.1
+        "cond_default": {
+            "magi_mit": 0.05,
+            "healing_up": 0.1
+        }
     },
     {
         // Seraph's Consolation's shield
         "row_id": 1917,
         "status_name": "Seraphic Veil",
         "target_type": "PartyWide",
-        "healing_pot": 0.2,
-        "special": "barrier"
+        "cond_default": {
+            "healing_pot": 0.2,
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Dissipation's 30sec 20% self increased healing potency
         "row_id": 791,
         "status_name": "Dissipation",
         "target_type": "Self",
-        "healing_pot": 0.2
+        "cond_default": {
+            "healing_pot": 0.2
+        }
     },
     {
         // Sacred Soil's regen
         "row_id": 1944,
         "status_name": "Sacred Soil",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Sacred Soil's 10% mitigation
         "row_id": 299,
         "status_name": "Sacred Soil",
         "target_type": "PartyWide",
-        "healing_pot": 0.2,
-        "magi_mit": 0.05,
-        "phys_mit": 0.05
+        "cond_default": {
+            "healing_pot": 0.2,
+            "magi_mit": 0.10,
+            "phys_mit": 0.10
+        }
     },
     {
         // Protraction's +10% Max HP & +10% increased received healing
         "row_id": 2710,
         "status_name": "Protraction",
         "target_type": "PartyMember",
-        "healing_up": 0.1,
-        "max_hp_up": 0.05
+        "cond_default": {
+            "healing_up": 0.1,
+            "max_hp_up": 0.05
+        }
     },
     {
         // Expedient's 20sec +10% mit buff
         "row_id": 2711,
         "status_name": "Desperate Measures",
         "target_type": "PartyWide",
-        "healing_up": 0.1,
-        "max_hp_up": 0.05
+        "cond_default": {
+            "healing_up": 0.1,
+            "max_hp_up": 0.05
+        }
     },
     {
         // Expedient's 10sec +30% Move speed buff
         "row_id": 2712,
         "status_name": "Expedience",
         "target_type": "PartyWide",
-        "healing_up": 0.1,
-        "max_hp_up": 0.05
+        "cond_default": {
+            "healing_up": 0.1,
+            "max_hp_up": 0.05
+        }
     }
 ]

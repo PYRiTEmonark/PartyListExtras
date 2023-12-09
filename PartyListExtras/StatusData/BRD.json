@@ -4,76 +4,96 @@
         "row_id": 125,
         "status_name": "Raging Strikes",
         "target_type": "Self",
-        "phys_up": 0.15,
-        "magi_up": 0.15
+        "cond_default": {
+            "phys_up": 0.15,
+            "magi_up": 0.15
+        }
     },
     {
         // Battle Voice's 15sec +20% Direct Hit rate
         "row_id": 141,
         "status_name": "Battle Voice",
         "target_type": "PartyWide",
-        "dhit_rate_up": 0.2
+        "cond_default": {
+            "dhit_rate_up": 0.2
+        }
     },
     {
         // Nature's Minne's 15sec +15% increased received healing buff
         "row_id": 1202,
         "status_name": "Nature's Minne",
         "target_type": "PartyMember",
-        "healing_up": 0.15
+        "cond_default": {
+            "healing_up": 0.15
+        }
     },
     {
         // Army Paeon's prolonged haste buff
         "row_id": 1932,
         "status_name": "Army's Muse",
         "target_type": "PartyWide",
-        "attack_speed_up": 0.12,
-        "cast_speed_up": 0.12,
-        "auto_speed_up": 0.12
+        "cond_default": {
+            "attack_speed_up": 0.12,
+            "cast_speed_up": 0.12,
+            "auto_speed_up": 0.12
+        }
     },
     {
         // Troubadour's partywide 15sec 10% mitigation buff
         "row_id": 1934,
         "status_name": "Troubadour",
         "target_type": "PartyWide",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // The Wanderer's Minuet's 2% crit hit chance increase
         "row_id": 2216,
         "status_name": "The Wanderer's Minuet",
         "target_type": "PartyWide",
-        "crit_rate_up": 0.02
+        "cond_default": {
+            "crit_rate_up": 0.02
+        }
     },
     {
         // Mage's Ballad's partywide 1% damage increase
         "row_id": 2217,
         "status_name": "Mage's Ballad",
         "target_type": "PartyWide",
-        "phys_up": 0.01,
-        "magi_up": 0.01
+        "cond_default": {
+            "phys_up": 0.01,
+            "magi_up": 0.01
+        }
     },
     {
         // Army's Paeon's 3% direct hit chance increase
         "row_id": 2218,
         "status_name": "Army's Paeon",
         "target_type": "PartyWide",
-        "dhit_rate_up": 0.03
+        "cond_default": {
+            "dhit_rate_up": 0.03
+        }
     },
     {
         // Radiant Finale. Assuming the player has 3 Codas as it's the optimal use of it: +6% increased damage for the party
         "row_id": 2722,
         "status_name": "Radiant Finale",
         "target_type": "PartyWide",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond_default": {
+            "phys_up": 0.06,
+            "magi_up": 0.06
+        }
     },
     {
         // Radiant Finale's dupe
         "row_id": 2964,
         "status_name": "Radiant Finale",
         "target_type": "PartyWide",
-        "phys_up": 0.06,
-        "magi_up": 0.06
+        "cond_default": {
+            "phys_up": 0.06,
+            "magi_up": 0.06
+        }
     }
 ]

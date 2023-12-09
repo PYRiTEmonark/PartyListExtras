@@ -4,14 +4,20 @@
         "row_id": 2703,
         "status_name": "Searing Light",
         "target_type": "PartyWide",
-        "phys_up": 0.03,
-        "magi_up": 0.03
+        "cond_default": {
+            "phys_up": 0.03,
+            "magi_up": 0.03
+        }
     },
     {
         // Radiant Aegis' 30-sec self-shield
         "row_id": 2702,
         "status_name": "Radiant Aegis",
         "target_type": "Self",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     }
 ]

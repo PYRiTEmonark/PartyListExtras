@@ -4,108 +4,158 @@
         "row_id": 2604,
         "status_name": "Kardia",
         "target_type": "PartyShared",
-        "special": "kardia"
+        "cond_default": {
+            "special": [
+                "kardia"
+            ]
+        }
     },
     {
         // Kardia's target buff
         "row_id": 2605,
         "status_name": "Kardion",
         "target_type": "PartyShared",
-        "special": "kardion"
+        "cond_default": {
+            "special": [
+                "kardion"
+            ]
+        }
     },
     {
         // Eukrasian Diagnosis applying a shield
         "row_id": 2607,
         "status_name": "Eukrasian Diagnosis",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Eukrasian Diagnosis applying the crit bonus shield
         "row_id": 2608,
         "status_name": "Differential Diagnosis",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Eukrasian Prognosis' party-wide shielding
         "row_id": 2609,
         "status_name": "Eukrasian Prognosis",
         "target_type": "PartyWide",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Zoe's healing potency increase
         "row_id": 2611,
         "status_name": "Zoe",
         "target_type": "Self",
-        "healing_pot": 0.5
+        "cond_default": {
+            "healing_pot": 0.5
+        }
     },
     {
         // Haima's shield buff
         "row_id": 2612,
         "status_name": "Haima",
         "target_type": "PartyMember",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Panhaima's shield buff
         "row_id": 2613,
         "status_name": "Panhaima",
         "target_type": "PartyWide",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     },
     {
         // Physis' party-wide regen
         "row_id": 2617,
         "status_name": "Physis",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Kerachole's party-wide 10% mitigation
         "row_id": 2618,
         "status_name": "Kerachole",
         "target_type": "PartyWide",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
-        // Taurochole's mono-target 10% mitigation
+        // Taurochole's single-target 10% mitigation
         "row_id": 2619,
         "status_name": "Taurochole",
         "target_type": "PartyMember",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Physis' party-wide regen + 10% increased received healing
         "row_id": 2620,
         "status_name": "Physis II",
         "target_type": "PartyWide",
-        "healing_up": 0.1,
-        "special": "regen"
+        "cond_default": {
+            "healing_up": 0.1,
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Krasis' 20% targeted increased received healing
         "row_id": 2622,
         "status_name": "Krasis",
         "target_type": "PartyMember",
-        "healing_up": 0.2
+        "cond_default": {
+            "healing_up": 0.2
+        }
     },
     {
         // Holos' 10% party-wide mitigation
         "row_id": 3003,
         "status_name": "Holos",
         "target_type": "PartyWide",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Holos' shield part
         "row_id": 3365,
         "status_name": "Holosakos",
         "target_type": "PartyWide",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     }
 ]

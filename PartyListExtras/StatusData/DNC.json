@@ -4,14 +4,22 @@
         "row_id": 1823,
         "status_name": "Closed Position",
         "target_type": "PartyShared",
-        "special": "dp_g"
+        "cond_default": {
+            "special": [
+                "dp_g"
+            ]
+        }
     },
     {
         // Closed Position's targeted buff
         "row_id": 1824,
         "status_name": "Dance Partner",
         "target_type": "PartyShared",
-        "special": "dp_r"
+        "cond_default": {
+            "special": [
+                "dp_r"
+            ]
+        }
     },
     {
         // Standard Finish's increased damage buff. Assuming that the DNC's always doing the 2 required steps, this is a +5% damage buff for the DNC and their partner.
@@ -19,52 +27,72 @@
         "row_id": 1821,
         "status_name": "Standard Finish",
         "target_type": "ConstPartyMember",
-        "phys_up": 0.05,
-        "magi_up": 0.05
+        "cond_default": {
+            "phys_up": 0.05,
+            "magi_up": 0.05
+        }
     },
     {
         // Technical Finish's increased damage buff. Assuming that the DNC's always doing the 4 required steps, this is a +5% damage buff for the entire party.
         "row_id": 1822,
         "status_name": "Technical Finish",
         "target_type": "PartyWide",
-        "phys_up": 0.05,
-        "magi_up": 0.05
+        "cond_default": {
+            "phys_up": 0.05,
+            "magi_up": 0.05
+        }
     },
     {
-        // Technical Finish's increased damage buff. Assuming that the DNC's always doing the 4 required steps, this is a +5% damage buff for the entire party.
+        // Devilment's Critical and Direct Hit Rate buff
         "row_id": 1825,
         "status_name": "Devilment",
         "target_type": "PartyMember",
-        "crit_rate_up": 0.2,
-        "dhit_rate_up": 0.2
+        "cond_default": {
+            "crit_rate_up": 0.2,
+            "dhit_rate_up": 0.2
+        }
     },
     {
         // Shield Samba's partywide 15sec 10% mitigation buff
         "row_id": 1826,
         "status_name": "Shield Samba",
         "target_type": "PartyWide",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Improvisation's regen
         "row_id": 1827,
         "status_name": "Improvisation",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Improvised Finish's regen
         "row_id": 2695,
         "status_name": "Improvisation",
         "target_type": "PartyWide",
-        "special": "regen"
+        "cond_default": {
+            "special": [
+                "regen"
+            ]
+        }
     },
     {
         // Improvised Finish's bonus shield
         "row_id": 2697,
         "status_name": "Improvised Finish",
         "target_type": "PartyWide",
-        "special": "barrier"
+        "cond_default": {
+            "special": [
+                "barrier"
+            ]
+        }
     }
 ]

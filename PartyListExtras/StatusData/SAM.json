@@ -4,22 +4,28 @@
         "row_id": 1232,
         "status_name": "Third Eye",
         "target_type": "Self",
-        "phys_mit": 0.1,
-        "magi_mit": 0.1
+        "cond_default": {
+            "phys_mit": 0.1,
+            "magi_mit": 0.1
+        }
     },
     {
         // Jinpu's self 13% damage-up
         "row_id": 1298,
         "status_name": "Fugetsu",
         "target_type": "ConstSelf",
-        "phys_up": 0.13,
-        "magi_up": 0.13
+        "cond_default": {
+            "phys_up": 0.13,
+            "magi_up": 0.13
+        }
     },
     {
         // Shifu's self 13% haste
         "row_id": 1299,
         "status_name": "Fuka",
         "target_type": "ConstSelf",
-        "attack_speed_up": 0.13
+        "cond_default": {
+            "attack_speed_up": 0.13
+        }
     }
 ]
