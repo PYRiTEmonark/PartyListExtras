@@ -33,6 +33,28 @@
         }
     },
     {
+        // Holmgang's invuln
+        "row_id": 409,
+        "status_name": "Holmgang",
+        "target_type": "Self",
+        "cond_default": {
+            "special": [
+                "invuln"
+            ]
+        }
+    },
+    {
+        // Holmgang's invuln
+        "row_id": 1304,
+        "status_name": "Holmgang",
+        "target_type": "Self",
+        "cond_default": {
+            "special": [
+                "invuln"
+            ]
+        }
+    },
+    {
         // Bloodwhetting's 8-sec self-10% mitigation
         "row_id": 2678,
         "status_name": "Bloodwhetting",
