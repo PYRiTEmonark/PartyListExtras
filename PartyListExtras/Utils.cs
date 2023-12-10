@@ -120,25 +120,28 @@ namespace PartyListExtras
             public static Role DPS = new Role
             {
                 id = 0,
-                jobs = [Job.BLM, Job.BRD, Job.DNC, Job.DRG, Job.MCH, Job.MNK, Job.NIN, Job.RDM, Job.RPR, Job.SAM, Job.SMN] };
+                jobs = new List<Job>() { Job.BLM, Job.BRD, Job.DNC, Job.DRG, Job.MCH, Job.MNK, Job.NIN, Job.RDM, Job.RPR, Job.SAM, Job.SMN }
+            };
             public static Role Tank = new Role
             {
                 id = 1,
-                jobs = [Job.DRK, Job.GNB, Job.PLD, Job.WAR]
+                jobs = new List<Job>() { Job.DRK, Job.GNB, Job.PLD, Job.WAR }
             };
             public static Role Healer = new Role
             {
                 id = 2,
-                jobs = [Job.AST, Job.SCH, Job.SGE, Job.WHM]
+                jobs = new List<Job>() { Job.AST, Job.SCH, Job.SGE, Job.WHM }
             };
             public static Role Melee = new Role
             {
                 id = 3,
-                jobs = [Job.DRG, Job.DRK, Job.GNB, Job.MNK, Job.NIN, Job.PLD, Job.RPR, Job.SAM, Job.WAR] };
+                jobs = new List<Job>() { Job.DRG, Job.DRK, Job.GNB, Job.MNK, Job.NIN, Job.PLD, Job.RPR, Job.SAM, Job.WAR }
+            };
             public static Role Ranged = new Role
             {
                 id = 4,
-                jobs = [Job.AST, Job.BLM, Job.BRD, Job.DNC, Job.MCH, Job.RDM, Job.SCH, Job.SGE, Job.SMN, Job.WHM] };
+                jobs = new List<Job>() { Job.AST, Job.BLM, Job.BRD, Job.DNC, Job.MCH, Job.RDM, Job.SCH, Job.SGE, Job.SMN, Job.WHM }
+            };
         }
 
         internal enum Combi { multi_sum, sum, max }

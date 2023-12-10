@@ -188,7 +188,7 @@ public class OverlayWindow : IDisposable
 
         var special_fstrings = plugin.Configuration.iconConfig.SpecialIcons;
         // For each special effect...
-        foreach (var sfx in applied.special ?? []) {
+        foreach (var sfx in applied.special ?? new List<BoolEffect>()) {
             // ...If the special effect is in the special_fstrings list...
             if (special_fstrings.ContainsKey(sfx) && !plugin.Configuration.iconConfig.hiddenSpecialEffects.Contains(sfx))
             {
