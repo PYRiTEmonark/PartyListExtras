@@ -1,5 +1,7 @@
+using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Command;
+using Dalamud.Hooking;
 using Dalamud.Interface.Internal;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
@@ -15,27 +17,32 @@ using System.Linq;
 
 namespace PartyListExtras
 {
-    // number to update so the DLL actually changes: 10
+    // number to update so the DLL actually changes: 11
     public sealed class Plugin : IDalamudPlugin
     {
         public string Name => "PartyListExtras";
         private const string CommandName = "/plx";
 
-        private DalamudPluginInterface PluginInterface { get; init; }
-        private ICommandManager CommandManager { get; init; }
+        internal DalamudPluginInterface PluginInterface { get; init; }
         public Configuration Configuration { get; init; }
         public WindowSystem WindowSystem = new("PartyListExtras");
+
+        private ICommandManager CommandManager { get; init; }
         public IGameGui GameGui { get; init; }
         public IChatGui ChatGui { get; init; }
         public IClientState ClientState { get; init; }
         public IObjectTable ObjectTable { get; init; }
+        public IFlyTextGui FlyTextGui { get; init; }
         public IPartyList PartyList { get; init; }
         public ICondition Condition { get; init; }
         public IPluginLog log { get; init; }
+        public IGameInteropProvider Hooks { get; init; }
+        public ISigScanner SigScanner { get; init; }
 
 
-        private ConfigWindow ConfigWindow { get; init; }
-        private OverlayWindow OverlayWindow { get; init; }
+        internal ConfigWindow ConfigWindow { get; init; }
+        internal OverlayWindow OverlayWindow { get; init; }
+        internal FlyText flytext { get; init; }
         internal Dictionary<string, IDalamudTextureWrap > textures = new Dictionary<string, IDalamudTextureWrap>();
         internal Dictionary<int, StatusEffectData> statusEffectData = new Dictionary<int, StatusEffectData>();
 
@@ -48,7 +55,11 @@ namespace PartyListExtras
             [RequiredVersion("1.0")] IObjectTable objectTable,
             [RequiredVersion("1.0")] IPartyList partyList,
             [RequiredVersion("1.0")] ICondition condition,
-            [RequiredVersion("1.0")] IPluginLog pluginLog)
+            [RequiredVersion("1.0")] IPluginLog pluginLog,
+            [RequiredVersion("1.0")] IFlyTextGui flyTextGui,
+            [RequiredVersion("1.0")] IGameInteropProvider hooks,
+            [RequiredVersion("1.0")] ISigScanner sigScanner)
+
         {
             this.PluginInterface = pluginInterface;
             this.CommandManager = commandManager;
@@ -58,8 +69,13 @@ namespace PartyListExtras
             this.PartyList = partyList;
             this.Condition = condition;
             this.ObjectTable = objectTable;
+            this.FlyTextGui = flyTextGui;
             this.log = pluginLog;
+            this.Hooks = hooks;
+            this.SigScanner = sigScanner;
 
+
+            // Set up configuration
             try
             {
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
@@ -77,6 +93,7 @@ namespace PartyListExtras
 
             this.Configuration.Initialize(this.PluginInterface);
 
+            // Set up windows
             ConfigWindow = new ConfigWindow(this);
             OverlayWindow = new OverlayWindow(this);
 
@@ -92,6 +109,9 @@ namespace PartyListExtras
             {
                 this.ConfigWindow.IsOpen = true;
             }
+
+            // Register fly text listener
+            flytext = new FlyText(this);
 
             // DO THIS LAST
             // otherwise if there's an error the command gets registered
@@ -109,6 +129,8 @@ namespace PartyListExtras
             OverlayWindow.Dispose();
 
             this.CommandManager.RemoveHandler(CommandName);
+
+            flytext.Dispose();
         }
 
         private void OnCommand(string command, string args)

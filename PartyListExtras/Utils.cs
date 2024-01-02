@@ -1,3 +1,8 @@
+using Dalamud.Game.ClientState.Objects.SubKinds;
+using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.ClientState.Statuses;
+using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
@@ -169,5 +174,48 @@ namespace PartyListExtras
         { FloatEffect.healing_pot, Combi.multi_sum }
         };
         
+        /// <summary>
+        /// Gets the battle character of any party member.
+        /// this should exclude any chocobos, fairies, etc.
+        /// </summary>
+        /// <param name="inp">The GameObject to check</param>
+        /// <param name="outp">The corresponding BattleChara if true</param>
+        /// <returns>True if outp contains a value</returns>
+        internal static bool TryGetPartyMemberBattleChara(GameObject? inp, out BattleChara? outp)
+        {
+            outp = null;
+            if (inp == null) return false;
+
+            if (inp?.GetType() == typeof(PlayerCharacter))
+            {
+                outp = (BattleChara)inp;
+            }
+            else if (inp?.GetType() == typeof(BattleNpc))
+            {
+                outp = (BattleChara)inp;
+            }
+            else
+            {
+                return false;
+            };
+
+            return true;
+        }
+
+        internal unsafe static bool IsCharaInParty(BattleChara? inp)
+        {
+            if (inp is null) return false;
+
+            List<uint> partymemberids = new List<uint>();
+            AgentHUD* pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
+            var partyMemberList = (HudPartyMember*)pl->PartyMemberList;
+            for (int i = 0; i < pl->PartyMemberCount; i++)
+            {
+                partymemberids.Add(partyMemberList[i].ObjectId);
+            }
+
+            return partymemberids.Contains(inp.ObjectId);
+        }
+
     }
 }

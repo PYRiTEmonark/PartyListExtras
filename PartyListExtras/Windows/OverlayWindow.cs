@@ -30,6 +30,7 @@ public class OverlayWindow : IDisposable
     // Used to ensure we don't duplicate the debug status info message
     public List<Tuple<string, string>> missing_ids = new List<Tuple<string, string>>();
 
+    // Size and position of overlay
     public Vector2 Size;
     public Vector2 Position;
 
@@ -82,33 +83,20 @@ public class OverlayWindow : IDisposable
         for (var i = 0; i < count; i++)
         {
             // Pull the status list of the party member
-            PlayerCharacter pc; BattleNpc bc; BattleChara battleChara;
+            BattleChara? battleChara;
             StatusList sl;
             var result = plugin.ObjectTable.SearchById(partyMemberList[i].ObjectId);
-            if (result?.GetType() == typeof(PlayerCharacter))
-            {
-                pc = (PlayerCharacter)result;
-                battleChara = (BattleChara)result;
-                sl = pc.StatusList;
-            }
-            else if (result?.GetType() == typeof(BattleNpc))
-            {
-                bc = (BattleNpc)result;
-                battleChara = (BattleChara)result;
-                sl = bc.StatusList;
-            }
-            else
-            {
-                //if (result == null) PluginLog.Warning("Party List member null");
-                //else PluginLog.Warning("Unexpected member of party list: {0}", result.GetType().ToString());
+            if (!TryGetPartyMemberBattleChara(result, out battleChara))
                 continue;
-            };
+
+            sl = battleChara!.StatusList;
 
             // Get ResNode of the JobIcon - everything is drawn relative to the job icon
             var icon = apl->PartyMember[i].ClassJobIcon;
             if (icon == null) { continue; }
             var node = icon->AtkResNode;
-            // TODO: allow repositioning and resizing of the UI element
+
+            // Final position and size
             var curpos = new Vector2(
                 node.ScreenX - ((plugin.Configuration.OverlayWidth * scaling) + plugin.Configuration.OverlayOffsetX),
                 node.ScreenY + plugin.Configuration.OverlayOffsetY);
@@ -124,32 +112,45 @@ public class OverlayWindow : IDisposable
                 targetJob = job,
             };
 
+            List<uint> statusIds = sl.ToList().Select(x => x.StatusId).ToList();
+            uint charaid = battleChara.ObjectId;
+
+            var applied = ParseStatusList(sl, cvars);
+            var statusIcons = GetStatusIcons(applied);
+
             //Spin out to helper functions because long
-            DrawStatusIcons(ParseStatusList(sl, cvars), "party_{0}".Format(i), curpos, cursize);
+            DrawStatusIcons(statusIcons, "party_{0}".Format(i), curpos, cursize);
         }
 
         ImGui.End();
     }
 
-    /// <summary>
-    /// Turns a dalamud StatusList object into StatusIcons for easy rendering
-    /// </summary>
-    /// <param name="sl">The status list as found in a BattleChara object</param>
-    /// <returns>A list of parsed status icons</returns>
-    private List<StatusIcon> ParseStatusList(StatusList sl, CondVars cvars)
-    {
-        var output = new List<StatusIcon>();
+    // TODO: Condvars is really a hack. Will fall apart v quick.
 
+    /// <summary>
+    /// Parses a Statuslist object and turns it into the applied effects
+    /// CondVars are used to calculate the actual values
+    /// The plugin configuration is used to filter out some effects
+    /// </summary>
+    /// <param name="sl"></param>
+    /// <param name="cvars"></param>
+    /// <returns></returns>
+    internal AppliedEffects ParseStatusList(StatusList sl, CondVars cvars)
+    {
         var debug = new List<Tuple<string, string>>();
 
         List<StatusEffectData> sed = new List<StatusEffectData>();
 
         // Gather up status data
-        foreach (var status in sl) {
+        foreach (var status in sl)
+        {
             if (status == null) continue;
-            if (plugin.statusEffectData.ContainsKey((int)status.GameData.RowId)) {
+            if (plugin.statusEffectData.ContainsKey((int)status.GameData.RowId))
+            {
                 sed.Add(plugin.statusEffectData[(int)status.GameData.RowId]);
-            } else {
+            }
+            else
+            {
                 debug.Add(new Tuple<string, string>(status.GameData.Name.ToString(), status.GameData.RowId.ToString()));
             }
         }
@@ -180,11 +181,23 @@ public class OverlayWindow : IDisposable
         if (!plugin.Configuration.showEssenceSelfs)
             sed = sed.Where(x => x.target_type != TargetType.EssenceSelf).ToList();
 
-        AppliedEffects applied;
+        // Combine and return a single
         if (sed.Count > 0)
-            applied = sed.Select(x => x.Compute(cvars)).Aggregate((a, b) => a.Combine(b));
+            return sed.Select(x => x.Compute(cvars)).Aggregate((a, b) => a.Combine(b));
         else
-            return new List<StatusIcon>();
+            return new AppliedEffects();
+    }
+
+    /// <summary>
+    /// Turns an appliedeffects object into StatusIcons for easy rendering
+    /// Uses the plugin configuration to filter some effects and change render outputs
+    /// </summary>
+    /// <param name="sl">The status list as found in a BattleChara object</param>
+    /// <param name="cvars">Condvars object corresponding to information about that player</param>
+    /// <returns>A list of parsed status icons</returns>
+    private List<StatusIcon> GetStatusIcons(AppliedEffects applied)
+    {
+        var output = new List<StatusIcon>();
 
         var special_fstrings = plugin.Configuration.iconConfig.SpecialIcons;
         // For each special effect...
@@ -233,24 +246,14 @@ public class OverlayWindow : IDisposable
 
         if (plugin.Configuration.iconConfig.showSpeedUps)
         {
-            // Attack Speed
-            if (plugin.Configuration.iconConfig.stackSpeedUps)
-            {
-                // this only takes the maximum
-                List<float?> spdups = new List<float?>();
-                foreach (StatusEffectData data in sed) {
-                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.attack_speed_up));
-                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.ability_cast_speed_up));
-                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.cast_speed_up));
-                    spdups.Add(applied.GetEffectOrDefault(FloatEffect.auto_speed_up));
-                }
-                var speed_up = spdups.Max();
+            if (plugin.Configuration.iconConfig.stackSpeedUps) {
+                var speed_up = applied.GetEffectOrDefault(FloatEffect.cast_speed_up);
                 if (speed_up > 0)
                     output.Add(new StatusIcon { FileName = "attack_speed_up.png", Value = speed_up, Label = "Speed Up" });
             }
             else
             {
-                var attack_speed_up = Utils.multi_sum(
+                var attack_speed_up = multi_sum(
                     applied.GetEffectOrDefault(FloatEffect.attack_speed_up),
                     applied.GetEffectOrDefault(FloatEffect.ability_cast_speed_up));
                 var cast_speed_up = applied.GetEffectOrDefault(FloatEffect.cast_speed_up);
@@ -331,13 +334,15 @@ public class OverlayWindow : IDisposable
         return output;
     }
 
+    // Solid colour background
     private void DrawOverlayBackground(Vector2 position, Vector2 size)
     {
         // Draw Single Colour Background
         var singlecol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorSingle);
         ImGui.GetBackgroundDrawList().AddRectFilled(position, (position + size), singlecol);
     }
-
+    
+    // Gradient background
     private void DrawOverlayBackgroundGradient(Vector2 position, Vector2 size)
     {
         // Draw Gradient Background
@@ -345,7 +350,6 @@ public class OverlayWindow : IDisposable
         var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
         ImGui.GetBackgroundDrawList().AddRectFilledMultiColor(position, (position + size), leftcol, rightcol, rightcol, leftcol);
     }
-
 
     // Draw Advanced background imitating the native UI
     // Abandoned due to ImGui Weirdness
@@ -453,37 +457,5 @@ public class OverlayWindow : IDisposable
         }
 
         //ImGui.EndChild();
-    }
-
-    internal bool one_true(IEnumerable<bool?> values)
-    {
-        // filter out null values then aggregate using or
-        return values.Where(x => x != null).Aggregate(false, (a, b) => a || b!.Value);
-    }
-
-    internal float sum(IEnumerable<float?> values)
-    {
-        // filter out null values then sum
-        float x = values.Where(x => x != null).Sum() ?? 0;
-        return to_percent(x);
-    }
-
-    internal float max(IEnumerable<float?> values)
-    {
-        // filter out null values then sum
-        float x = values.Where(x => x != null).Max() ?? 0;
-        return to_percent(x);
-    }
-
-    internal float multi_sum(IEnumerable<float?> values)
-    {
-        // filter out null values then do the multiplicative application
-        var x = values.Where(x => x != null).Select(x => 1 - x).Aggregate(1f, (a, b) => a * b!.Value);
-        return to_percent(1f - x);
-    }
-
-    internal int to_percent(float value)
-    {
-        return (int)Math.Round(value * 100, 0);
     }
 }
