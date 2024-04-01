@@ -1,12 +1,14 @@
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
+using Dalamud.Logging;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -104,6 +106,16 @@ namespace PartyListExtras
             float c = a ?? 0;
             float d = b ?? 0;
             return 1 - ((1 - c) * (1 - d));
+        }
+
+        /// <summary>
+        /// Turns a float into a formatting string
+        /// </summary>
+        /// <param name="a"></param>
+        /// <returns></returns>
+        internal static string to_percent(float a)
+        {
+            return Math.Round((decimal)(a! * 100), 0).ToString() + "%";
         }
 
         // Standin instead of e.g. Lumina data
@@ -217,5 +229,35 @@ namespace PartyListExtras
             return partymemberids.Contains(inp.ObjectId);
         }
 
+    }
+
+    public class EnumStringAttribute : Attribute
+    {
+        string enumString;
+
+        /// <summary>
+        /// Use with EnumStringAttribute.EnumToString() to give readable names to Enums
+        /// </summary>
+        /// <param name="enumString">String returned by EnumStringAttribute.EnumToString()</param>
+        public EnumStringAttribute(string enumString)
+        {
+            this.enumString = enumString;
+        }
+
+        public static string EnumToString<T>(T inp) {
+            if (inp is null) return "null";
+            
+            Type type = inp.GetType();
+            if (!type.IsEnum) throw new ArgumentException("inp must be an enum member");
+            
+            string defaultstring = inp.ToString() ?? "";
+
+            var enummember = typeof(T).GetMember(defaultstring);
+            if (enummember == null || enummember.Length == 0) return defaultstring;
+
+            var x = enummember[0].GetCustomAttribute<EnumStringAttribute>(false);
+            if (x != null)  return x.enumString;
+            else return defaultstring;
+        }
     }
 }

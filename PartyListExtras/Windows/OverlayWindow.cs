@@ -119,7 +119,7 @@ public class OverlayWindow : IDisposable
             var statusIcons = GetStatusIcons(applied);
 
             //Spin out to helper functions because long
-            DrawStatusIcons(statusIcons, "party_{0}".Format(i), curpos, cursize);
+            DrawStatusIcons(statusIcons, string.Format("party_{0}", i.ToString()), curpos, cursize);
         }
 
         ImGui.End();
@@ -161,7 +161,7 @@ public class OverlayWindow : IDisposable
         {
             if (!missing_ids.Contains(item))
             {
-                debugMessage += "{0} = {1}; ".Format(item.Item1, item.Item2);
+                debugMessage += string.Format("{0} = {1}; ", item.Item1, item.Item2);
                 missing_ids.Add(item);
             }
         }
@@ -395,7 +395,7 @@ public class OverlayWindow : IDisposable
     /// <param name="windowId">unique number to prevent overlapping windows</param>
     /// <param name="position">position of the subwindow</param>
     /// <param name="size">size of the subwindow</param>
-    private void DrawStatusIcons(List<StatusIcon> icons, string windowId, Vector2 position, Vector2 size)
+    private void DrawStatusIcons(List<StatusIcon> icons, string windowId, Vector2 position, Vector2 size, bool RTL = true)
     {
         // Start child window to make the cursor work "nicer"
         //ImGui.BeginChild("PLX_StatusIconList_{0}".Format(windowId), size);
@@ -432,7 +432,7 @@ public class OverlayWindow : IDisposable
             // the label e.g. damage up
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Value == null)))
             {
-                cursor += new Vector2(
+                if (RTL) cursor += new Vector2(
                     -(1f * ImGui.CalcTextSize(icon.Label).X) + (-paddingX * scaling),
                     0
                 );
@@ -440,7 +440,7 @@ public class OverlayWindow : IDisposable
             }
 
             // The icon itself
-            cursor += new Vector2(
+            if (RTL) cursor += new Vector2(
                 -(1f * imgsize) - paddingX,
                 0
             );
@@ -448,7 +448,7 @@ public class OverlayWindow : IDisposable
 
             // Info, e.g. mit percent
             if (icon.Value != null && dm != 3) {
-                cursor += new Vector2(
+                if (RTL) cursor += new Vector2(
                     -(1f * ImGui.CalcTextSize(icon.ValueStr()).X * scaling) - paddingX,
                     0
                 );

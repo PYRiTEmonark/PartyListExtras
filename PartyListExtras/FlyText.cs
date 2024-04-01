@@ -52,8 +52,15 @@ namespace PartyListExtras
             addToScreenLogHook?.Dispose();
         }
 
-
-        static List<FlyTextKind> DamageKinds = new List<FlyTextKind>() { FlyTextKind.Damage, FlyTextKind.DamageDh, FlyTextKind.DamageCrit, FlyTextKind.DamageCritDh };
+        static List<FlyTextKind> DamageKinds = new List<FlyTextKind>() {
+            FlyTextKind.Damage, FlyTextKind.DamageDh, FlyTextKind.DamageCrit, FlyTextKind.DamageCritDh,
+        };
+        static List<FlyTextKind> AutoKinds = new List<FlyTextKind>() {
+            FlyTextKind.AutoAttackOrDot, FlyTextKind.AutoAttackOrDotDh, FlyTextKind.AutoAttackOrDotCrit, FlyTextKind.AutoAttackOrDotCritDh
+        };
+        static List<FlyTextKind> HealingKinds = new List<FlyTextKind>() {
+            FlyTextKind.Healing, FlyTextKind.HealingCrit
+        };
 
         private unsafe void AddToScreenLogDetour(
             Character* target,
@@ -70,7 +77,8 @@ namespace PartyListExtras
             addToScreenLogHook?.Original(target, source, kind, option, actionKind, actionId, val1, val2, serverAttackType, val4);
             try
             {
-                PluginLog.Log("AddToScreenLog ftk: {0} vals: {1} {2}", kind, val1, val2);
+
+                if (!plugin.Configuration.enableFloatText) return;
 
                 // This feels safer. (vibes based programming)
                 var _source = plugin.ObjectTable.SearchById(source->GameObject.ObjectID);
@@ -105,10 +113,17 @@ namespace PartyListExtras
                     statusType = FlyTextStatusType.DamageUp;
                 }
                 // Damage and target in party -> Mitigation
-                else if (DamageKinds.Contains(kind) && IsCharaInParty(bctarget))
+                else if ((DamageKinds.Contains(kind) || AutoKinds.Contains(kind)) && IsCharaInParty(bctarget))
                 {
-                    tagValue =  sourceEffects.GetEffectOrDefault(FloatEffect.phys_mit);
+                    tagValue = targetEffects.GetEffectOrDefault(FloatEffect.phys_mit);
                     statusType = FlyTextStatusType.Mitigation;
+                }
+                // Healing and both in party -> healing
+                else if (HealingKinds.Contains(kind) && IsCharaInParty(bctarget) && IsCharaInParty(bcsource))
+                {
+                    tagValue = sourceEffects.GetEffectOrDefault(FloatEffect.healing_pot);
+                    tagValue = multi_sum(tagValue, sourceEffects.GetEffectOrDefault(FloatEffect.healing_up));
+                    statusType = FlyTextStatusType.HealingUp;
                 }
 
                 matcher.AddData(statusType, tagValue, kind, val1, val2);
@@ -117,22 +132,24 @@ namespace PartyListExtras
             {
                 plugin.log.Warning(ex.ToString());
             }
-
         }
 
         internal void onFlyText(ref FlyTextKind kind, ref int val1, ref int val2, ref SeString text1, ref SeString text2, ref uint color, ref uint icon, ref uint damageTypeIcon, ref float yOffset, ref bool handled)
         {
-            PluginLog.Log("onFlyText ftk: {0} vals: {1} {2}, icon: {3}", kind, val1, val2, icon);
-
             if (matcher.MatchAndPop(out FlyTextStatusType? _statusType, out float? _tagValue, kind, val1, val2)) {
-                plugin.log.Info("Matched status");
 
-                SeString icontext = new SeStringBuilder()
-                    .Append(text2)
-                    .AddText("{0} {1}".Format(_statusType!, _tagValue!))
-                    .Build();
+                if (_tagValue!.Value > 0)
+                {
+                    string tagValue = to_percent(_tagValue!.Value);
+                    string statusType = EnumStringAttribute.EnumToString(_statusType!.Value);
 
-                text2 = icontext;
+                    SeString icontext = new SeStringBuilder()
+                        .Append(text2)
+                        .AddText(string.Format("{0} {1}", statusType, tagValue))
+                        .Build();
+
+                    text2 = icontext;
+                }
 
             } else {
                 plugin.log.Warning("Couldn't match float text");
@@ -187,12 +204,20 @@ namespace PartyListExtras
         internal enum FlyTextStatusType
         {
             None,
+            [EnumString("Damage Up")]
             DamageUp,
+            [EnumString("Magic Damage Up")]
             MagiDamageUp,
+            [EnumString("Physical Damage Up")]
             PhysDamageUp,
+            [EnumString("Mitigation")]
             Mitigation,
+            [EnumString("Magic Mitigation")]
             MagiMitigation,
-            PhysMitigation
+            [EnumString("Physical Mitigation")]
+            PhysMitigation,
+            [EnumString("Healing Up")]
+            HealingUp
         }
 
     }

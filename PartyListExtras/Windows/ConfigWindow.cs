@@ -34,8 +34,13 @@ public class ConfigWindow : Window, IDisposable
     {
         // Enabled
         bool enable = configuration.EnableOverlay;
-        if (ImGui.Checkbox("Enable", ref enable))
+        if (ImGui.Checkbox("Enable Overlay", ref enable))
             configuration.EnableOverlay = enable;
+
+        bool enablefloat = configuration.enableFloatText;
+        if (ImGui.Checkbox("Enable Float Text", ref enablefloat))
+            configuration.enableFloatText = enablefloat;
+
 
         bool hic = configuration.hideOutOfCombat;
         if (ImGui.Checkbox("Hide when not in combat", ref hic))
