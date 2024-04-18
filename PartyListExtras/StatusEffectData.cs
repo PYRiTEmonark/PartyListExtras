@@ -23,8 +23,13 @@ namespace PartyListExtras
         [JsonConverter(typeof(StringEnumConverter))]
         public TargetType target_type { get; set; }
 
+        // Conditionals - see Conditoinal struct for details
         public List<Conditional> cond { get; set; }
+
+        // always applied no matter what
         public AppliedEffects cond_default { get; set; }
+
+        // applied if none of the conditions are met. unspecified behaviour if there are not conds.
         public AppliedEffects cond_else { get; set; }
 
         public AppliedEffects Compute(CondVars condvars)
@@ -66,11 +71,11 @@ namespace PartyListExtras
             if (targetJob is not null)
                 matched &= targetJob == other.targetJob;
 
-            if (targetRole is not null)
-                matched &= targetRole.jobs.Contains(other.targetJob);
+            if (targetRole is not null && other.targetJob.HasValue)
+                matched &= targetRole.jobs.Contains(other.targetJob.Value);
 
             return matched;
-            
+
         }
 
         public AppliedEffects then { get; set; }
@@ -93,8 +98,8 @@ namespace PartyListExtras
             return true;
         }
 
-        public int targetLevel { get; set; }
-        public Job targetJob { get; set; }
+        public int? targetLevel { get; set; }
+        public Job? targetJob { get; set; }
     }
 
     public struct AppliedEffects
@@ -127,7 +132,7 @@ namespace PartyListExtras
                 if (!t_stn.TryGetValue(k, out a)) a = 0;
                 if (!o_stn.TryGetValue(k, out b)) b = 0;
 
-                switch (statusCombinators[k])
+                switch (statusCombinators.GetValueOrDefault(k, Combi.multi_sum))
                 {
                     case Utils.Combi.sum:
                         out_stn[k] = a + b; break;

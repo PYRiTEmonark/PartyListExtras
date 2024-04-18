@@ -9,6 +9,7 @@ using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Logging;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Client.System.Input;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -25,7 +26,8 @@ public class OverlayWindow : IDisposable
     private Plugin plugin;
 
     // Scales all drawn things
-    public float scaling;
+    public float partylistscaling;
+    public float enemylistscaling;
 
     // Used to ensure we don't duplicate the debug status info message
     public List<Tuple<string, string>> missing_ids = new List<Tuple<string, string>>();
@@ -53,19 +55,48 @@ public class OverlayWindow : IDisposable
             );
         ImGui.SetWindowPos(this.Position);
 
-        // If any of this goes wrong we just skip drawing the window
+        // Party info for getting battlecharas
         HudPartyMember* partyMemberList;
-        short count;
+        short partycount;
+
+        // Enemy info
+        int enemycount;
+        List<uint> enemyIds = new List<uint>();
+
+        // the ATK lists
         AddonPartyList* apl;
+        AddonEnemyList* ael;
+
+        // Used to position our UI
         AtkResNode apl_node;
+        AtkResNode ael_node;
+
+        // If any of this goes wrong we just skip drawing the window
         try
         {
+            // PARTY INFO
             AgentHUD* pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
             partyMemberList = (HudPartyMember*)pl->PartyMemberList;
-            count = pl->PartyMemberCount;
+            partycount = pl->PartyMemberCount;
+
+            // PARTY LIST ATK
             apl = (AddonPartyList*)plugin.GameGui.GetAddonByName("_PartyList");
-            this.scaling = apl->AtkUnitBase.Scale;
+            this.partylistscaling = apl->AtkUnitBase.Scale;
             apl_node = apl->BackgroundNineGridNode->AtkResNode;
+
+            // ENEMY INFO
+            var numArray = Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->
+                AtkModule.AtkArrayDataHolder.NumberArrays[21];
+
+            // dummied to single enemy
+            var enemyObjectId = numArray->IntArray[8 + (0 * 5)];
+            enemyIds.Add((uint)enemyObjectId);
+            enemycount = 1;
+
+            // ENEMY LIST ATK
+            ael = (AddonEnemyList*)plugin.GameGui.GetAddonByName("_EnemyList");
+            this.enemylistscaling = ael->AtkUnitBase.Scale;
+            ael_node = apl->BackgroundNineGridNode->AtkResNode;
         }
         catch (NullReferenceException e) {
             plugin.log.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
@@ -80,7 +111,7 @@ public class OverlayWindow : IDisposable
         this.Size = ImGui.GetMainViewport().Size;
 
         // For each player in the party...
-        for (var i = 0; i < count; i++)
+        for (var i = 0; i < partycount; i++)
         {
             // Pull the status list of the party member
             BattleChara? battleChara;
@@ -98,9 +129,9 @@ public class OverlayWindow : IDisposable
 
             // Final position and size
             var curpos = new Vector2(
-                node.ScreenX - ((plugin.Configuration.OverlayWidth * scaling) + plugin.Configuration.OverlayOffsetX),
+                node.ScreenX - ((plugin.Configuration.OverlayWidth * partylistscaling) + plugin.Configuration.OverlayOffsetX),
                 node.ScreenY + plugin.Configuration.OverlayOffsetY);
-            var cursize = new Vector2(plugin.Configuration.OverlayWidth * scaling, node.Height * scaling);
+            var cursize = new Vector2(plugin.Configuration.OverlayWidth * partylistscaling, node.Height * partylistscaling);
 
             // Variables for checking status effects
             var tla = battleChara.ClassJob.GameData!.Abbreviation.ToString();
@@ -120,6 +151,44 @@ public class OverlayWindow : IDisposable
 
             //Spin out to helper functions because long
             DrawStatusIcons(statusIcons, string.Format("party_{0}", i.ToString()), curpos, cursize);
+        }
+
+        // For each known enemy...
+        for (int i = 0; i < enemycount; i++)
+        {
+            // Pull the status list of the party member
+            BattleChara? battleChara;
+            StatusList sl;
+            var result = plugin.ObjectTable.SearchById(enemyIds[i]);
+            if (!TryGetPartyMemberBattleChara(result, out battleChara))
+            {
+                plugin.log.Warning("can't find object {0}", enemyIds[i]);
+                continue;
+            }
+
+            sl = battleChara!.StatusList;
+
+            plugin.log.Warning("{0} a", sl.FirstOrDefault());
+
+            // As with the party list position stuff would go here
+            var curpos = new Vector2(10, 10);
+            var cursize = new Vector2(100, 20);
+
+            CondVars cvars = new CondVars()
+            {
+                targetLevel = null,
+                targetJob = null,
+            };
+
+            List<uint> statusIds = sl.ToList().Select(x => x.StatusId).ToList();
+            uint charaid = battleChara.ObjectId;
+
+            var applied = ParseStatusList(sl, cvars);
+            plugin.log.Warning("{0}", applied.special ?? new List<BoolEffect>());
+            var statusIcons = GetStatusIcons(applied);
+
+            //Spin out to helper functions because long
+            DrawStatusIcons(statusIcons, string.Format("enemy_{0}", i.ToString()), curpos, cursize, RTL: false);
         }
 
         ImGui.End();
@@ -343,12 +412,14 @@ public class OverlayWindow : IDisposable
     }
     
     // Gradient background
-    private void DrawOverlayBackgroundGradient(Vector2 position, Vector2 size)
+    private void DrawOverlayBackgroundGradient(Vector2 position, Vector2 size, bool RTL)
     {
         // Draw Gradient Background
         var leftcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorLeft);
         var rightcol = ImGui.ColorConvertFloat4ToU32(plugin.Configuration.colorRight);
-        ImGui.GetBackgroundDrawList().AddRectFilledMultiColor(position, (position + size), leftcol, rightcol, rightcol, leftcol);
+        
+        if (RTL) ImGui.GetBackgroundDrawList().AddRectFilledMultiColor(position, (position + size), leftcol, rightcol, rightcol, leftcol);
+        else ImGui.GetBackgroundDrawList().AddRectFilledMultiColor(position, (position + size), rightcol, leftcol, leftcol, rightcol);
     }
 
     // Draw Advanced background imitating the native UI
@@ -403,8 +474,9 @@ public class OverlayWindow : IDisposable
 
         var width = size.X;
         var paddingX = plugin.Configuration.OverlayPaddingX;
+        if (RTL) paddingX = -paddingX; // Invert padding so we pad to the left
         var paddingY = plugin.Configuration.OverlayPaddingY;
-        var cursor = position + new Vector2(width, paddingY);
+        var cursor = position + new Vector2(RTL ? width : 0, paddingY);
 
         // shorten the display mode
         var dm = plugin.Configuration.DisplayMode;
@@ -417,7 +489,7 @@ public class OverlayWindow : IDisposable
         // Draw Background
         if (plugin.Configuration.doGradientBackground)
         {
-            DrawOverlayBackgroundGradient(position, size);
+            DrawOverlayBackgroundGradient(position, size, RTL);
         }
         else
         {
@@ -432,24 +504,24 @@ public class OverlayWindow : IDisposable
             // the label e.g. damage up
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Value == null)))
             {
-                if (RTL) cursor += new Vector2(
-                    -(1f * ImGui.CalcTextSize(icon.Label).X) + (-paddingX * scaling),
+                cursor += new Vector2(
+                    (RTL ? -1 : 1) * ((1f * ImGui.CalcTextSize(icon.Label).X) + (paddingX * partylistscaling)),
                     0
                 );
                 drawlist.AddText(cursor, white, icon.Label);
             }
 
             // The icon itself
-            if (RTL) cursor += new Vector2(
-                -(1f * imgsize) - paddingX,
+            cursor += new Vector2(
+                (RTL ? -1 : 1) * ((1f * imgsize) + paddingX),
                 0
             );
             drawlist.AddImage(plugin.textures[icon.FileName].ImGuiHandle, cursor, cursor + new Vector2(imgsize, imgsize));
 
             // Info, e.g. mit percent
             if (icon.Value != null && dm != 3) {
-                if (RTL) cursor += new Vector2(
-                    -(1f * ImGui.CalcTextSize(icon.ValueStr()).X * scaling) - paddingX,
+                cursor += new Vector2(
+                    (RTL ? -1 : 1) * ((1f * ImGui.CalcTextSize(icon.ValueStr()).X * partylistscaling) + paddingX),
                     0
                 );
                 drawlist.AddText(cursor, white, icon.ValueStr());

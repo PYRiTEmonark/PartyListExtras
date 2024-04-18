@@ -29,7 +29,8 @@ namespace PartyListExtras
             ConstPartyMember, // Can/Should always be up and granted to self or targeted party member e.g. Some StQ lost actions
             PartyShared, // e.g. DNC's Dance Partner
             PartyWide, // Granted to all party members e.g. GNB's Heart of Light or DRG's Battle Litany
-            PartyAoE // Granted by standing in an AoE e.g. BLM's Ley Lines
+            PartyAoE, // Granted by standing in an AoE e.g. BLM's Ley Lines
+            Enemy // Effect is given by a party member to an enemy
         }
 
         public enum FloatEffect
@@ -57,6 +58,10 @@ namespace PartyListExtras
             max_mp_up,
             healing_up,
             healing_pot,
+            // Enemy Effects
+            vuln_up,
+            phys_dn,
+            magi_dn
         }
 
 
@@ -183,7 +188,9 @@ namespace PartyListExtras
         { FloatEffect.evade_up, Combi.multi_sum },
         { FloatEffect.max_mp_up, Combi.sum },
         { FloatEffect.healing_up, Combi.multi_sum },
-        { FloatEffect.healing_pot, Combi.multi_sum }
+        { FloatEffect.healing_pot, Combi.multi_sum },
+        { FloatEffect.vuln_up, Combi.multi_sum }
+
         };
         
         /// <summary>

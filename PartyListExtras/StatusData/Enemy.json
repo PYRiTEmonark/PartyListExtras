@@ -1,0 +1,25 @@
+[
+    // Effects for enemies
+    {
+        // Vulnrability up as used by NIN
+        "row_id": 638,
+        "status_name": "Vulnrability Up",
+        "target_type": "Self",
+        "cond_default": {
+            "phys_up": 0.05,
+            "special": [ "regen" ]
+        }
+    },
+
+    {
+        // Melee DPS feint
+        "row_id": 1195,
+        "status_name": "Feint",
+        "target_type": "Self",
+        "cond_default": {
+            "phys_up": 0.10,
+            "magi_dn": 0.05,
+            "special": [ "regen" ]
+        }
+    }
+]

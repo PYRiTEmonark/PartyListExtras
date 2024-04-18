@@ -20,7 +20,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Icons\all_down.png" />
+    <None Remove="Icons\all_dn.png" />
     <None Remove="Icons\all_up.png" />
     <None Remove="Icons\attack_speed_up.png" />
     <None Remove="Icons\auto_speed_up.png" />
@@ -39,7 +39,7 @@
     <None Remove="Icons\kardia.png" />
     <None Remove="Icons\kardion.png" />
     <None Remove="Icons\living_dead.png" />
-    <None Remove="Icons\magi_down.png" />
+    <None Remove="Icons\magi_dn.png" />
     <None Remove="Icons\magi_up.png" />
     <None Remove="Icons\mit_all.png" />
     <None Remove="Icons\mit_magi.png" />
@@ -48,7 +48,7 @@
     <None Remove="Icons\mp_up.png" />
     <None Remove="Icons\othr_down.png" />
     <None Remove="Icons\othr_up.png" />
-    <None Remove="Icons\phys_down.png" />
+    <None Remove="Icons\phys_dn.png" />
     <None Remove="Icons\phys_up.png" />
     <None Remove="Icons\regen.png" />
     <None Remove="Icons\speed_up.png" />
@@ -63,6 +63,7 @@
     <None Remove="StatusData\DNC.json" />
     <None Remove="StatusData\DRG.json" />
     <None Remove="StatusData\DRK.json" />
+    <None Remove="StatusData\Enemy.json" />
     <None Remove="StatusData\GNB.json" />
     <None Remove="StatusData\MCH.json" />
     <None Remove="StatusData\MNK.json" />
@@ -155,6 +156,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\DRK.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="StatusData\Enemy.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="StatusData\MCH.json">
@@ -256,7 +260,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Icons\all_down.png">
+    <Content Include="Icons\all_dn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\all_up.png">
@@ -274,7 +278,7 @@
     <Content Include="Icons\kardion.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\magi_down.png">
+    <Content Include="Icons\magi_dn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\magi_up.png">
@@ -289,7 +293,7 @@
     <Content Include="Icons\othr_up.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Icons\phys_down.png">
+    <Content Include="Icons\phys_dn.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Icons\phys_up.png">
