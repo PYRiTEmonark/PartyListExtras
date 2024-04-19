@@ -7,19 +7,37 @@
         "target_type": "Self",
         "cond_default": {
             "phys_up": 0.05,
-            "special": [ "regen" ]
+            "magi_up": 0.05
         }
     },
-
     {
         // Melee DPS feint
         "row_id": 1195,
         "status_name": "Feint",
         "target_type": "Self",
         "cond_default": {
-            "phys_up": 0.10,
-            "magi_dn": 0.05,
-            "special": [ "regen" ]
+            "phys_mit": 0.10,
+            "magi_mit": 0.05
+        }
+    },
+    {
+        // Magic DPS addle
+        "row_id": 1203,
+        "status_name": "Feint",
+        "target_type": "Self",
+        "cond_default": {
+            "phys_mit": 0.05,
+            "magi_mit": 0.10
+        }
+    },
+    {
+        // Tank's Reprisal
+        "row_id": 1193,
+        "status_name": "Reprisal",
+        "target_type": "Self",
+        "cond_default": {
+            "phys_mit": 0.10,
+            "magi_mit": 0.10
         }
     }
 ]

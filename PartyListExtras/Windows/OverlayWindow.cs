@@ -61,7 +61,7 @@ public class OverlayWindow : IDisposable
 
         // Enemy info
         int enemycount;
-        List<uint> enemyIds = new List<uint>();
+        List<int> enemyIds = new List<int>();
 
         // the ATK lists
         AddonPartyList* apl;
@@ -69,7 +69,7 @@ public class OverlayWindow : IDisposable
 
         // Used to position our UI
         AtkResNode apl_node;
-        AtkResNode ael_node;
+        AtkUnitBase ael_base;
 
         // If any of this goes wrong we just skip drawing the window
         try
@@ -84,19 +84,23 @@ public class OverlayWindow : IDisposable
             this.partylistscaling = apl->AtkUnitBase.Scale;
             apl_node = apl->BackgroundNineGridNode->AtkResNode;
 
+            // ENEMY LIST ATK
+            ael = (AddonEnemyList*)plugin.GameGui.GetAddonByName("_EnemyList");
+            this.enemylistscaling = ael->AtkUnitBase.Scale;
+            ael_base = ael->AtkUnitBase;
+            enemycount = ael->EnemyCount;
+
             // ENEMY INFO
             var numArray = Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->
                 AtkModule.AtkArrayDataHolder.NumberArrays[21];
 
             // dummied to single enemy
-            var enemyObjectId = numArray->IntArray[8 + (0 * 5)];
-            enemyIds.Add((uint)enemyObjectId);
-            enemycount = 1;
+            for (int i = 0; i < enemycount; i++)
+            {
+                var enemyObjectId = numArray->IntArray[8 + (i * 6)];
+                enemyIds.Add(enemyObjectId);
+            }
 
-            // ENEMY LIST ATK
-            ael = (AddonEnemyList*)plugin.GameGui.GetAddonByName("_EnemyList");
-            this.enemylistscaling = ael->AtkUnitBase.Scale;
-            ael_node = apl->BackgroundNineGridNode->AtkResNode;
         }
         catch (NullReferenceException e) {
             plugin.log.Verbose("Failure during start of OverlayWindow.Draw - skipping. Message: " + e.Message);
@@ -159,20 +163,31 @@ public class OverlayWindow : IDisposable
             // Pull the status list of the party member
             BattleChara? battleChara;
             StatusList sl;
-            var result = plugin.ObjectTable.SearchById(enemyIds[i]);
-            if (!TryGetPartyMemberBattleChara(result, out battleChara))
-            {
-                plugin.log.Warning("can't find object {0}", enemyIds[i]);
+            var result = plugin.ObjectTable.SearchById((ulong)enemyIds[i]);
+            if (!TryGetPartyMemberBattleChara(result, out battleChara)) {
+                //plugin.log.Verbose("can't find enemy object {0}", enemyIds[i]);
                 continue;
+            } else {
+                //plugin.log.Verbose("found {0}", enemyIds[i]);
             }
 
             sl = battleChara!.StatusList;
 
-            plugin.log.Warning("{0} a", sl.FirstOrDefault());
+            // Enemy List base position
+            short ael_x = 0; short ael_y = 0;
+            ael_base.GetPosition(&ael_x, &ael_y);
+            float ael_width = ael_base.GetScaledWidth(true);
+            float ael_height = ael_base.GetScaledHeight(true);
 
-            // As with the party list position stuff would go here
-            var curpos = new Vector2(10, 10);
-            var cursize = new Vector2(100, 20);
+            // Top Right of button
+            var curpos = new Vector2(
+                ael_x + ael_width,
+                ael_y + (ael_height * i)
+            );
+            var cursize = new Vector2(
+                100,
+                ael_height
+            );
 
             CondVars cvars = new CondVars()
             {
@@ -184,7 +199,7 @@ public class OverlayWindow : IDisposable
             uint charaid = battleChara.ObjectId;
 
             var applied = ParseStatusList(sl, cvars);
-            plugin.log.Warning("{0}", applied.special ?? new List<BoolEffect>());
+            // temp plugin.log.Warning("{0}", applied.special ?? new List<BoolEffect>());
             var statusIcons = GetStatusIcons(applied);
 
             //Spin out to helper functions because long
