@@ -122,8 +122,8 @@
         "status_name": "Desperate Measures",
         "target_type": "PartyWide",
         "cond_default": {
-            "healing_up": 0.1,
-            "max_hp_up": 0.05
+            "magi_mit": 0.20,
+            "phys_mit": 0.20
         }
     },
     {
@@ -132,8 +132,7 @@
         "status_name": "Expedience",
         "target_type": "PartyWide",
         "cond_default": {
-            "healing_up": 0.1,
-            "max_hp_up": 0.05
+            "move_speed_up": 0.3
         }
     }
 ]

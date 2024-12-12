@@ -81,8 +81,9 @@ namespace PartyListExtras
                 if (!plugin.Configuration.enableFloatText) return;
 
                 // This feels safer. (vibes based programming)
-                var _source = plugin.ObjectTable.SearchById(source->GameObject.ObjectID);
-                var _target = plugin.ObjectTable.SearchById(target->GameObject.ObjectID);
+                // FIXME: pretty sure apiX makes this a bad idea
+                var _source = plugin.ObjectTable.SearchById(source->GameObject.ObjectIndex);
+                var _target = plugin.ObjectTable.SearchById(target->GameObject.ObjectIndex);
 
                 // Get AppliedEffects for source and target
 
@@ -152,7 +153,7 @@ namespace PartyListExtras
                 }
 
             } else {
-                plugin.log.Warning("Couldn't match float text");
+                //plugin.log.Warning("Couldn't match float text");
             }
         }
 

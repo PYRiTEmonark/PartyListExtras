@@ -6,7 +6,6 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Logging;
 using Dalamud.Utility;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
 
 namespace PartyListExtras.Windows;
 

@@ -1,8 +1,8 @@
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Command;
-using Dalamud.Hooking;
 using Dalamud.Interface.Internal;
+using Dalamud.Interface.Textures.TextureWraps;
 using Dalamud.Interface.Windowing;
 using Dalamud.IoC;
 using Dalamud.Plugin;
@@ -23,7 +23,7 @@ namespace PartyListExtras
         public string Name => "PartyListExtras";
         private const string CommandName = "/plx";
 
-        internal DalamudPluginInterface PluginInterface { get; init; }
+        internal IDalamudPluginInterface PluginInterface { get; init; }
         public Configuration Configuration { get; init; }
         public WindowSystem WindowSystem = new("PartyListExtras");
 
@@ -38,27 +38,30 @@ namespace PartyListExtras
         public IPluginLog log { get; init; }
         public IGameInteropProvider Hooks { get; init; }
         public ISigScanner SigScanner { get; init; }
+        public ITextureProvider TextureProvider { get; init; }
 
 
         internal ConfigWindow ConfigWindow { get; init; }
         internal OverlayWindow OverlayWindow { get; init; }
         internal FlyText flytext { get; init; }
+
         internal Dictionary<string, IDalamudTextureWrap > textures = new Dictionary<string, IDalamudTextureWrap>();
         internal Dictionary<int, StatusEffectData> statusEffectData = new Dictionary<int, StatusEffectData>();
 
         public Plugin(
-            [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
-            [RequiredVersion("1.0")] ICommandManager commandManager,
-            [RequiredVersion("1.0")] IGameGui gameGui,
-            [RequiredVersion("1.0")] IChatGui chatGui,
-            [RequiredVersion("1.0")] IClientState clientState,
-            [RequiredVersion("1.0")] IObjectTable objectTable,
-            [RequiredVersion("1.0")] IPartyList partyList,
-            [RequiredVersion("1.0")] ICondition condition,
-            [RequiredVersion("1.0")] IPluginLog pluginLog,
-            [RequiredVersion("1.0")] IFlyTextGui flyTextGui,
-            [RequiredVersion("1.0")] IGameInteropProvider hooks,
-            [RequiredVersion("1.0")] ISigScanner sigScanner)
+            IDalamudPluginInterface pluginInterface,
+            ICommandManager commandManager,
+            IGameGui gameGui,
+            IChatGui chatGui,
+            IClientState clientState,
+            IObjectTable objectTable,
+            IPartyList partyList,
+            ICondition condition,
+            IPluginLog pluginLog,
+            IFlyTextGui flyTextGui,
+            IGameInteropProvider hooks,
+            ISigScanner sigScanner,
+            ITextureProvider textureProvider)
 
         {
             this.PluginInterface = pluginInterface;
@@ -73,6 +76,7 @@ namespace PartyListExtras
             this.log = pluginLog;
             this.Hooks = hooks;
             this.SigScanner = sigScanner;
+            this.TextureProvider = textureProvider;
 
 
             // Set up configuration
@@ -194,7 +198,8 @@ namespace PartyListExtras
             {
                 if (imageName == null) continue;
                 var imagePath = Path.Combine(baseImagePath, imageName);
-                this.textures.Add(imageName, this.PluginInterface.UiBuilder.LoadImage(imagePath));
+                var image = File.ReadAllBytes(imagePath);
+                textures.Add(imageName, TextureProvider.CreateFromImageAsync(image).GetAwaiter().GetResult());
             }
 
             log.Debug("Images Loaded: {0}", string.Join(',', imageNames));

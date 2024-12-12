@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Numerics;
-using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
-using Dalamud.Logging;
-using Dalamud.Utility;
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using FFXIVClientStructs.FFXIV.Client.System.Input;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using ImGuiNET;
 using static PartyListExtras.Utils;
+
+using System.Diagnostics;
+using Microsoft.VisualBasic;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 
 namespace PartyListExtras.Windows;
 
@@ -49,6 +47,8 @@ public class OverlayWindow : IDisposable
     public unsafe void Draw()
     {
 
+        Stopwatch sw = Stopwatch.StartNew();
+
         ImGui.Begin("PLX_OverlayWindow",
             ImGuiWindowFlags.NoDecoration | ImGuiWindowFlags.NoScrollWithMouse | ImGuiWindowFlags.NoBackground |
             ImGuiWindowFlags.NoMouseInputs | ImGuiWindowFlags.NoNav | ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings
@@ -56,7 +56,7 @@ public class OverlayWindow : IDisposable
         ImGui.SetWindowPos(this.Position);
 
         // Party info for getting battlecharas
-        HudPartyMember* partyMemberList;
+        Span<HudPartyMember> partyMemberList;
         short partycount;
 
         // Enemy info
@@ -71,12 +71,16 @@ public class OverlayWindow : IDisposable
         AtkResNode apl_node;
         AtkUnitBase ael_base;
 
+        // Enemy List dimensions
+        float elc_x = 0; float elc_y = 0;
+        float elc_width = 0; float elc_height = 0;
+
         // If any of this goes wrong we just skip drawing the window
         try
         {
             // PARTY INFO
-            AgentHUD* pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
-            partyMemberList = (HudPartyMember*)pl->PartyMemberList;
+            AgentHUD* pl = AgentHUD.Instance();
+            partyMemberList = pl->PartyMembers;
             partycount = pl->PartyMemberCount;
 
             // PARTY LIST ATK
@@ -90,9 +94,15 @@ public class OverlayWindow : IDisposable
             ael_base = ael->AtkUnitBase;
             enemycount = ael->EnemyCount;
 
+            var coll_node = (**ael->AtkUnitBase.CollisionNodeList);
+
+            elc_x = coll_node.GetXFloat() + ael->AtkUnitBase.GetX();
+            elc_y = coll_node.GetYFloat() + ael->AtkUnitBase.GetY();
+            elc_width = coll_node.GetWidth();
+            elc_height = coll_node.GetHeight();
+
             // ENEMY INFO
-            var numArray = Framework.Instance()->GetUiModule()->GetRaptureAtkModule()->
-                AtkModule.AtkArrayDataHolder.NumberArrays[21];
+            var numArray = RaptureAtkModule.Instance()->AtkModule.AtkArrayDataHolder.NumberArrays[21];
 
             // dummied to single enemy
             for (int i = 0; i < enemycount; i++)
@@ -118,16 +128,29 @@ public class OverlayWindow : IDisposable
         for (var i = 0; i < partycount; i++)
         {
             // Pull the status list of the party member
-            BattleChara? battleChara;
             StatusList sl;
-            var result = plugin.ObjectTable.SearchById(partyMemberList[i].ObjectId);
-            if (!TryGetPartyMemberBattleChara(result, out battleChara))
+            uint battleCharaIdx;
+            try
+            {
+                battleCharaIdx = partyMemberList[i].Object->GetGameObjectId().ObjectId;
+            } catch (NullReferenceException e) {
+                // plugin.log.Verbose("party list member {0} was not found", i);
                 continue;
+            }
+            IBattleChara battleChara;
+            var result = plugin.ObjectTable.SearchById(battleCharaIdx);
+            try
+            {
+                battleChara = (IBattleChara)result;
+            } catch {
+                // plugin.log.Verbose("object {0} was not an IBattleChara", battleCharaIdx);
+                continue;
+            }
 
-            sl = battleChara!.StatusList;
+            sl = battleChara.StatusList;
 
             // Get ResNode of the JobIcon - everything is drawn relative to the job icon
-            var icon = apl->PartyMember[i].ClassJobIcon;
+            var icon = apl->PartyMembers[i].ClassJobIcon;
             if (icon == null) { continue; }
             var node = icon->AtkResNode;
 
@@ -138,7 +161,8 @@ public class OverlayWindow : IDisposable
             var cursize = new Vector2(plugin.Configuration.OverlayWidth * partylistscaling, node.Height * partylistscaling);
 
             // Variables for checking status effects
-            var tla = battleChara.ClassJob.GameData!.Abbreviation.ToString();
+            //var tla = battleChara.ClassJob.GameData!.Abbreviation.ToString();
+            var tla = battleChara.ClassJob.Value.Abbreviation.ToString();
             Enum.TryParse<Utils.Job>(tla, out var job);
 
             CondVars cvars = new CondVars()
@@ -148,7 +172,7 @@ public class OverlayWindow : IDisposable
             };
 
             List<uint> statusIds = sl.ToList().Select(x => x.StatusId).ToList();
-            uint charaid = battleChara.ObjectId;
+            uint charaidx = battleChara.ObjectIndex;
 
             var applied = ParseStatusList(sl, cvars);
             var statusIcons = GetStatusIcons(applied);
@@ -157,11 +181,13 @@ public class OverlayWindow : IDisposable
             DrawStatusIcons(statusIcons, string.Format("party_{0}", i.ToString()), curpos, cursize);
         }
 
+        long __party_elapsed = sw.ElapsedTicks;
+
         // For each known enemy...
         for (int i = 0; i < enemycount; i++)
         {
             // Pull the status list of the party member
-            BattleChara? battleChara;
+            IBattleChara? battleChara;
             StatusList sl;
             var result = plugin.ObjectTable.SearchById((ulong)enemyIds[i]);
             if (!TryGetPartyMemberBattleChara(result, out battleChara)) {
@@ -173,21 +199,20 @@ public class OverlayWindow : IDisposable
 
             sl = battleChara!.StatusList;
 
-            // Enemy List base position
-            short ael_x = 0; short ael_y = 0;
-            ael_base.GetPosition(&ael_x, &ael_y);
-            float ael_width = ael_base.GetScaledWidth(true);
-            float ael_height = ael_base.GetScaledHeight(true);
-
             // Top Right of button
+            // FIXME: this needs to be the cast bar at least
             var curpos = new Vector2(
-                ael_x + ael_width,
-                ael_y + (ael_height * i)
+                (float)(elc_x + (elc_width * 1.25)), //TEMP
+                elc_y + (elc_height * i) + 3
             );
             var cursize = new Vector2(
                 100,
-                ael_height
+                elc_height
             );
+
+            //temp
+            //plugin.log.Warning("{0} {1} {2} {3}", curpos.X, curpos.Y, cursize.X, cursize.Y);
+
 
             CondVars cvars = new CondVars()
             {
@@ -196,7 +221,7 @@ public class OverlayWindow : IDisposable
             };
 
             List<uint> statusIds = sl.ToList().Select(x => x.StatusId).ToList();
-            uint charaid = battleChara.ObjectId;
+            uint charaidx = battleChara.ObjectIndex;
 
             var applied = ParseStatusList(sl, cvars);
             // temp plugin.log.Warning("{0}", applied.special ?? new List<BoolEffect>());
@@ -207,6 +232,7 @@ public class OverlayWindow : IDisposable
         }
 
         ImGui.End();
+        sw.Stop();
     }
 
     // TODO: Condvars is really a hack. Will fall apart v quick.
@@ -221,6 +247,9 @@ public class OverlayWindow : IDisposable
     /// <returns></returns>
     internal AppliedEffects ParseStatusList(StatusList sl, CondVars cvars)
     {
+        var sw = Stopwatch.StartNew();
+        List<long> __sw = [0];
+
         var debug = new List<Tuple<string, string>>();
 
         List<StatusEffectData> sed = new List<StatusEffectData>();
@@ -235,9 +264,17 @@ public class OverlayWindow : IDisposable
             }
             else
             {
-                debug.Add(new Tuple<string, string>(status.GameData.Name.ToString(), status.GameData.RowId.ToString()));
+                debug.Add(new Tuple<string, string>(status.GameData.Value.ToString(), status.GameData.RowId.ToString()));
             }
         }
+
+        if (sed.Count == 0) {
+            sw.Stop();
+            if (sw.ElapsedTicks > 1000) plugin.log.Verbose("{0}ms, {1}tck \n (No Effects Found)", sw.ElapsedMilliseconds, sw.ElapsedTicks);
+            return new AppliedEffects();
+        }
+
+        __sw.Add(sw.ElapsedTicks);
 
         // Send Message to log for status effects that are missing
         var debugMessage = "";
@@ -251,25 +288,34 @@ public class OverlayWindow : IDisposable
         }
         if (debugMessage.Length > 0) plugin.log.Debug("Missing Status Ids: " + debugMessage);
 
-        // Filters
-        // ConstSelf
+        __sw.Add(sw.ElapsedTicks);
+
+        // Filter out Constant effects
         if (!plugin.Configuration.showConstSelfs)
         {
-            sed = sed
+            var sed_enum = sed
                 .Where(x => x.target_type != TargetType.ConstSelf)
                 .Where(x => x.target_type != TargetType.ConstPartyMember)
                 .ToList();
         }
 
+        __sw.Add(sw.ElapsedTicks);
+
         // StQ essences
         if (!plugin.Configuration.showEssenceSelfs)
             sed = sed.Where(x => x.target_type != TargetType.EssenceSelf).ToList();
 
-        // Combine and return a single
-        if (sed.Count > 0)
-            return sed.Select(x => x.Compute(cvars)).Aggregate((a, b) => a.Combine(b));
-        else
-            return new AppliedEffects();
+        __sw.Add(sw.ElapsedTicks);
+
+        AppliedEffects final = new AppliedEffects();
+        foreach (var s in sed) final = final.Combine(s.Compute(cvars));
+
+        __sw.Add(sw.ElapsedTicks);
+
+        sw.Stop();
+        if (sw.ElapsedTicks > 1000) plugin.log.Verbose("{0}ms, {1}tck \n tcks at points: {2} \n n.effects {3}", sw.ElapsedMilliseconds, sw.ElapsedTicks, __sw, sed.Count);
+
+        return final;
     }
 
     /// <summary>
@@ -483,16 +529,20 @@ public class OverlayWindow : IDisposable
     /// <param name="size">size of the subwindow</param>
     private void DrawStatusIcons(List<StatusIcon> icons, string windowId, Vector2 position, Vector2 size, bool RTL = true)
     {
+
         // Start child window to make the cursor work "nicer"
         //ImGui.BeginChild("PLX_StatusIconList_{0}".Format(windowId), size);
         ImGui.SetWindowPos(position);
 
         var width = size.X;
         var paddingX = plugin.Configuration.OverlayPaddingX;
-        if (RTL) paddingX = -paddingX; // Invert padding so we pad to the left
         var paddingY = plugin.Configuration.OverlayPaddingY;
         var cursor = position + new Vector2(RTL ? width : 0, paddingY);
 
+        // Invert padding so we pad to the left
+        // I know it looks like this is the wrong way round but shsuhb
+        //if (!RTL) paddingX = -paddingX;
+        
         // shorten the display mode
         var dm = plugin.Configuration.DisplayMode;
 
@@ -520,7 +570,7 @@ public class OverlayWindow : IDisposable
             if (icon.Label != null && (dm == 0 || (dm == 1 && icon.Value == null)))
             {
                 cursor += new Vector2(
-                    (RTL ? -1 : 1) * ((1f * ImGui.CalcTextSize(icon.Label).X) + (paddingX * partylistscaling)),
+                    (RTL ? -1 : 1) * ((1f * ImGui.CalcTextSize(icon.Label).X) + paddingX),
                     0
                 );
                 drawlist.AddText(cursor, white, icon.Label);

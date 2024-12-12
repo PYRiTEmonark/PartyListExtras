@@ -10,6 +10,24 @@
         }
     },
     {
+        // Aspected Benefic's regen
+        "row_id": 835,
+        "status_name": "Aspected Benefic",
+        "target_type": "PartyMember",
+        "default": {
+            "special": [ "regen" ]
+        }
+    },
+    {
+        // Aspected Helios' regen
+        "row_id": 836,
+        "status_name": "Aspected Helios",
+        "target_type": "PartyWide",
+        "default": {
+            "special": [ "regen" ]
+        }
+    },
+    {
         // Collective Unconscious's partywide 15sec regen
         "row_id": 956,
         "status_name": "Collective Unconscious",
@@ -29,7 +47,6 @@
     },
 
     // Balance, Arrow, Spear, Bole, Ewer & Spire are 3/6% damage increase buffs according to their target's range
-    // TODO : add a melee/ranged check to determine if the buff is 3% or 6% for the cards
 
     {
         // Melee card

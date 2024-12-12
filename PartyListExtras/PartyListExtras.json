@@ -6,6 +6,7 @@
     "InternalName": "PartyListExtras",
     "RepoUrl": "https://github.com/PYRiTEmonark/PartyListExtras",
     "ApplicableVersion": "any",
+    "DalamudApiLevel": 11,
     "Tags": [
     ]
 }

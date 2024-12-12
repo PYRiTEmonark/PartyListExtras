@@ -2,6 +2,7 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.ClientState.Statuses;
 using Dalamud.Logging;
+using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Newtonsoft.Json.Converters;
@@ -200,40 +201,42 @@ namespace PartyListExtras
         /// <param name="inp">The GameObject to check</param>
         /// <param name="outp">The corresponding BattleChara if true</param>
         /// <returns>True if outp contains a value</returns>
-        internal static bool TryGetPartyMemberBattleChara(GameObject? inp, out BattleChara? outp)
+        internal static bool TryGetPartyMemberBattleChara(IGameObject? inp, out IBattleChara? outp)
         {
             outp = null;
             if (inp == null) return false;
 
-            if (inp?.GetType() == typeof(PlayerCharacter))
-            {
-                outp = (BattleChara)inp;
-            }
-            else if (inp?.GetType() == typeof(BattleNpc))
-            {
-                outp = (BattleChara)inp;
-            }
-            else
-            {
-                return false;
-            };
+            //if (inp?.GetType() == typeof(PlayerCharacter))
+            //{
+            //    outp = (IBattleChara)inp;
+            //}
+            //else if (inp?.GetType() == typeof(IBattleNpc))
+            //{
+            //    outp = (IBattleChara)inp;
+            //}
+            //else
+            //{
+            //    return false;
+            //};
+            outp = (IBattleChara)inp;
 
             return true;
         }
 
-        internal unsafe static bool IsCharaInParty(BattleChara? inp)
+        internal unsafe static bool IsCharaInParty(IBattleChara? inp)
         {
             if (inp is null) return false;
 
-            List<uint> partymemberids = new List<uint>();
-            AgentHUD* pl = Framework.Instance()->GetUiModule()->GetAgentModule()->GetAgentHUD();
-            var partyMemberList = (HudPartyMember*)pl->PartyMemberList;
+            List<ulong> partymemberids = new List<ulong>();
+            AgentHUD* pl = AgentHUD.Instance();
+            var partyMemberList = pl->PartyMembers;
             for (int i = 0; i < pl->PartyMemberCount; i++)
             {
-                partymemberids.Add(partyMemberList[i].ObjectId);
+                partymemberids.Add(partyMemberList[i].Object->GetGameObjectId());
             }
 
-            return partymemberids.Contains(inp.ObjectId);
+            // WARN: unsure if entity id is sufficently unique for comparason
+            return partymemberids.Contains(inp.GameObjectId);
         }
 
     }
